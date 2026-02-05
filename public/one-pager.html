@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IDE vs SME Framework - One Pager</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a24 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px;
+    }
+    
+    .page {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.03);
+      border-radius: 24px;
+      padding: 48px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #8B5CF6, #EC4899, #06B6D4);
+      border-radius: 16px;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .logo svg {
+      width: 32px;
+      height: 32px;
+    }
+    
+    h1 {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #8B5CF6, #EC4899, #06B6D4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    
+    .subtitle {
+      color: rgba(255,255,255,0.5);
+      font-size: 16px;
+    }
+    
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    
+    .column {
+      padding: 24px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .column.ide {
+      background: rgba(139, 92, 246, 0.1);
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+    
+    .column.sme {
+      background: rgba(59, 130, 246, 0.1);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    
+    .column h2 {
+      font-size: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .column.ide h2 { color: #8B5CF6; }
+    .column.sme h2 { color: #3B82F6; }
+    
+    .column ul {
+      list-style: none;
+    }
+    
+    .column li {
+      padding: 8px 0;
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    
+    .column li::before {
+      content: '→';
+      color: inherit;
+      opacity: 0.5;
+    }
+    
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+    }
+    
+    .table th, .table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .table th {
+      color: rgba(255,255,255,0.5);
+      font-weight: 500;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .table td:nth-child(2) { color: #8B5CF6; }
+    .table td:nth-child(3) { color: #3B82F6; }
+    
+    .examples {
+      margin-bottom: 40px;
+    }
+    
+    .examples h3 {
+      font-size: 18px;
+      margin-bottom: 16px;
+      color: rgba(255,255,255,0.9);
+    }
+    
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    
+    .example {
+      padding: 16px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .example h4 {
+      font-size: 14px;
+      color: #EC4899;
+      margin-bottom: 4px;
+    }
+    
+    .example p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+    }
+    
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .qr {
+      width: 80px;
+      height: 80px;
+      background: #fff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .qr-placeholder {
+      width: 60px;
+      height: 60px;
+      background: repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 10px 10px;
+    }
+    
+    .footer-text {
+      text-align: right;
+    }
+    
+    .footer-text p {
+      color: rgba(255,255,255,0.5);
+      font-size: 12px;
+    }
+    
+    .footer-text a {
+      color: #8B5CF6;
+      text-decoration: none;
+    }
+    
+    .key-insight {
+      background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(236,72,153,0.1));
+      border: 1px solid rgba(139,92,246,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    
+    .key-insight p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.8);
+    }
+    
+    .key-insight strong {
+      color: #8B5CF6;
+    }
+    
+    @media print {
+      body {
+        background: white;
+        color: #1a1a24;
+        padding: 0;
+      }
+      
+      .page {
+        background: white;
+        border: none;
+        padding: 40px;
+      }
+      
+      .column {
+        background: #f8f8f8;
+      }
+      
+      .column li, .table td, .example p, .footer-text p {
+        color: #666;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <h1>IDE vs SME Framework</h1>
+      <p class="subtitle">Innovation Driven Environment vs Small/Medium Enterprise</p>
+    </header>
+    
+    <div class="comparison">
+      <div class="column ide">
+        <h2>🚀 IDE Approach</h2>
+        <ul>
+          <li>Innovation-first mindset</li>
+          <li>Exponential growth targets (10x)</li>
+          <li>Fail fast, learn faster</li>
+          <li>Create new markets</li>
+          <li>AI amplifies humans</li>
+          <li>Small autonomous teams</li>
+          <li>Decisions in hours</li>
+        </ul>
+      </div>
+      <div class="column sme">
+        <h2>🏢 SME Approach</h2>
+        <ul>
+          <li>Stability-first mindset</li>
+          <li>Linear growth (10% YoY)</li>
+          <li>Minimize risk & costs</li>
+          <li>Capture existing markets</li>
+          <li>Traditional workflows</li>
+          <li>Departmental silos</li>
+          <li>Decisions in weeks</li>
+        </ul>
+      </div>
+    </div>
+    
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Aspect</th>
+          <th>IDE</th>
+          <th>SME</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Primary Goal</td>
+          <td>Disrupt & Create</td>
+          <td>Capture Share</td>
+        </tr>
+        <tr>
+          <td>Risk Tolerance</td>
+          <td>High</td>
+          <td>Low</td>
+        </tr>
+        <tr>
+          <td>Failure View</td>
+          <td>Learning Data</td>
+          <td>Cost to Minimize</td>
+        </tr>
+        <tr>
+          <td>Team Structure</td>
+          <td>Flat, Cross-functional</td>
+          <td>Hierarchical</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="key-insight">
+      <p><strong>Key Insight:</strong> The culture of experimentation is what separates IDEs from SMEs more than any single practice.</p>
+    </div>
+    
+    <div class="examples">
+      <h3>WorldClass Examples</h3>
+      <div class="examples-grid">
+        <div class="example">
+          <h4>Vent.Africa</h4>
+          <p>Fintech innovation in African markets</p>
+        </div>
+        <div class="example">
+          <h4>AI Dev Platform</h4>
+          <p>Tools that build tools</p>
+        </div>
+        <div class="example">
+          <h4>Quinn AI</h4>
+          <p>Personal AI running 24/7</p>
+        </div>
+      </div>
+    </div>
+    
+    <footer class="footer">
+      <div class="qr">
+        <div class="qr-placeholder"></div>
+      </div>
+      <div class="footer-text">
+        <p><strong>WorldClass</strong></p>
+        <p><a href="https://worldclass.dev">worldclass.dev</a></p>
+        <p>University Excursion 2026</p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

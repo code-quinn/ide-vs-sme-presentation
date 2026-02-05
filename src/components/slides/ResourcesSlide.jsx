@@ -40,12 +40,13 @@ const ResourcesSlide = ({ slide }) => {
           </div>
           <p className="text-sm text-white/50 mb-4">Scan or click below</p>
           <a
-            href="https://code-quinn.github.io/ide-vs-sme-presentation/ide-vs-sme-one-pager.pdf" download
+            href={onePagerUrl}
             target="_blank"
+            rel="noopener noreferrer"
             className="block w-full py-3 rounded-xl bg-gradient-to-r from-wc-purple to-wc-pink text-white font-bold hover:opacity-90 transition-opacity"
           >
-            <Download className="w-4 h-4 inline mr-2" />
-            View & Print
+            <ExternalLink className="w-4 h-4 inline mr-2" />
+            View Page
           </a>
         </motion.div>
 

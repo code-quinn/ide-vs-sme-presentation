@@ -345,61 +345,89 @@ const VisualMetaphorSlide = ({ slide }) => {
                 </>
               )}
 
-              {/* SMOKE - 3X effect */}
+              {/* SMOKE - 9X MASSIVE effect */}
               {(launched || countdown !== null) && (
                 <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-15 pointer-events-none">
-                  {/* 12 smoke puffs (3x previous) */}
-                  {[...Array(12)].map((_, i) => (
+                  {/* 36 outer smoke puffs */}
+                  {[...Array(36)].map((_, i) => (
                     <motion.div
                       key={`smoke-${i}`}
                       className="absolute rounded-full"
                       style={{
-                        width: 40 + (i % 4) * 20,
-                        height: 35 + (i % 4) * 15,
-                        background: `rgba(200, 200, 200, ${0.6 - (i % 5) * 0.08})`,
-                        filter: 'blur(8px)',
-                        left: -30 + (i % 5) * 12,
-                        top: (i % 3) * 5,
+                        width: 50 + (i % 5) * 25,
+                        height: 45 + (i % 5) * 20,
+                        background: `rgba(220, 220, 220, ${0.8 - (i % 6) * 0.07})`,
+                        filter: 'blur(5px)',
+                        left: -50 + (i % 8) * 12,
+                        top: (i % 4) * 8,
                       }}
-                      initial={{ y: 0, scale: 0.3, opacity: 0.6 }}
+                      initial={{ y: 0, scale: 0.3, opacity: 0.8 }}
                       animate={{
-                        y: [0, 25 + (i % 4) * 15],
-                        x: ((i % 2 === 0 ? -1 : 1) * (25 + (i % 4) * 20)),
-                        scale: [0.3, 1.2, 2],
-                        opacity: [0.6, 0.4, 0],
+                        y: [0, 30 + (i % 5) * 20],
+                        x: ((i % 2 === 0 ? -1 : 1) * (35 + (i % 5) * 25)),
+                        scale: [0.3, 1.5, 2.5],
+                        opacity: [0.8, 0.5, 0],
                       }}
                       transition={{
-                        duration: 1.8 + (i % 3) * 0.3,
+                        duration: 2 + (i % 4) * 0.3,
                         repeat: Infinity,
-                        delay: i * 0.12,
+                        delay: i * 0.05,
                         ease: "easeOut"
                       }}
                     />
                   ))}
-                  {/* Extra dense center smoke */}
-                  {[...Array(6)].map((_, i) => (
+                  {/* 18 dense center smoke */}
+                  {[...Array(18)].map((_, i) => (
                     <motion.div
                       key={`core-smoke-${i}`}
                       className="absolute rounded-full"
                       style={{
-                        width: 50 + (i % 3) * 25,
-                        height: 45 + (i % 3) * 20,
-                        background: 'rgba(220, 220, 220, 0.7)',
-                        filter: 'blur(6px)',
-                        left: -25 + (i % 4) * 12,
+                        width: 60 + (i % 4) * 30,
+                        height: 55 + (i % 4) * 25,
+                        background: 'rgba(240, 240, 240, 0.85)',
+                        filter: 'blur(4px)',
+                        left: -35 + (i % 5) * 14,
                         top: 0,
                       }}
-                      initial={{ y: 0, scale: 0.2, opacity: 0.7 }}
+                      initial={{ y: 0, scale: 0.2, opacity: 0.85 }}
                       animate={{
-                        y: [0, 15 + (i % 3) * 10],
-                        x: ((i % 2 === 0 ? -1 : 1) * (15 + (i % 3) * 12)),
-                        scale: [0.2, 1, 1.8],
-                        opacity: [0.7, 0.5, 0],
+                        y: [0, 20 + (i % 4) * 15],
+                        x: ((i % 2 === 0 ? -1 : 1) * (20 + (i % 4) * 18)),
+                        scale: [0.2, 1.3, 2.2],
+                        opacity: [0.85, 0.6, 0],
                       }}
                       transition={{
-                        duration: 1.4,
+                        duration: 1.6 + (i % 3) * 0.2,
                         repeat: Infinity,
-                        delay: i * 0.15,
+                        delay: i * 0.08,
+                        ease: "easeOut"
+                      }}
+                    />
+                  ))}
+                  {/* 12 ground-spreading smoke */}
+                  {[...Array(12)].map((_, i) => (
+                    <motion.div
+                      key={`ground-smoke-${i}`}
+                      className="absolute rounded-full"
+                      style={{
+                        width: 80 + (i % 4) * 40,
+                        height: 40 + (i % 3) * 20,
+                        background: 'rgba(200, 200, 200, 0.7)',
+                        filter: 'blur(6px)',
+                        left: -40 + (i % 6) * 15,
+                        top: 20,
+                      }}
+                      initial={{ y: 0, scale: 0.3, opacity: 0.7 }}
+                      animate={{
+                        y: [0, 25 + (i % 3) * 15],
+                        x: ((i % 2 === 0 ? -1 : 1) * (50 + (i % 4) * 35)),
+                        scale: [0.3, 1.5, 3],
+                        opacity: [0.7, 0.4, 0],
+                      }}
+                      transition={{
+                        duration: 2.2 + (i % 3) * 0.3,
+                        repeat: Infinity,
+                        delay: i * 0.1,
                         ease: "easeOut"
                       }}
                     />

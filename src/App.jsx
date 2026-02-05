@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronLeft, ChevronRight, Rocket, Building2, Zap, Users, 
@@ -12,6 +12,11 @@ import SlideRenderer from './components/SlideRenderer';
 import ProgressBar from './components/ProgressBar';
 import ScoreBoard from './components/ScoreBoard';
 import ParticleBackground from './components/ParticleBackground';
+import { 
+  useSlideTransitionSound, 
+  useBackgroundMusic, 
+  AudioControls 
+} from './components/AudioController';
 
 function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -19,8 +24,35 @@ function App() {
   const [achievements, setAchievements] = useState([]);
   const [direction, setDirection] = useState(1);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const isFirstRender = useRef(true);
 
   const totalSlides = slides.length;
+  
+  // Audio hooks
+  const { playTransition } = useSlideTransitionSound(soundEnabled);
+  const { 
+    entrancePlaying, 
+    exitPlaying, 
+    toggleEntrance, 
+    stopEntrance, 
+    playExit, 
+    stopExit 
+  } = useBackgroundMusic();
+  
+  // Play transition sound on slide change (skip first render)
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    playTransition();
+    
+    // Stop entrance music when leaving first slide
+    if (currentSlide > 0 && entrancePlaying) {
+      stopEntrance();
+    }
+  }, [currentSlide, playTransition, entrancePlaying, stopEntrance]);
 
   const addPoints = useCallback((points, achievement = null) => {
     setScore(prev => prev + points);
@@ -82,6 +114,19 @@ function App() {
     <div className="w-screen h-screen animated-bg overflow-hidden relative">
       <ParticleBackground />
       
+      {/* Audio Controls */}
+      <AudioControls 
+        soundEnabled={soundEnabled}
+        setSoundEnabled={setSoundEnabled}
+        entrancePlaying={entrancePlaying}
+        toggleEntrance={toggleEntrance}
+        currentSlide={currentSlide}
+        totalSlides={totalSlides}
+        playExit={playExit}
+        exitPlaying={exitPlaying}
+        stopExit={stopExit}
+      />
+      
       {/* Progress Bar */}
       <ProgressBar current={currentSlide} total={totalSlides} />
       
@@ -108,6 +153,14 @@ function App() {
               slide={slides[currentSlide]} 
               addPoints={addPoints}
               currentSlide={currentSlide}
+              audioProps={{
+                entrancePlaying,
+                exitPlaying,
+                toggleEntrance,
+                stopEntrance,
+                playExit,
+                stopExit,
+              }}
             />
           </motion.div>
         </AnimatePresence>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Rocket, Building2, Zap, Sparkles, ArrowRight } from 'lucide-react';
+import { Rocket, Building2, Zap, Sparkles, ArrowRight, Play, Music } from 'lucide-react';
 
-const TitleSlide = ({ slide }) => {
+const TitleSlide = ({ slide, audioProps }) => {
+  const { entrancePlaying, toggleEntrance, stopEntrance } = audioProps || {};
   const [showVs, setShowVs] = useState(false);
   const [glowPulse, setGlowPulse] = useState(0);
 
@@ -227,12 +228,37 @@ const TitleSlide = ({ slide }) => {
           </div>
         </motion.div>
 
+        {/* Music & Start buttons */}
+        {toggleEntrance && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.8 }}
+            className="mt-8 flex flex-wrap items-center justify-center gap-4"
+          >
+            {/* Entrance Music Toggle */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={toggleEntrance}
+              className={`px-5 py-2.5 rounded-xl font-medium flex items-center gap-2 transition-all ${
+                entrancePlaying 
+                  ? 'bg-green-500/20 text-green-300 border border-green-500/50' 
+                  : 'bg-white/10 text-white/70 hover:bg-white/15 border border-white/10'
+              }`}
+            >
+              <Music className="w-4 h-4" />
+              {entrancePlaying ? '♪ Playing...' : 'Play Intro Music'}
+            </motion.button>
+          </motion.div>
+        )}
+
         {/* Start hint */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2 }}
-          className="mt-10"
+          className="mt-8"
         >
           <motion.div
             animate={{ x: [0, 10, 0] }}

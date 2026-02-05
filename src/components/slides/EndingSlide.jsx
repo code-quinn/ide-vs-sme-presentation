@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Twitter, Mail, Globe } from 'lucide-react';
+import { Heart, Twitter, Mail, Globe, Music2, Square } from 'lucide-react';
 
-const EndingSlide = ({ slide }) => {
+const EndingSlide = ({ slide, audioProps }) => {
+  const { playExit, stopExit, exitPlaying } = audioProps || {};
   return (
     <div className="max-w-3xl mx-auto text-center max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-hide">
       <motion.div
@@ -101,11 +102,45 @@ const EndingSlide = ({ slide }) => {
         </a>
       </motion.div>
 
+      {/* Celebration Music Button */}
+      {playExit && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.0 }}
+          className="mt-8"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={exitPlaying ? stopExit : playExit}
+            className={`px-6 py-3 rounded-xl font-semibold flex items-center gap-2 mx-auto
+                       transition-all ${
+                         exitPlaying 
+                           ? 'bg-yellow-500/30 text-yellow-300 border border-yellow-500/50' 
+                           : 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg shadow-orange-500/30'
+                       }`}
+          >
+            {exitPlaying ? (
+              <>
+                <Square className="w-4 h-4" />
+                Stop Music
+              </>
+            ) : (
+              <>
+                <span className="text-xl">🎉</span>
+                Play Celebration Music
+              </>
+            )}
+          </motion.button>
+        </motion.div>
+      )}
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.1 }}
-        className="mt-12"
+        className="mt-8"
       >
         <div className="inline-flex items-center gap-2 text-white/30">
           <span className="font-mono text-sm">Built with</span>

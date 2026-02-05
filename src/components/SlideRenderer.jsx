@@ -46,7 +46,7 @@ const slideComponents = {
   'visual-metaphor': VisualMetaphorSlide,
 };
 
-const SlideRenderer = ({ slide, addPoints, currentSlide }) => {
+const SlideRenderer = ({ slide, addPoints, currentSlide, audioProps }) => {
   const SlideComponent = slideComponents[slide.type];
 
   if (!SlideComponent) {
@@ -67,6 +67,7 @@ const SlideRenderer = ({ slide, addPoints, currentSlide }) => {
         slide={slide} 
         addPoints={addPoints}
         slideIndex={currentSlide}
+        audioProps={audioProps}
       />
     </motion.div>
   );

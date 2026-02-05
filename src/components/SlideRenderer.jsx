@@ -12,6 +12,8 @@ import QuizIntroSlide from './slides/QuizIntroSlide';
 import QuizSlide from './slides/QuizSlide';
 import ExerciseSlide from './slides/ExerciseSlide';
 import DemoSlide from './slides/DemoSlide';
+import LiveChatSlide from './slides/LiveChatSlide';
+import TakeHomeSlide from './slides/TakeHomeSlide';
 import TakeawaysSlide from './slides/TakeawaysSlide';
 import ResourcesSlide from './slides/ResourcesSlide';
 import EndingSlide from './slides/EndingSlide';

@@ -245,17 +245,20 @@ export const slides = [
     bonus: 'Groups that share get +100 points!',
   },
 
-  // Slide 15: Live Demo Placeholder
+  // Slide 15: Live Demo with Quinn
   {
-    type: 'demo',
-    title: '🔴 Live Demo',
-    subtitle: 'IDE in Real Time',
-    items: [
-      'Watch AI-assisted development',
-      'See how we ship features in hours',
-      'Real tools, real workflow',
-      'Questions welcome!',
-    ]
+    type: 'live-chat',
+    title: '🔴 Live Demo with Quinn',
+    subtitle: 'AI Assistant in Real Time',
+    description: 'Watch WorldClass interact with Quinn (AI) live!',
+    instructions: [
+      'Opening Telegram Web on the big screen',
+      'Ask me anything about IDE vs SME',
+      'Request a quick code demo',
+      'See AI-assisted development in action',
+    ],
+    telegramUrl: 'https://web.telegram.org',
+    note: 'This is the same AI that built this entire presentation overnight!',
   },
 
   // Slide 16: Key Takeaways
@@ -272,14 +275,45 @@ export const slides = [
     cta: 'The question isn\'t IF you\'ll work in an IDE, but WHEN.'
   },
 
-  // Slide 17: Resources & One-Pager
+  // Slide 17: Practical Take-Home
+  {
+    type: 'take-home',
+    title: '🎁 Your Take-Home Kit',
+    subtitle: 'Start Your Own IDE Journey',
+    items: [
+      {
+        icon: '📋',
+        title: 'IDE Starter Checklist',
+        desc: 'Step-by-step guide to transform your workflow',
+      },
+      {
+        icon: '🛠️',
+        title: 'AI Tools Setup Guide',
+        desc: 'Get Claude, GitHub Copilot, and more working today',
+      },
+      {
+        icon: '📁',
+        title: 'Project Template',
+        desc: 'A starter repo with IDE best practices built-in',
+      },
+      {
+        icon: '📖',
+        title: 'Reading List',
+        desc: 'Books and articles on innovation-driven thinking',
+      },
+    ],
+    downloadUrl: '/take-home-kit.html',
+  },
+
+  // Slide 18: Resources & One-Pager
   {
     type: 'resources',
-    title: 'Take This With You',
+    title: 'Resources & Links',
     onePager: true,
     links: [
       { label: 'WorldClass', url: 'https://worldclass.dev' },
       { label: 'Vent.Africa', url: 'https://vent.africa' },
+      { label: 'This Presentation', url: 'https://worldclass-dev.github.io/ide-vs-sme-presentation' },
     ],
     qrCode: true,
   },

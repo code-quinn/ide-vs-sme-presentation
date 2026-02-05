@@ -31,6 +31,8 @@ const slideComponents = {
   quiz: QuizSlide,
   exercise: ExerciseSlide,
   demo: DemoSlide,
+  'live-chat': LiveChatSlide,
+  'take-home': TakeHomeSlide,
   takeaways: TakeawaysSlide,
   resources: ResourcesSlide,
   ending: EndingSlide,

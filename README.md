@@ -119,6 +119,19 @@ A printable one-pager PDF is available at `/one-pager.html` for takeaway materia
 
 ## 🚢 Deployment
 
+### GitHub Pages (Automatic)
+
+This repo includes a GitHub Actions workflow for automatic deployment:
+
+1. Push to `master` or `main` branch
+2. Go to repo Settings → Pages
+3. Set Source to "GitHub Actions"
+4. The site will deploy automatically on every push
+
+**Live URL:** `https://<username>.github.io/ide-vs-sme-presentation/`
+
+### Manual Build
+
 ```bash
 # Build for production
 npm run build
@@ -128,6 +141,13 @@ npm run preview
 
 # Deploy dist/ folder to any static host
 ```
+
+### Netlify (Alternative)
+
+1. Connect your GitHub repo to Netlify
+2. Build command: `npm run build`
+3. Publish directory: `dist`
+4. Deploy!
 
 ## 📝 License
 

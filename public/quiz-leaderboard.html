@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard | IDE vs SME Quiz</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 30px 20px;
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .trophy {
+            font-size: 5rem;
+            margin-bottom: 15px;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        /* Podium */
+        .podium-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 10px;
+            margin-bottom: 40px;
+            padding: 0 10px;
+        }
+
+        .podium-place {
+            text-align: center;
+            animation: slideUp 0.6s ease backwards;
+        }
+
+        .podium-place:nth-child(1) { animation-delay: 0.3s; }
+        .podium-place:nth-child(2) { animation-delay: 0.1s; }
+        .podium-place:nth-child(3) { animation-delay: 0.5s; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .podium-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 10px;
+            border: 3px solid;
+        }
+
+        .podium-place.first .podium-avatar {
+            width: 90px;
+            height: 90px;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border-color: #fbbf24;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
+        }
+
+        .podium-place.second .podium-avatar {
+            background: linear-gradient(135deg, #9ca3af, #6b7280);
+            border-color: #9ca3af;
+        }
+
+        .podium-place.third .podium-avatar {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            border-color: #d97706;
+        }
+
+        .podium-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 5px;
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .podium-score {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .podium-place.first .podium-score { color: #fbbf24; }
+        .podium-place.second .podium-score { color: #9ca3af; }
+        .podium-place.third .podium-score { color: #d97706; }
+
+        .podium-stand {
+            width: 100px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 900;
+        }
+
+        .podium-place.first .podium-stand {
+            height: 120px;
+            background: linear-gradient(180deg, #fbbf24, #d97706);
+        }
+
+        .podium-place.second .podium-stand {
+            height: 90px;
+            background: linear-gradient(180deg, #9ca3af, #6b7280);
+        }
+
+        .podium-place.third .podium-stand {
+            height: 60px;
+            background: linear-gradient(180deg, #d97706, #b45309);
+        }
+
+        /* Other players list */
+        .players-list {
+            max-width: 500px;
+            margin: 0 auto 40px;
+        }
+
+        .players-list h3 {
+            font-size: 1rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .player-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 10px;
+            animation: fadeIn 0.5s ease backwards;
+        }
+
+        .player-row:nth-child(2) { animation-delay: 0.1s; }
+        .player-row:nth-child(3) { animation-delay: 0.2s; }
+        .player-row:nth-child(4) { animation-delay: 0.3s; }
+        .player-row:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .player-row.me {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .player-rank {
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .player-correct {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .player-score {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #a855f7;
+        }
+
+        /* Buttons */
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .play-again-btn {
+            padding: 20px 40px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.4);
+        }
+
+        .play-again-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(168, 85, 247, 0.5);
+        }
+
+        .share-btn {
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .share-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            animation: confetti-fall linear forwards;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        /* Your result card */
+        .your-result {
+            max-width: 400px;
+            margin: 0 auto 40px;
+            background: rgba(168, 85, 247, 0.15);
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            border-radius: 25px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .your-result-label {
+            font-size: 0.9rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .your-result-rank {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .your-result-score {
+            font-size: 1.5rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 500px) {
+            h1 { font-size: 2rem; }
+            .podium-stand { width: 80px; }
+            .podium-place.first .podium-avatar { width: 70px; height: 70px; }
+            .podium-avatar { width: 55px; height: 55px; font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="trophy">🏆</div>
+        <h1>Leaderboard</h1>
+        <p class="subtitle">IDE vs SME Quiz Results</p>
+    </div>
+
+    <!-- Podium for top 3 -->
+    <div class="podium-container" id="podiumContainer"></div>
+
+    <!-- Your result (for players) -->
+    <div class="your-result" id="yourResult" style="display: none;">
+        <div class="your-result-label">Your Rank</div>
+        <div class="your-result-rank" id="yourRank">#1</div>
+        <div class="your-result-score" id="yourScore">250 points</div>
+    </div>
+
+    <!-- Rest of players -->
+    <div class="players-list" id="playersList"></div>
+
+    <!-- Buttons -->
+    <div class="buttons" id="buttons">
+        <button class="play-again-btn" id="playAgainBtn" onclick="playAgain()">🚀 Play Again</button>
+        <button class="share-btn" onclick="shareResults()">📤 Share Results</button>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'ide_quiz_state';
+        const channel = new BroadcastChannel('ide_quiz_channel');
+
+        const playerId = sessionStorage.getItem('quiz_player_id');
+        const isHost = new URLSearchParams(window.location.search).get('host') === 'true';
+
+        function getState() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : null;
+        }
+
+        function setState(state) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            channel.postMessage({ type: 'state_update', state });
+        }
+
+        function init() {
+            const state = getState();
+            if (!state) {
+                showEmptyState();
+                return;
+            }
+
+            renderLeaderboard(state);
+            
+            // Show confetti for top 3
+            setTimeout(() => createConfetti(), 500);
+        }
+
+        function renderLeaderboard(state) {
+            // Sort players by score
+            const players = Object.entries(state.players)
+                .map(([id, data]) => ({ id, ...data }))
+                .sort((a, b) => b.score - a.score);
+
+            if (players.length === 0) {
+                showEmptyState();
+                return;
+            }
+
+            // Render podium
+            const podiumContainer = document.getElementById('podiumContainer');
+            const podiumOrder = [1, 0, 2]; // 2nd, 1st, 3rd
+
+            podiumContainer.innerHTML = podiumOrder.map(i => {
+                const player = players[i];
+                if (!player) return '';
+
+                const placeClass = i === 0 ? 'first' : i === 1 ? 'second' : 'third';
+                const placeNum = i + 1;
+                const emoji = i === 0 ? '👑' : i === 1 ? '🥈' : '🥉';
+
+                return `
+                    <div class="podium-place ${placeClass}">
+                        <div class="podium-avatar">${emoji}</div>
+                        <div class="podium-name">${player.name}</div>
+                        <div class="podium-score">${player.score}</div>
+                        <div class="podium-stand">${placeNum}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // Render other players (4th onwards)
+            const playersList = document.getElementById('playersList');
+            const otherPlayers = players.slice(3);
+
+            if (otherPlayers.length > 0) {
+                playersList.innerHTML = '<h3>Other Players</h3>';
+                
+                otherPlayers.forEach((player, i) => {
+                    const rank = i + 4;
+                    const isMe = player.id === playerId;
+                    const correctCount = Object.values(player.answers || {}).filter(a => a.correct).length;
+
+                    const row = document.createElement('div');
+                    row.className = 'player-row' + (isMe ? ' me' : '');
+                    row.innerHTML = `
+                        <div class="player-rank">${rank}</div>
+                        <div class="player-info">
+                            <div class="player-name">${player.name}${isMe ? ' (You)' : ''}</div>
+                            <div class="player-correct">${correctCount}/${state.questions.length} correct</div>
+                        </div>
+                        <div class="player-score">${player.score}</div>
+                    `;
+                    playersList.appendChild(row);
+                });
+            }
+
+            // Show your result card (for players)
+            if (playerId && !isHost) {
+                const myRank = players.findIndex(p => p.id === playerId) + 1;
+                const myPlayer = players.find(p => p.id === playerId);
+
+                if (myPlayer) {
+                    document.getElementById('yourResult').style.display = 'block';
+                    document.getElementById('yourRank').textContent = `#${myRank}`;
+                    document.getElementById('yourScore').textContent = `${myPlayer.score} points`;
+                }
+            }
+
+            // Only show play again for host
+            if (!isHost) {
+                document.getElementById('playAgainBtn').style.display = 'none';
+            }
+        }
+
+        function showEmptyState() {
+            document.getElementById('podiumContainer').innerHTML = `
+                <div class="empty-state">
+                    <div class="icon">🤔</div>
+                    <p>No results yet. Start a quiz first!</p>
+                </div>
+            `;
+        }
+
+        function playAgain() {
+            // Reset game state
+            const state = getState();
+            if (state) {
+                // Reset session but keep players
+                Object.keys(state.players).forEach(id => {
+                    state.players[id].score = 0;
+                    state.players[id].answers = {};
+                });
+                state.session = {
+                    state: 'waiting',
+                    currentQuestion: 0,
+                    startedAt: null
+                };
+                setState(state);
+            }
+            
+            // Redirect to host
+            window.location.href = 'quiz-host.html';
+        }
+
+        function shareResults() {
+            const state = getState();
+            if (!state) return;
+
+            const players = Object.entries(state.players)
+                .map(([id, data]) => ({ id, ...data }))
+                .sort((a, b) => b.score - a.score);
+
+            let text = '🏆 IDE vs SME Quiz Results!\n\n';
+            
+            players.slice(0, 5).forEach((player, i) => {
+                const medal = ['🥇', '🥈', '🥉'][i] || `${i + 1}.`;
+                text += `${medal} ${player.name}: ${player.score} points\n`;
+            });
+
+            text += `\nPlay at: ${window.location.origin}/quiz-join.html`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'IDE vs SME Quiz Results',
+                    text: text
+                }).catch(() => copyToClipboard(text));
+            } else {
+                copyToClipboard(text);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.share-btn');
+                const original = btn.innerHTML;
+                btn.innerHTML = '✅ Copied!';
+                setTimeout(() => btn.innerHTML = original, 2000);
+            }).catch(() => alert('Share:\n\n' + text));
+        }
+
+        function createConfetti() {
+            const colors = ['#fbbf24', '#f59e0b', '#a855f7', '#ec4899', '#22c55e', '#3b82f6'];
+            
+            for (let i = 0; i < 80; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 30);
+            }
+        }
+
+        // Listen for updates (live leaderboard)
+        channel.onmessage = (e) => {
+            if (e.data.type === 'state_update') {
+                renderLeaderboard(e.data.state);
+            }
+        };
+
+        // Poll for updates
+        setInterval(() => {
+            const state = getState();
+            if (state) {
+                renderLeaderboard(state);
+            }
+        }, 1000);
+
+        // Init
+        init();
+    </script>
+</body>
+</html>

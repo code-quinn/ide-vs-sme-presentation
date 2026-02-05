@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Host Dashboard | IDE vs SME Quiz</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo { font-size: 4rem; margin-bottom: 10px; }
+
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle { color: #888; font-size: 1.1rem; }
+
+        .dashboard {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 800px) {
+            .dashboard { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        /* Join Card */
+        .join-card {
+            text-align: center;
+        }
+
+        .game-pin-large {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border-radius: 20px;
+            padding: 25px 40px;
+            margin-bottom: 25px;
+        }
+
+        .game-pin-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .game-pin-code {
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: 8px;
+        }
+
+        .qr-container {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .qr-code {
+            width: 180px;
+            height: 180px;
+        }
+
+        .join-url {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+
+        .join-url a {
+            color: #a855f7;
+            text-decoration: none;
+        }
+
+        /* Players Card */
+        .players-card { }
+
+        .player-count {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .count-number {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .count-label {
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        .players-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            justify-content: center;
+        }
+
+        .player-chip {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 1rem;
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .no-players {
+            text-align: center;
+            color: #666;
+            padding: 40px;
+            font-style: italic;
+        }
+
+        /* Start Button Card */
+        .start-card {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .start-btn {
+            padding: 25px 80px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 60px;
+            background: linear-gradient(135deg, #22c55e, #10b981);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 50px rgba(34, 197, 94, 0.4);
+        }
+
+        .start-btn:hover:not(:disabled) {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(34, 197, 94, 0.5);
+        }
+
+        .start-btn:disabled {
+            background: linear-gradient(135deg, #444, #333);
+            cursor: not-allowed;
+            box-shadow: none;
+            opacity: 0.6;
+        }
+
+        .start-hint {
+            margin-top: 20px;
+            color: #888;
+            font-size: 1rem;
+        }
+
+        /* Reset Button */
+        .reset-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 12px 25px;
+            font-size: 0.9rem;
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            border-radius: 30px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+        }
+
+        /* Current Question Display (during game) */
+        .game-screen {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .game-screen.active {
+            display: block;
+        }
+
+        .dashboard.hidden {
+            display: none;
+        }
+
+        .question-display {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            color: #a855f7;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .options-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .options-display { grid-template-columns: 1fr; }
+        }
+
+        .option-display {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option-letter {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .option-display:nth-child(1) .option-letter { background: #ef4444; }
+        .option-display:nth-child(2) .option-letter { background: #3b82f6; }
+        .option-display:nth-child(3) .option-letter { background: #22c55e; }
+        .option-display:nth-child(4) .option-letter { background: #f59e0b; }
+
+        .timer-display {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #a855f7;
+        }
+
+        .timer-display.urgent {
+            color: #ef4444;
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .answers-count {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        .next-question-btn {
+            padding: 20px 60px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .next-question-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">🎯</div>
+        <h1>IDE vs SME Quiz</h1>
+        <p class="subtitle">Host Dashboard</p>
+    </div>
+
+    <!-- Lobby Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="card join-card">
+            <div class="card-title">Join at</div>
+            <div class="game-pin-large">
+                <div class="game-pin-label">Game PIN</div>
+                <div class="game-pin-code">IDEVSME</div>
+            </div>
+            <div class="qr-container">
+                <canvas id="qrCode" class="qr-code"></canvas>
+            </div>
+            <div class="join-url">
+                <a href="#" id="joinUrl"></a>
+            </div>
+        </div>
+
+        <div class="card players-card">
+            <div class="card-title">Players</div>
+            <div class="player-count">
+                <span class="count-number" id="playerCount">0</span>
+                <span class="count-label">joined</span>
+            </div>
+            <div class="players-grid" id="playersGrid">
+                <div class="no-players">Waiting for players...</div>
+            </div>
+        </div>
+
+        <div class="card start-card">
+            <button class="start-btn" id="startBtn" disabled onclick="startGame()">
+                🚀 START QUIZ
+            </button>
+            <p class="start-hint" id="startHint">Need at least 1 player to start</p>
+        </div>
+    </div>
+
+    <!-- Game Screen (shown during quiz) -->
+    <div class="game-screen" id="gameScreen">
+        <div class="question-display">
+            <div class="question-number" id="hostQuestionNumber">Question 1 of 5</div>
+            <div class="question-text" id="hostQuestionText"></div>
+            <div class="options-display" id="hostOptions"></div>
+            <div class="timer-display" id="hostTimer">10</div>
+            <div class="answers-count" id="answersCount">0 answers</div>
+            <button class="next-question-btn" id="nextQuestionBtn" style="display: none;" onclick="nextQuestion()">
+                Next Question →
+            </button>
+        </div>
+    </div>
+
+    <button class="reset-btn" onclick="resetGame()">🔄 Reset Game</button>
+
+    <!-- QR Code Library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+
+    <script>
+        const STORAGE_KEY = 'ide_quiz_state';
+        const channel = new BroadcastChannel('ide_quiz_channel');
+        
+        let timerInterval = null;
+        let currentTimer = 10;
+
+        function getState() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : null;
+        }
+
+        function setState(state) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            channel.postMessage({ type: 'state_update', state });
+        }
+
+        function getQuestions() {
+            return [
+                {
+                    text: "What does IDE stand for in this framework?",
+                    options: ["Integrated Development Environment", "Innovation Driven Environment", "Internal Design Engineering", "Internet Data Exchange"],
+                    correct: 1,
+                    timeLimit: 10
+                },
+                {
+                    text: "Which approach says 'fail fast, learn fast'?",
+                    options: ["SME (Subject Matter Expert)", "IDE (Innovation Driven Environment)", "Both equally", "Neither"],
+                    correct: 1,
+                    timeLimit: 10
+                },
+                {
+                    text: "The 🚀 rocket metaphor represents:",
+                    options: ["SME's stability", "IDE's rapid iteration", "Traditional approaches", "Government processes"],
+                    correct: 1,
+                    timeLimit: 10
+                },
+                {
+                    text: "What % of startups typically fail?",
+                    options: ["10%", "50%", "70-90%", "5%"],
+                    correct: 2,
+                    timeLimit: 10
+                },
+                {
+                    text: "Which company's motto was 'move fast and break things'?",
+                    options: ["IBM", "Facebook/Meta", "Government", "Traditional bank"],
+                    correct: 1,
+                    timeLimit: 10
+                }
+            ];
+        }
+
+        function initState() {
+            let state = getState();
+            if (!state || state.session.state === 'finished') {
+                state = {
+                    session: {
+                        state: 'waiting',
+                        currentQuestion: 0,
+                        startedAt: null,
+                        questionStartedAt: null
+                    },
+                    players: {},
+                    questions: getQuestions()
+                };
+                setState(state);
+            }
+            return state;
+        }
+
+        function updatePlayersList() {
+            const state = getState();
+            if (!state) return;
+
+            const players = Object.entries(state.players);
+            const count = players.length;
+
+            document.getElementById('playerCount').textContent = count;
+            
+            const grid = document.getElementById('playersGrid');
+            const startBtn = document.getElementById('startBtn');
+            const startHint = document.getElementById('startHint');
+
+            if (count === 0) {
+                grid.innerHTML = '<div class="no-players">Waiting for players...</div>';
+                startBtn.disabled = true;
+                startHint.textContent = 'Need at least 1 player to start';
+            } else {
+                grid.innerHTML = '';
+                players.sort((a, b) => a[1].joinedAt - b[1].joinedAt);
+                players.forEach(([id, player]) => {
+                    const chip = document.createElement('div');
+                    chip.className = 'player-chip';
+                    chip.textContent = player.name;
+                    grid.appendChild(chip);
+                });
+                startBtn.disabled = false;
+                startHint.textContent = `${count} player${count > 1 ? 's' : ''} ready!`;
+            }
+        }
+
+        function startGame() {
+            const state = getState();
+            state.session.state = 'playing';
+            state.session.currentQuestion = 0;
+            state.session.startedAt = Date.now();
+            state.session.questionStartedAt = Date.now();
+            setState(state);
+
+            showGameScreen();
+            startTimer();
+        }
+
+        function showGameScreen() {
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('gameScreen').classList.add('active');
+            updateQuestionDisplay();
+        }
+
+        function updateQuestionDisplay() {
+            const state = getState();
+            const q = state.questions[state.session.currentQuestion];
+            const total = state.questions.length;
+            const current = state.session.currentQuestion + 1;
+
+            document.getElementById('hostQuestionNumber').textContent = `Question ${current} of ${total}`;
+            document.getElementById('hostQuestionText').textContent = q.text;
+
+            const optionsContainer = document.getElementById('hostOptions');
+            optionsContainer.innerHTML = '';
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((opt, i) => {
+                const div = document.createElement('div');
+                div.className = 'option-display';
+                div.innerHTML = `
+                    <div class="option-letter">${letters[i]}</div>
+                    <div>${opt}</div>
+                `;
+                optionsContainer.appendChild(div);
+            });
+
+            updateAnswersCount();
+            document.getElementById('nextQuestionBtn').style.display = 'none';
+        }
+
+        function startTimer() {
+            currentTimer = 10;
+            updateTimerDisplay();
+            
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                currentTimer--;
+                updateTimerDisplay();
+                
+                if (currentTimer <= 0) {
+                    clearInterval(timerInterval);
+                    showQuestionResults();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const display = document.getElementById('hostTimer');
+            display.textContent = currentTimer;
+            display.classList.toggle('urgent', currentTimer <= 3);
+        }
+
+        function updateAnswersCount() {
+            const state = getState();
+            const currentQ = state.session.currentQuestion;
+            const players = Object.values(state.players);
+            const answered = players.filter(p => p.answers && p.answers[currentQ] !== undefined).length;
+            const total = players.length;
+            
+            document.getElementById('answersCount').textContent = `${answered}/${total} answered`;
+        }
+
+        function showQuestionResults() {
+            document.getElementById('hostTimer').textContent = '⏱️';
+            document.getElementById('nextQuestionBtn').style.display = 'inline-block';
+            
+            const state = getState();
+            if (state.session.currentQuestion >= state.questions.length - 1) {
+                document.getElementById('nextQuestionBtn').textContent = 'View Leaderboard 🏆';
+            } else {
+                document.getElementById('nextQuestionBtn').textContent = 'Next Question →';
+            }
+        }
+
+        function nextQuestion() {
+            const state = getState();
+            
+            if (state.session.currentQuestion >= state.questions.length - 1) {
+                // Game over
+                state.session.state = 'finished';
+                setState(state);
+                window.location.href = 'quiz-leaderboard.html?host=true';
+                return;
+            }
+
+            state.session.currentQuestion++;
+            state.session.questionStartedAt = Date.now();
+            setState(state);
+
+            updateQuestionDisplay();
+            startTimer();
+        }
+
+        function resetGame() {
+            if (confirm('Reset the game? All players will be removed.')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        // Listen for updates
+        channel.onmessage = (e) => {
+            if (e.data.type === 'state_update') {
+                updatePlayersList();
+                updateAnswersCount();
+            }
+        };
+
+        // Poll for updates
+        setInterval(() => {
+            const state = getState();
+            if (state) {
+                updatePlayersList();
+                if (state.session.state === 'playing') {
+                    updateAnswersCount();
+                }
+            }
+        }, 500);
+
+        // Generate QR code
+        function generateQR() {
+            const joinUrl = window.location.origin + '/quiz-join.html';
+            document.getElementById('joinUrl').href = joinUrl;
+            document.getElementById('joinUrl').textContent = joinUrl;
+            
+            QRCode.toCanvas(document.getElementById('qrCode'), joinUrl, {
+                width: 180,
+                margin: 0,
+                color: {
+                    dark: '#1a1a2e',
+                    light: '#ffffff'
+                }
+            });
+        }
+
+        // Init
+        initState();
+        updatePlayersList();
+        generateQR();
+
+        // Check if game is already running
+        const state = getState();
+        if (state && state.session.state === 'playing') {
+            showGameScreen();
+            updateQuestionDisplay();
+            startTimer();
+        }
+    </script>
+</body>
+</html>

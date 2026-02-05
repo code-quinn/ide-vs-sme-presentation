@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Quiz | IDE vs SME</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+            min-height: 100vh;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 450px;
+            width: 100%;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-pin {
+            background: rgba(168, 85, 247, 0.2);
+            border: 2px solid rgba(168, 85, 247, 0.5);
+            border-radius: 15px;
+            padding: 15px 30px;
+            margin: 1.5rem 0;
+            display: inline-block;
+        }
+
+        .game-pin-label {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .game-pin-code {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 5px;
+            color: #a855f7;
+        }
+
+        .join-form {
+            margin: 2rem 0;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 20px 25px;
+            font-size: 1.3rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.1);
+        }
+
+        input[type="text"]::placeholder {
+            color: #666;
+        }
+
+        .join-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.4);
+        }
+
+        .join-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(168, 85, 247, 0.5);
+        }
+
+        .join-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Waiting Screen */
+        .waiting-screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .waiting-screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .waiting-icon {
+            font-size: 5rem;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+        }
+
+        .waiting-text {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            color: #a855f7;
+        }
+
+        .waiting-subtext {
+            color: #888;
+            margin-bottom: 2rem;
+        }
+
+        .player-name-display {
+            font-size: 1.3rem;
+            padding: 15px 30px;
+            background: rgba(168, 85, 247, 0.2);
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .players-list {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .players-list h3 {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .players-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .player-chip {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            animation: popIn 0.3s ease;
+        }
+
+        .player-chip.me {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border: none;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .join-form-container {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .join-form-container.hidden {
+            display: none;
+        }
+
+        /* Mobile */
+        @media (max-width: 500px) {
+            .container { padding: 20px; }
+            h1 { font-size: 2rem; }
+            .game-pin-code { font-size: 2rem; }
+            input[type="text"] { font-size: 1.1rem; padding: 16px 20px; }
+            .join-btn { font-size: 1.2rem; padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🚀</div>
+        <h1>JOIN QUIZ</h1>
+        
+        <div class="game-pin">
+            <div class="game-pin-label">Game PIN</div>
+            <div class="game-pin-code">IDEVSME</div>
+        </div>
+
+        <!-- Join Form -->
+        <div class="join-form-container" id="joinForm">
+            <form class="join-form" onsubmit="joinGame(event)">
+                <div class="input-group">
+                    <input type="text" id="playerName" placeholder="Enter your name" maxlength="20" required autocomplete="off">
+                </div>
+                <button type="submit" class="join-btn" id="joinBtn">Join Game 🎮</button>
+            </form>
+        </div>
+
+        <!-- Waiting Screen -->
+        <div class="waiting-screen" id="waitingScreen">
+            <div class="waiting-icon">⏳</div>
+            <div class="waiting-text">Waiting for host...</div>
+            <div class="waiting-subtext">You're in! Get ready to play!</div>
+            <div class="player-name-display" id="playerNameDisplay">Player</div>
+            
+            <div class="players-list">
+                <h3>Players Joined</h3>
+                <div class="players-grid" id="playersGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Real-time sync using BroadcastChannel + localStorage
+        const STORAGE_KEY = 'ide_quiz_state';
+        const channel = new BroadcastChannel('ide_quiz_channel');
+        
+        let playerId = null;
+        let playerName = null;
+
+        // Initialize state if not exists
+        function initState() {
+            const state = getState();
+            if (!state) {
+                setState({
+                    session: {
+                        state: 'waiting',
+                        currentQuestion: 0,
+                        startedAt: null
+                    },
+                    players: {},
+                    questions: getQuestions()
+                });
+            }
+            return getState();
+        }
+
+        function getState() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : null;
+        }
+
+        function setState(state) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            channel.postMessage({ type: 'state_update', state });
+        }
+
+        function getQuestions() {
+            return [
+                {
+                    text: "What does IDE stand for in this framework?",
+                    options: ["Integrated Development Environment", "Innovation Driven Environment", "Internal Design Engineering", "Internet Data Exchange"],
+                    correct: 1,
+                    timeLimit: 10
+                },
+                {
+                    text: "Which approach says 'fail fast, learn fast'?",
+                    options: ["SME (Subject Matter Expert)", "IDE (Innovation Driven Environment)", "Both equally", "Neither"],
+                    correct: 1,
+                    timeLimit: 10
+                },
+                {
+                    text: "The 🚀 rocket metaphor represents:",
+                    options: ["SME's stability", "IDE's rapid iteration", "Traditional approaches", "Government processes"],
+                    correct: 1,
+                    timeLimit: 10
+                },
+                {
+                    text: "What % of startups typically fail?",
+                    options: ["10%", "50%", "70-90%", "5%"],
+                    correct: 2,
+                    timeLimit: 10
+                },
+                {
+                    text: "Which company's motto was 'move fast and break things'?",
+                    options: ["IBM", "Facebook/Meta", "Government", "Traditional bank"],
+                    correct: 1,
+                    timeLimit: 10
+                }
+            ];
+        }
+
+        function joinGame(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('playerName');
+            playerName = nameInput.value.trim();
+            
+            if (!playerName) return;
+
+            playerId = 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            
+            // Store player info in sessionStorage for persistence
+            sessionStorage.setItem('quiz_player_id', playerId);
+            sessionStorage.setItem('quiz_player_name', playerName);
+
+            const state = initState();
+            state.players[playerId] = {
+                name: playerName,
+                score: 0,
+                answers: {},
+                joinedAt: Date.now()
+            };
+            setState(state);
+
+            showWaitingScreen();
+        }
+
+        function showWaitingScreen() {
+            document.getElementById('joinForm').classList.add('hidden');
+            document.getElementById('waitingScreen').classList.add('active');
+            document.getElementById('playerNameDisplay').textContent = '👤 ' + playerName;
+            updatePlayersList();
+        }
+
+        function updatePlayersList() {
+            const state = getState();
+            if (!state) return;
+
+            const grid = document.getElementById('playersGrid');
+            grid.innerHTML = '';
+
+            const players = Object.entries(state.players);
+            players.sort((a, b) => a[1].joinedAt - b[1].joinedAt);
+
+            players.forEach(([id, player]) => {
+                const chip = document.createElement('div');
+                chip.className = 'player-chip' + (id === playerId ? ' me' : '');
+                chip.textContent = player.name;
+                grid.appendChild(chip);
+            });
+        }
+
+        // Listen for state updates
+        channel.onmessage = (e) => {
+            if (e.data.type === 'state_update') {
+                const state = e.data.state;
+                
+                // Check if game started
+                if (state.session.state === 'playing' && playerId) {
+                    window.location.href = 'quiz-play.html';
+                }
+                
+                updatePlayersList();
+            }
+        };
+
+        // Check for existing session
+        function checkExistingSession() {
+            const existingId = sessionStorage.getItem('quiz_player_id');
+            const existingName = sessionStorage.getItem('quiz_player_name');
+            
+            if (existingId && existingName) {
+                const state = getState();
+                if (state && state.players[existingId]) {
+                    playerId = existingId;
+                    playerName = existingName;
+                    
+                    if (state.session.state === 'playing') {
+                        window.location.href = 'quiz-play.html';
+                        return;
+                    }
+                    
+                    showWaitingScreen();
+                }
+            }
+        }
+
+        // Poll for updates (backup for BroadcastChannel)
+        setInterval(() => {
+            if (playerId) {
+                const state = getState();
+                if (state && state.session.state === 'playing') {
+                    window.location.href = 'quiz-play.html';
+                }
+                updatePlayersList();
+            }
+        }, 1000);
+
+        // Init
+        initState();
+        checkExistingSession();
+
+        // Focus input
+        document.getElementById('playerName').focus();
+    </script>
+</body>
+</html>

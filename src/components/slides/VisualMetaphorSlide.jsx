@@ -261,73 +261,117 @@ const VisualMetaphorSlide = ({ slide }) => {
                 </motion.div>
               )}
 
-              <div className="flex flex-col items-center">
-                {/* The Rocket - FAST launch */}
-                <motion.div
-                  animate={{ 
-                    y: launched ? -400 : 0,
-                    scale: launched ? 0.8 : 1,
-                  }}
-                  transition={{
-                    duration: launched ? 1.2 : 0.3,
-                    ease: launched ? [0.2, 0.8, 0.2, 1] : "easeOut"
-                  }}
-                  className="relative z-10"
+              {/* SMOKE - Stays at launch pad, trails behind rocket */}
+              {(launched || countdown !== null) && (
+                <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-0">
+                  {/* Multiple smoke puffs that spread and fade */}
+                  {[...Array(12)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute rounded-full"
+                      style={{
+                        width: 15 + (i % 4) * 10,
+                        height: 15 + (i % 4) * 10,
+                        background: `rgba(156, 163, 175, ${0.4 + (i % 3) * 0.1})`,
+                        filter: 'blur(8px)',
+                        left: -20 + (i % 5) * 10,
+                        top: (i % 3) * 10,
+                      }}
+                      initial={{ 
+                        x: 0, 
+                        y: 0, 
+                        opacity: 0.6,
+                        scale: 0.5 
+                      }}
+                      animate={{ 
+                        x: ((i % 2 === 0 ? 1 : -1) * (20 + (i % 4) * 15)),
+                        y: 10 + (i % 3) * 15,
+                        opacity: 0,
+                        scale: 2 + (i % 3) * 0.5,
+                      }}
+                      transition={{
+                        duration: 1.5 + (i % 4) * 0.3,
+                        repeat: Infinity,
+                        delay: i * 0.15,
+                        ease: "easeOut"
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* ROCKET + FIRE - Move together as one unit */}
+              <motion.div
+                className="flex flex-col items-center relative z-10"
+                animate={{ 
+                  y: launched ? -350 : 0,
+                  scale: launched ? 0.85 : 1,
+                }}
+                transition={{
+                  duration: launched ? 1.2 : 0.3,
+                  ease: launched ? [0.2, 0.8, 0.2, 1] : "easeOut"
+                }}
+              >
+                {/* The Rocket - Rotated to point STRAIGHT UP */}
+                <div 
+                  className="text-8xl"
+                  style={{ transform: 'rotate(-45deg)' }}
                 >
-                  <div className="text-8xl">🚀</div>
-                </motion.div>
+                  🚀
+                </div>
                 
-                {/* POWERFUL Fire - gushing from furnace */}
+                {/* FIRE - ATTACHED to rocket, moves with it */}
                 {(launched || countdown !== null) && (
-                  <motion.div className="flex flex-col items-center -mt-6">
-                    {/* Main thrust flame - large, intense, pulsing */}
+                  <motion.div className="flex flex-col items-center -mt-4">
+                    {/* Main thrust flame */}
                     <motion.div
                       animate={{ 
-                        scaleY: [1, 1.5, 1.2, 1.8, 1],
-                        scaleX: [1, 0.9, 1.1, 0.95, 1],
+                        scaleY: [1, 1.4, 1.1, 1.6, 1],
+                        scaleX: [1, 0.85, 1.1, 0.9, 1],
                       }}
-                      transition={{ duration: 0.15, repeat: Infinity }}
-                      className="text-6xl origin-top"
+                      transition={{ duration: 0.12, repeat: Infinity }}
+                      className="text-5xl origin-top"
                     >
                       🔥
                     </motion.div>
                     
                     {/* Secondary flames for width */}
-                    <div className="flex -mt-4">
+                    <div className="flex -mt-3">
                       <motion.span 
-                        animate={{ opacity: [0.6, 1, 0.6], rotate: [-10, -15, -10] }}
+                        animate={{ 
+                          opacity: [0.7, 1, 0.7], 
+                          scaleY: [1, 1.3, 1],
+                          rotate: [-8, -12, -8] 
+                        }}
                         transition={{ duration: 0.1, repeat: Infinity }}
-                        className="text-4xl"
+                        className="text-3xl"
                       >🔥</motion.span>
                       <motion.span 
-                        animate={{ opacity: [0.7, 1, 0.7], rotate: [10, 15, 10] }}
-                        transition={{ duration: 0.12, repeat: Infinity }}
-                        className="text-4xl"
+                        animate={{ 
+                          opacity: [0.8, 1, 0.8], 
+                          scaleY: [1, 1.2, 1],
+                          rotate: [8, 12, 8] 
+                        }}
+                        transition={{ duration: 0.11, repeat: Infinity }}
+                        className="text-3xl"
                       >🔥</motion.span>
                     </div>
-                  </motion.div>
-                )}
-                
-                {/* Minimal Smoke - just 2 puffs */}
-                {(launched || countdown !== null) && (
-                  <motion.div 
-                    className="flex gap-2 -mt-2"
-                    animate={{ 
-                      y: [0, 30],
-                      opacity: [0.5, 0],
-                      scale: [1, 1.5]
-                    }}
-                    transition={{ duration: 1, repeat: Infinity }}
-                  >
-                    <span className="text-2xl">💨</span>
-                    <span className="text-2xl">💨</span>
+                    
+                    {/* Tertiary flames - extra intensity */}
+                    <div className="flex -mt-2">
+                      <motion.span 
+                        animate={{ opacity: [0.5, 0.8, 0.5], scale: [0.9, 1.1, 0.9] }}
+                        transition={{ duration: 0.08, repeat: Infinity }}
+                        className="text-2xl"
+                      >🔥</motion.span>
+                    </div>
                   </motion.div>
                 )}
 
                 {/* Idle flame animation when not launched */}
                 {!launched && countdown === null && (
                   <motion.div
-                    className="-mt-6"
+                    className="-mt-4"
                     animate={{ 
                       scale: [1, 1.15, 1],
                       opacity: [0.6, 0.9, 0.6]
@@ -337,7 +381,7 @@ const VisualMetaphorSlide = ({ slide }) => {
                     <span className="text-4xl">🔥</span>
                   </motion.div>
                 )}
-              </div>
+              </motion.div>
             </div>
 
             {/* Launch platform */}

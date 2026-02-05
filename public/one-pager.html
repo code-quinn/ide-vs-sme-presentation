@@ -81,18 +81,18 @@
     h1 {
       font-size: 32px;
       font-weight: 900;
-      color: var(--purple); /* Fallback for PDF */
-      background: linear-gradient(135deg, var(--purple), var(--pink), var(--cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--purple);
       letter-spacing: -0.02em;
     }
     
-    /* PDF fallback - gradient text doesn't work in PDF */
-    @supports not (-webkit-background-clip: text) {
-      h1 { color: var(--purple) !important; }
-      .footer-info .brand { color: var(--purple) !important; }
+    /* Gradient text only for screen - not PDF safe */
+    @media screen {
+      h1 {
+        background: linear-gradient(135deg, var(--purple), var(--pink), var(--cyan));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
     }
     
     .subtitle {
@@ -396,12 +396,18 @@
     .footer-info .brand {
       font-size: 18px;
       font-weight: 800;
-      color: var(--purple); /* Fallback for PDF */
-      background: linear-gradient(135deg, var(--purple), var(--pink));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--purple);
       margin-bottom: 4px;
+    }
+    
+    /* Gradient text only for screen */
+    @media screen {
+      .footer-info .brand {
+        background: linear-gradient(135deg, var(--purple), var(--pink));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
     }
     
     .footer-info p {

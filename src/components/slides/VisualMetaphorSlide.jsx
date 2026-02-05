@@ -150,78 +150,59 @@ const VisualMetaphorSlide = ({ slide }) => {
               </div>
             </div>
 
-            {/* Countdown Display - TOP RIGHT corner, away from rocket */}
+            {/* Countdown Display - Small, right side, away from rocket */}
             <AnimatePresence>
               {countdown !== null && (
                 <motion.div
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 1.5, opacity: 0 }}
-                  className="absolute top-4 right-4 z-30"
+                  exit={{ scale: 1.2, opacity: 0 }}
+                  className="absolute top-14 right-3 z-30"
                 >
                   <div 
-                    className="flex flex-col items-center px-6 py-4 rounded-2xl"
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg"
                     style={{
-                      background: 'rgba(88, 28, 135, 0.8)',
-                      border: '2px solid rgba(168, 85, 247, 0.6)',
-                      boxShadow: '0 0 30px rgba(168, 85, 247, 0.4)',
+                      background: 'rgba(88, 28, 135, 0.7)',
+                      border: '1px solid rgba(168, 85, 247, 0.5)',
                     }}
                   >
-                    <span className="text-xs text-purple-300 uppercase tracking-widest mb-1">T-minus</span>
-                    <span className="text-6xl font-black text-white"
-                      style={{ textShadow: '0 0 20px rgba(168, 85, 247, 0.8)' }}
-                    >
-                      {countdown}
-                    </span>
+                    <span className="text-[10px] text-purple-300 uppercase">T-</span>
+                    <span className="text-2xl font-bold text-white">{countdown}</span>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Launch Result - TOP RIGHT corner, same position as countdown */}
+            {/* Launch Result - Small badge, right side */}
             <AnimatePresence>
               {launchResult && (
                 <motion.div
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0, opacity: 0 }}
-                  className="absolute top-4 right-4 z-30"
+                  className="absolute top-14 right-3 z-30"
                 >
                   {launchResult === 'success' ? (
                     <div 
-                      className="flex flex-col items-center px-5 py-3 rounded-2xl"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg"
                       style={{
-                        background: 'rgba(21, 128, 61, 0.85)',
-                        border: '2px solid rgba(74, 222, 128, 0.6)',
-                        boxShadow: '0 0 30px rgba(74, 222, 128, 0.4)',
+                        background: 'rgba(21, 128, 61, 0.8)',
+                        border: '1px solid rgba(74, 222, 128, 0.5)',
                       }}
                     >
-                      <span className="text-5xl">🎉</span>
-                      <motion.p 
-                        className="text-green-300 font-bold text-xl mt-1"
-                        animate={{ scale: [1, 1.05, 1] }}
-                        transition={{ duration: 0.5, repeat: Infinity }}
-                      >
-                        SHIPPED!
-                      </motion.p>
+                      <span className="text-lg">🎉</span>
+                      <span className="text-sm font-bold text-green-300">SHIPPED!</span>
                     </div>
                   ) : (
                     <div 
-                      className="flex flex-col items-center px-5 py-3 rounded-2xl"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg"
                       style={{
-                        background: 'rgba(154, 52, 18, 0.85)',
-                        border: '2px solid rgba(251, 146, 60, 0.6)',
-                        boxShadow: '0 0 30px rgba(251, 146, 60, 0.4)',
+                        background: 'rgba(154, 52, 18, 0.8)',
+                        border: '1px solid rgba(251, 146, 60, 0.5)',
                       }}
                     >
-                      <span className="text-5xl">💥</span>
-                      <motion.p 
-                        className="text-orange-300 font-bold text-xl mt-1"
-                        animate={{ scale: [1, 1.05, 1] }}
-                        transition={{ duration: 0.5, repeat: Infinity }}
-                      >
-                        Iterating!
-                      </motion.p>
+                      <span className="text-lg">💥</span>
+                      <span className="text-sm font-bold text-orange-300">Iterate!</span>
                     </div>
                   )}
                 </motion.div>

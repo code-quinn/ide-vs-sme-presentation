@@ -46,14 +46,14 @@ doc.fontSize(10)
 // Main content area
 let y = 140;
 
-// Two-column comparison
+// Two-column comparison headers
 doc.fontSize(16)
    .font('Helvetica-Bold')
    .fillColor(purple)
-   .text('🚀 IDE', 40, y);
+   .text('[>] IDE', 40, y);
 
 doc.fillColor(blue)
-   .text('🏢 SME', 310, y);
+   .text('[=] SME', 310, y);
 
 y += 30;
 
@@ -80,12 +80,12 @@ doc.fontSize(10).font('Helvetica');
 
 idePoints.forEach((point, i) => {
   doc.fillColor(dark)
-     .text(`✓ ${point}`, 50, y + i * 18, { width: 220 });
+     .text('> ' + point, 50, y + i * 18, { width: 220 });
 });
 
 smePoints.forEach((point, i) => {
   doc.fillColor(dark)
-     .text(`• ${point}`, 320, y + i * 18, { width: 220 });
+     .text('- ' + point, 320, y + i * 18, { width: 220 });
 });
 
 y += 130;
@@ -136,7 +136,7 @@ doc.roundedRect(40, y, 515, 60, 8).fill('#FEF3C7');
 doc.fontSize(11)
    .font('Helvetica-Bold')
    .fillColor('#92400E')
-   .text('💡 Key Insight', 55, y + 12);
+   .text('* KEY INSIGHT *', 55, y + 12);
 
 doc.fontSize(10)
    .font('Helvetica')
@@ -188,20 +188,20 @@ doc.fontSize(10)
    .font('Helvetica')
    .fillColor(blue);
 
-doc.text('🌐 chuksabanum.com', 50, y);
-doc.text('🐦 x.com/beyondkodes', 200, y);
-doc.text('📧 ceo@vent.africa', 380, y);
+doc.text('Web: chuksabanum.com', 50, y);
+doc.text('Twitter: x.com/beyondkodes', 200, y);
+doc.text('Email: ceo@vent.africa', 380, y);
 
-y += 20;
-doc.text('🚀 vent.africa', 50, y);
-doc.text('🎯 This presentation: code-quinn.github.io/ide-vs-sme-presentation', 200, y, { width: 350 });
+y += 18;
+doc.text('Vent.Africa: vent.africa', 50, y);
+doc.text('Slides: code-quinn.github.io/ide-vs-sme-presentation', 200, y, { width: 350 });
 
 // Footer
 doc.rect(0, 800, 595, 42).fill(dark);
 doc.fontSize(9)
    .font('Helvetica')
    .fillColor('#9CA3AF')
-   .text('Built with ❤️ by WorldClass & Quinn AI at 2am | Admiralty University of Nigeria Excursion 2026', 40, 815, { align: 'center', width: 515 });
+   .text('Built by WorldClass & Quinn AI | Admiralty University of Nigeria Excursion 2026', 40, 815, { align: 'center', width: 515 });
 
 // Finalize
 doc.end();

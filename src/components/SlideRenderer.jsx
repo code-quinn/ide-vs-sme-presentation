@@ -17,6 +17,10 @@ import TakeHomeSlide from './slides/TakeHomeSlide';
 import TakeawaysSlide from './slides/TakeawaysSlide';
 import ResourcesSlide from './slides/ResourcesSlide';
 import EndingSlide from './slides/EndingSlide';
+import AnimatedFlowSlide from './slides/AnimatedFlowSlide';
+import AnimatedChartSlide from './slides/AnimatedChartSlide';
+import DayInLifeSlide from './slides/DayInLifeSlide';
+import VisualMetaphorSlide from './slides/VisualMetaphorSlide';
 
 const slideComponents = {
   title: TitleSlide,
@@ -36,6 +40,10 @@ const slideComponents = {
   takeaways: TakeawaysSlide,
   resources: ResourcesSlide,
   ending: EndingSlide,
+  'animated-flow': AnimatedFlowSlide,
+  'animated-chart': AnimatedChartSlide,
+  'day-in-life': DayInLifeSlide,
+  'visual-metaphor': VisualMetaphorSlide,
 };
 
 const SlideRenderer = ({ slide, addPoints, currentSlide }) => {

@@ -90,7 +90,59 @@ export const slides = [
     }
   },
 
-  // Slide 5: Decision Making
+  // Slide 5: Visual Metaphor - Rocket vs Building
+  {
+    type: 'visual-metaphor',
+    title: 'The Big Picture',
+  },
+
+  // Slide 6: Decision Making Flow Animation
+  {
+    type: 'animated-flow',
+    title: 'How Decisions Get Made',
+    subtitle: 'Watch the difference in real-time',
+    ideFlow: [
+      'Idea proposed',
+      'Quick team discussion',
+      'Prototype built',
+      'Ship to users',
+      'Iterate based on data',
+    ],
+    smeFlow: [
+      'Idea proposed',
+      'Manager review',
+      'Department approval',
+      'Budget committee',
+      'Legal review',
+      'Executive sign-off',
+      'Implementation plan',
+      'Finally... start building',
+    ],
+    ideTime: '2 days',
+    smeTime: '3 months',
+  },
+
+  // Slide 7: Metrics Comparison
+  {
+    type: 'animated-chart',
+    title: 'By The Numbers',
+    subtitle: 'How IDEs and SMEs compare across key metrics',
+    metrics: [
+      { label: 'Time in Meetings', ideValue: 15, smeValue: 45, ideLabel: '15%', smeLabel: '45%', insight: 'IDEs protect deep work time' },
+      { label: 'Decision Speed', ideValue: 90, smeValue: 30, ideLabel: 'Fast', smeLabel: 'Slow', insight: 'Bureaucracy kills velocity' },
+      { label: 'Experiment Frequency', ideValue: 85, smeValue: 20, ideLabel: 'Weekly', smeLabel: 'Quarterly', insight: 'More experiments = more learnings' },
+      { label: 'Risk Tolerance', ideValue: 80, smeValue: 25, ideLabel: 'High', smeLabel: 'Low', insight: 'No risk = no innovation' },
+    ],
+  },
+
+  // Slide 8: Day in the Life
+  {
+    type: 'day-in-life',
+    title: 'A Day in the Life',
+    subtitle: 'Watch how an IDE engineer vs SME employee spend their day',
+  },
+
+  // Slide 9: Decision Making (original)
   {
     type: 'visual',
     title: 'Decision-Making Speed',

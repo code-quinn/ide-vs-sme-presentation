@@ -1,93 +1,141 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FileText, ExternalLink, QrCode, Download } from 'lucide-react';
+import { FileText, ExternalLink, Download } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 
 const ResourcesSlide = ({ slide }) => {
+  const presentationUrl = 'https://code-quinn.github.io/ide-vs-sme-presentation';
+  const onePagerUrl = `${presentationUrl}/one-pager.html`;
+
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-5xl mx-auto">
       <div className="text-center mb-8">
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="w-20 h-20 rounded-2xl bg-gradient-to-br from-wc-cyan to-wc-blue mx-auto mb-4 flex items-center justify-center"
+          className="w-20 h-20 rounded-2xl bg-gradient-to-br from-wc-cyan to-wc-purple mx-auto mb-4 flex items-center justify-center"
         >
           <FileText className="w-10 h-10 text-white" />
         </motion.div>
         <h2 className="text-4xl font-bold gradient-text">{slide.title}</h2>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8">
-        {/* One-Pager */}
+      <div className="grid md:grid-cols-3 gap-6">
+        {/* One-Pager Download */}
         <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="glass rounded-2xl p-6"
+          className="glass rounded-2xl p-6 text-center"
         >
-          <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            <FileText className="w-6 h-6 text-wc-purple" />
-            One-Pager Takeaway
-          </h3>
-          <div className="bg-dark-700 rounded-xl p-4 mb-4">
-            <div className="aspect-[8.5/11] bg-white rounded-lg flex flex-col items-center justify-center p-4">
-              <div className="text-dark-900 font-bold text-lg mb-2">IDE vs SME</div>
-              <div className="w-full h-2 bg-gradient-to-r from-wc-purple to-wc-pink rounded mb-4" />
-              <div className="grid grid-cols-2 gap-2 w-full text-xs text-dark-900/70">
-                <div className="bg-wc-purple/10 p-2 rounded">Innovation First</div>
-                <div className="bg-wc-blue/10 p-2 rounded">Stability First</div>
-                <div className="bg-wc-cyan/10 p-2 rounded">Fast Decisions</div>
-                <div className="bg-orange-500/10 p-2 rounded">Careful Planning</div>
-              </div>
-              <div className="mt-4 w-16 h-16 bg-dark-900/10 rounded flex items-center justify-center">
-                <QrCode className="w-12 h-12 text-dark-900/30" />
-              </div>
-            </div>
+          <h3 className="text-lg font-bold text-white mb-4">📄 One-Pager</h3>
+          <div className="bg-white rounded-xl p-3 mb-4 inline-block">
+            <QRCodeSVG 
+              value={onePagerUrl}
+              size={120}
+              level="M"
+              includeMargin={false}
+              fgColor="#1a1a2e"
+            />
           </div>
-          <button className="w-full py-3 rounded-xl bg-gradient-to-r from-wc-purple to-wc-pink text-white font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
-            <Download className="w-5 h-5" />
-            Download PDF
-          </button>
+          <p className="text-sm text-white/50 mb-4">Scan or click below</p>
+          <a
+            href="/one-pager.html"
+            target="_blank"
+            className="block w-full py-3 rounded-xl bg-gradient-to-r from-wc-purple to-wc-pink text-white font-bold hover:opacity-90 transition-opacity"
+          >
+            <Download className="w-4 h-4 inline mr-2" />
+            View & Print
+          </a>
         </motion.div>
 
-        {/* Links & QR */}
+        {/* WorldClass / Chukwuemeka */}
         <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="space-y-6"
+          className="glass rounded-2xl p-6 text-center"
         >
-          {/* Links */}
-          <div className="glass rounded-2xl p-6">
-            <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-              <ExternalLink className="w-6 h-6 text-wc-cyan" />
-              Useful Links
-            </h3>
-            <div className="space-y-3">
-              {slide.links.map((link, idx) => (
-                <a
-                  key={idx}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3 rounded-xl bg-dark-700 hover:bg-dark-600 transition-colors group"
-                >
-                  <span className="text-white/80 group-hover:text-white">{link.label}</span>
-                  <ExternalLink className="w-4 h-4 text-white/40 group-hover:text-wc-cyan" />
-                </a>
-              ))}
-            </div>
+          <h3 className="text-lg font-bold text-white mb-4">👨‍💻 WorldClass</h3>
+          <div className="bg-white rounded-xl p-3 mb-4 inline-block">
+            <QRCodeSVG 
+              value="https://chuksabanum.com"
+              size={120}
+              level="M"
+              includeMargin={false}
+              fgColor="#1a1a2e"
+            />
           </div>
+          <p className="text-sm text-white/50 mb-4">chuksabanum.com</p>
+          <a
+            href="https://chuksabanum.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full py-3 rounded-xl bg-gradient-to-r from-wc-cyan to-blue-500 text-white font-bold hover:opacity-90 transition-opacity"
+          >
+            <ExternalLink className="w-4 h-4 inline mr-2" />
+            Visit Site
+          </a>
+        </motion.div>
 
-          {/* QR Code Placeholder */}
-          <div className="glass rounded-2xl p-6 text-center">
-            <h3 className="text-lg font-bold text-white mb-4">Scan for Resources</h3>
-            <div className="w-32 h-32 bg-white rounded-xl mx-auto flex items-center justify-center">
-              <QrCode className="w-24 h-24 text-dark-900" />
-            </div>
-            <p className="text-sm text-white/50 mt-3">worldclass.dev/ide-framework</p>
+        {/* Vent.Africa */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="glass rounded-2xl p-6 text-center"
+        >
+          <h3 className="text-lg font-bold text-white mb-4">🌍 Vent.Africa</h3>
+          <div className="bg-white rounded-xl p-3 mb-4 inline-block">
+            <QRCodeSVG 
+              value="https://vent.africa"
+              size={120}
+              level="M"
+              includeMargin={false}
+              fgColor="#1a1a2e"
+            />
           </div>
+          <p className="text-sm text-white/50 mb-4">Crypto-to-Cash Platform</p>
+          <a
+            href="https://vent.africa"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold hover:opacity-90 transition-opacity"
+          >
+            <ExternalLink className="w-4 h-4 inline mr-2" />
+            Explore
+          </a>
         </motion.div>
       </div>
+
+      {/* All Links */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="mt-8 glass rounded-2xl p-6"
+      >
+        <h3 className="text-lg font-bold text-white mb-4 text-center">🔗 Quick Links</h3>
+        <div className="flex flex-wrap justify-center gap-4">
+          {[
+            { label: 'WorldClass', url: 'https://chuksabanum.com', color: 'from-wc-purple to-wc-pink' },
+            { label: 'Vent.Africa', url: 'https://vent.africa', color: 'from-emerald-500 to-teal-500' },
+            { label: 'This Presentation', url: presentationUrl, color: 'from-wc-cyan to-blue-500' },
+            { label: 'Take-Home Kit', url: `${presentationUrl}/take-home-kit.html`, color: 'from-orange-500 to-red-500' },
+          ].map((link, idx) => (
+            <a
+              key={idx}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`px-6 py-3 rounded-full bg-gradient-to-r ${link.color} text-white font-medium hover:opacity-90 transition-opacity flex items-center gap-2`}
+            >
+              {link.label}
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          ))}
+        </div>
+      </motion.div>
     </div>
   );
 };

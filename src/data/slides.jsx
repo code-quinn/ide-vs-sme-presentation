@@ -363,7 +363,7 @@ export const slides = [
     title: 'Resources & Links',
     onePager: true,
     links: [
-      { label: 'WorldClass', url: 'https://worldclass.dev' },
+      { label: 'WorldClass', url: 'https://chuksabanum.com' },
       { label: 'Vent.Africa', url: 'https://vent.africa' },
       { label: 'This Presentation', url: 'https://code-quinn.github.io/ide-vs-sme-presentation' },
     ],

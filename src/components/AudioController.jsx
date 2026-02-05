@@ -2,23 +2,72 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Volume2, VolumeX, Music, Music2, Play, Square } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Unlock audio context on first user interaction (handles autoplay restrictions)
+let audioContextUnlocked = false;
+const unlockAudioContext = () => {
+  if (audioContextUnlocked) return;
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (AudioContext) {
+      const ctx = new AudioContext();
+      ctx.resume().then(() => {
+        audioContextUnlocked = true;
+      });
+    }
+  } catch (e) {
+    // Ignore errors
+  }
+};
+
+// Add unlock listener on first interaction
+if (typeof window !== 'undefined') {
+  ['click', 'touchstart', 'keydown'].forEach(event => {
+    document.addEventListener(event, unlockAudioContext, { once: true });
+  });
+}
+
+// Helper to preload audio
+const preloadAudio = (audio) => {
+  return new Promise((resolve) => {
+    if (audio.readyState >= 3) {
+      resolve();
+      return;
+    }
+    audio.addEventListener('canplaythrough', () => resolve(), { once: true });
+    audio.addEventListener('error', () => resolve(), { once: true });
+    audio.load();
+  });
+};
+
 // Hook for slide transition sounds
 export const useSlideTransitionSound = (enabled = true) => {
   const audioRef = useRef(null);
+  const [loaded, setLoaded] = useState(false);
   
   useEffect(() => {
-    audioRef.current = new Audio('/audio/transition.mp3');
-    audioRef.current.volume = 0.15; // Subtle
+    const audio = new Audio('/audio/transition.mp3');
+    audio.preload = 'auto';
+    audio.volume = 0.15; // Subtle
+    audioRef.current = audio;
+    
+    preloadAudio(audio).then(() => setLoaded(true));
+    
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+    };
   }, []);
   
   const playTransition = useCallback(() => {
-    if (enabled && audioRef.current) {
+    if (enabled && audioRef.current && loaded) {
       audioRef.current.currentTime = 0;
       audioRef.current.play().catch(() => {});
     }
-  }, [enabled]);
+  }, [enabled, loaded]);
   
-  return { playTransition };
+  return { playTransition, loaded };
 };
 
 // Hook for background music (entrance/exit)
@@ -27,19 +76,34 @@ export const useBackgroundMusic = () => {
   const exitRef = useRef(null);
   const [entrancePlaying, setEntrancePlaying] = useState(false);
   const [exitPlaying, setExitPlaying] = useState(false);
+  const [audioLoaded, setAudioLoaded] = useState(false);
   
   useEffect(() => {
-    entranceRef.current = new Audio('/audio/entrance.mp3');
-    entranceRef.current.volume = 0.3;
-    entranceRef.current.loop = true;
+    const entrance = new Audio('/audio/entrance.mp3');
+    entrance.preload = 'auto';
+    entrance.volume = 0.3;
+    entrance.loop = true;
+    entranceRef.current = entrance;
     
-    exitRef.current = new Audio('/audio/exit.mp3');
-    exitRef.current.volume = 0.4;
-    exitRef.current.loop = false;
+    const exit = new Audio('/audio/exit.mp3');
+    exit.preload = 'auto';
+    exit.volume = 0.4;
+    exit.loop = false;
+    exitRef.current = exit;
+    
+    // Preload both audio files
+    Promise.all([
+      preloadAudio(entrance),
+      preloadAudio(exit)
+    ]).then(() => setAudioLoaded(true));
     
     return () => {
-      entranceRef.current?.pause();
-      exitRef.current?.pause();
+      [entranceRef, exitRef].forEach(ref => {
+        if (ref.current) {
+          ref.current.pause();
+          ref.current.src = '';
+        }
+      });
     };
   }, []);
   

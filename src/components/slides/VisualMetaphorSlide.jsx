@@ -269,44 +269,7 @@ const VisualMetaphorSlide = ({ slide }) => {
               {/* WATER PIPES WITH SPRAY - Visible pipes on left and right */}
               {(launched || countdown !== null) && (
                 <>
-                  {/* LEFT PIPE STRUCTURE */}
-                  <div className="absolute bottom-20 left-[8%] z-30">
-                    {/* Vertical pipe */}
-                    <div className="w-3 h-16 bg-gradient-to-b from-slate-400 to-slate-500 rounded-sm" 
-                      style={{ boxShadow: 'inset -1px 0 2px rgba(0,0,0,0.3)' }} />
-                    {/* Horizontal nozzle */}
-                    <div className="absolute top-2 left-3 w-8 h-2 bg-gradient-to-r from-slate-500 to-slate-400 rounded-r-full"
-                      style={{ boxShadow: '0 1px 2px rgba(0,0,0,0.3)' }} />
-                    {/* Water spray from nozzle */}
-                    {[...Array(12)].map((_, i) => (
-                      <motion.div
-                        key={`water-l-${i}`}
-                        className="absolute"
-                        style={{
-                          width: 4 + (i % 3) * 2,
-                          height: 10 + (i % 4) * 5,
-                          background: 'linear-gradient(to bottom, rgba(147, 197, 253, 0.9), rgba(59, 130, 246, 0.8))',
-                          borderRadius: '50%',
-                          left: 11,
-                          top: 3,
-                        }}
-                        animate={{
-                          x: [0, 30 + (i % 4) * 20, 80 + (i % 3) * 25],
-                          y: [0, 10 + (i % 3) * 8, 40 + (i % 4) * 15],
-                          opacity: [0.9, 0.7, 0],
-                          scaleY: [1, 0.8, 0.5],
-                        }}
-                        transition={{
-                          duration: 0.5 + (i % 3) * 0.1,
-                          repeat: Infinity,
-                          delay: i * 0.04,
-                          ease: "easeOut"
-                        }}
-                      />
-                    ))}
-                  </div>
-                  
-                  {/* RIGHT PIPE STRUCTURE */}
+                  {/* RIGHT PIPE STRUCTURE - Water sprayer */}
                   <div className="absolute bottom-20 right-[8%] z-30">
                     {/* Vertical pipe */}
                     <div className="w-3 h-16 bg-gradient-to-b from-slate-400 to-slate-500 rounded-sm"

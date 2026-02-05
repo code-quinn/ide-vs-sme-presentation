@@ -3,440 +3,173 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IDE Starter Kit - Your Take-Home Package</title>
+  <title>IDE Starter Kit | Your Innovation Journey Begins</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            dark: { 900: '#0a0a0f', 800: '#12121a', 700: '#1a1a2e' },
+            wc: { purple: '#8B5CF6', pink: '#EC4899', cyan: '#06B6D4' }
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-    
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a24 100%);
-      color: #fff;
-      min-height: 100vh;
-      padding: 40px 20px;
-    }
-    
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    
-    header {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-    
-    .logo {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, #10B981, #06B6D4);
-      border-radius: 20px;
-      margin: 0 auto 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 40px;
-    }
-    
-    h1 {
-      font-size: 42px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #8B5CF6, #EC4899, #06B6D4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 12px;
-    }
-    
-    .subtitle {
-      color: rgba(255,255,255,0.5);
-      font-size: 18px;
-    }
-    
-    section {
-      background: rgba(255,255,255,0.03);
-      border-radius: 20px;
-      padding: 32px;
-      margin-bottom: 24px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    section h2 {
-      font-size: 24px;
-      color: #fff;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    section h2 .icon {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, #8B5CF6, #EC4899);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-    }
-    
-    .checklist {
-      list-style: none;
-    }
-    
-    .checklist li {
-      padding: 16px;
-      background: rgba(255,255,255,0.02);
-      border-radius: 12px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-    
-    .checklist li:hover {
-      background: rgba(139, 92, 246, 0.1);
-      border-color: rgba(139, 92, 246, 0.2);
-    }
-    
-    .checkbox {
-      width: 24px;
-      height: 24px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-radius: 6px;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-    
-    .checklist li strong {
-      display: block;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-    
-    .checklist li span {
-      color: rgba(255,255,255,0.6);
-      font-size: 14px;
-    }
-    
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-    }
-    
-    .tool-card {
-      background: rgba(255,255,255,0.02);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      border: 1px solid rgba(255,255,255,0.05);
-      text-decoration: none;
-      color: inherit;
-      transition: all 0.3s;
-    }
-    
-    .tool-card:hover {
-      background: rgba(6, 182, 212, 0.1);
-      border-color: rgba(6, 182, 212, 0.3);
-      transform: translateY(-2px);
-    }
-    
-    .tool-card .icon {
-      font-size: 32px;
-      margin-bottom: 12px;
-    }
-    
-    .tool-card h3 {
-      font-size: 16px;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-    
-    .tool-card p {
-      font-size: 12px;
-      color: rgba(255,255,255,0.5);
-    }
-    
-    .badge {
-      display: inline-block;
-      padding: 4px 12px;
-      background: linear-gradient(135deg, #10B981, #06B6D4);
-      border-radius: 100px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-top: 8px;
-    }
-    
-    .reading-list {
-      list-style: none;
-    }
-    
-    .reading-list li {
-      padding: 16px;
-      background: rgba(255,255,255,0.02);
-      border-radius: 12px;
-      margin-bottom: 12px;
-      border-left: 3px solid #8B5CF6;
-    }
-    
-    .reading-list li strong {
-      display: block;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-    
-    .reading-list li span {
-      color: rgba(255,255,255,0.5);
-      font-size: 14px;
-    }
-    
-    .cta-section {
-      text-align: center;
-      padding: 48px;
-      background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(236,72,153,0.1));
-      border: 1px solid rgba(139,92,246,0.3);
-    }
-    
-    .cta-section h2 {
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-    
-    .cta-section p {
-      color: rgba(255,255,255,0.6);
-      margin-bottom: 24px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .btn {
-      display: inline-block;
-      padding: 16px 32px;
-      background: linear-gradient(135deg, #8B5CF6, #EC4899);
-      color: #fff;
-      text-decoration: none;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 16px;
-      transition: all 0.3s;
-    }
-    
-    .btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3);
-    }
-    
-    footer {
-      text-align: center;
-      margin-top: 48px;
-      padding-top: 24px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      color: rgba(255,255,255,0.4);
-      font-size: 14px;
-    }
-    
-    @media print {
-      body { background: white; color: #1a1a24; padding: 20px; }
-      section { background: #f8f8f8; border-color: #eee; }
-      .checkbox { border-color: #333; }
-      h1 { background: none; -webkit-text-fill-color: #8B5CF6; }
-    }
+    body { background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%); }
+    .gradient-text { background: linear-gradient(135deg, #8B5CF6, #EC4899, #06B6D4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+    @media print { body { background: white; color: black; } .no-print { display: none; } }
   </style>
 </head>
-<body>
-  <div class="container">
-    <header>
-      <div class="logo">🚀</div>
-      <h1>IDE Starter Kit</h1>
-      <p class="subtitle">Your Take-Home Package from WorldClass University Excursion</p>
+<body class="min-h-screen text-white font-['Inter']">
+  <div class="max-w-4xl mx-auto px-6 py-12">
+    
+    <!-- Header -->
+    <header class="text-center mb-16">
+      <h1 class="text-5xl font-black gradient-text mb-4">🚀 IDE Starter Kit</h1>
+      <p class="text-xl text-white/60">Your Innovation Driven Journey Begins Here</p>
+      <p class="text-sm text-white/40 mt-2">University Excursion 2026 | WorldClass</p>
     </header>
 
-    <section>
-      <h2><span class="icon">📋</span> IDE Transformation Checklist</h2>
-      <p style="color: rgba(255,255,255,0.6); margin-bottom: 20px;">Transform your workflow from SME to IDE thinking. Check off each item as you go!</p>
-      
-      <ul class="checklist">
-        <li>
-          <div class="checkbox"></div>
+    <!-- Section 1: IDE Checklist -->
+    <section class="glass rounded-2xl p-8 mb-8">
+      <h2 class="text-2xl font-bold text-wc-purple mb-6">📋 IDE Transformation Checklist</h2>
+      <div class="space-y-4">
+        <label class="flex items-start gap-4 p-4 rounded-xl bg-white/5 cursor-pointer hover:bg-white/10 transition">
+          <input type="checkbox" class="mt-1 w-5 h-5 accent-wc-purple">
           <div>
-            <strong>Day 1: Set up your AI assistant</strong>
-            <span>Sign up for Claude.ai (free) or ChatGPT. Start using AI for brainstorming and code review.</span>
+            <p class="font-semibold">Adopt a "Fail Fast" Mindset</p>
+            <p class="text-sm text-white/50">Start small experiments. Document learnings, not just outcomes.</p>
           </div>
-        </li>
-        <li>
-          <div class="checkbox"></div>
+        </label>
+        <label class="flex items-start gap-4 p-4 rounded-xl bg-white/5 cursor-pointer hover:bg-white/10 transition">
+          <input type="checkbox" class="mt-1 w-5 h-5 accent-wc-purple">
           <div>
-            <strong>Day 2-3: Install developer AI tools</strong>
-            <span>Set up GitHub Copilot or Cursor IDE. Let AI help you write code faster.</span>
+            <p class="font-semibold">Set Up AI Tools</p>
+            <p class="text-sm text-white/50">Get Claude, ChatGPT, or GitHub Copilot. Use them daily.</p>
           </div>
-        </li>
-        <li>
-          <div class="checkbox"></div>
+        </label>
+        <label class="flex items-start gap-4 p-4 rounded-xl bg-white/5 cursor-pointer hover:bg-white/10 transition">
+          <input type="checkbox" class="mt-1 w-5 h-5 accent-wc-purple">
           <div>
-            <strong>Week 1: Start a side experiment</strong>
-            <span>Pick a problem you care about. Build a quick prototype in one weekend with AI help.</span>
+            <p class="font-semibold">Build in Public</p>
+            <p class="text-sm text-white/50">Share your work on Twitter/X, LinkedIn, or a blog. Feedback accelerates growth.</p>
           </div>
-        </li>
-        <li>
-          <div class="checkbox"></div>
+        </label>
+        <label class="flex items-start gap-4 p-4 rounded-xl bg-white/5 cursor-pointer hover:bg-white/10 transition">
+          <input type="checkbox" class="mt-1 w-5 h-5 accent-wc-purple">
           <div>
-            <strong>Week 2: Practice rapid iteration</strong>
-            <span>Ship something small to real users. Get feedback. Improve. Repeat.</span>
+            <p class="font-semibold">Automate One Thing This Week</p>
+            <p class="text-sm text-white/50">Find a repetitive task. Use AI or code to automate it. Celebrate.</p>
           </div>
-        </li>
-        <li>
-          <div class="checkbox"></div>
+        </label>
+        <label class="flex items-start gap-4 p-4 rounded-xl bg-white/5 cursor-pointer hover:bg-white/10 transition">
+          <input type="checkbox" class="mt-1 w-5 h-5 accent-wc-purple">
           <div>
-            <strong>Week 3: Embrace failure as data</strong>
-            <span>Try something that might not work. Document what you learn regardless of outcome.</span>
+            <p class="font-semibold">Ship Something in 48 Hours</p>
+            <p class="text-sm text-white/50">An MVP, a landing page, a bot. Constraint breeds creativity.</p>
           </div>
-        </li>
-        <li>
-          <div class="checkbox"></div>
-          <div>
-            <strong>Week 4: Build in public</strong>
-            <span>Share your progress on Twitter/LinkedIn. Connect with others building cool things.</span>
-          </div>
-        </li>
-        <li>
-          <div class="checkbox"></div>
-          <div>
-            <strong>Month 2: Cross-functional collaboration</strong>
-            <span>Partner with someone outside your skill set. Designer? Marketer? Business person?</span>
-          </div>
-        </li>
-        <li>
-          <div class="checkbox"></div>
-          <div>
-            <strong>Month 3: 10x thinking exercise</strong>
-            <span>Take one of your ideas. Ask: "How would I make this 10x bigger/better/faster?"</span>
-          </div>
-        </li>
-      </ul>
-    </section>
-
-    <section>
-      <h2><span class="icon">🛠️</span> Essential AI Tools</h2>
-      <p style="color: rgba(255,255,255,0.6); margin-bottom: 20px;">Get started with these tools today — most have free tiers!</p>
-      
-      <div class="tools-grid">
-        <a href="https://claude.ai" target="_blank" class="tool-card">
-          <div class="icon">🤖</div>
-          <h3>Claude.ai</h3>
-          <p>AI assistant for thinking, writing, and coding</p>
-          <span class="badge">Free Tier</span>
-        </a>
-        <a href="https://github.com/features/copilot" target="_blank" class="tool-card">
-          <div class="icon">🧑‍💻</div>
-          <h3>GitHub Copilot</h3>
-          <p>AI pair programmer in your editor</p>
-          <span class="badge">Free for Students</span>
-        </a>
-        <a href="https://cursor.com" target="_blank" class="tool-card">
-          <div class="icon">⚡</div>
-          <h3>Cursor</h3>
-          <p>AI-first code editor</p>
-          <span class="badge">Free Tier</span>
-        </a>
-        <a href="https://v0.dev" target="_blank" class="tool-card">
-          <div class="icon">🎨</div>
-          <h3>v0 by Vercel</h3>
-          <p>Generate UI with AI</p>
-          <span class="badge">Free</span>
-        </a>
-        <a href="https://replit.com" target="_blank" class="tool-card">
-          <div class="icon">🌐</div>
-          <h3>Replit</h3>
-          <p>Code + AI + Deploy in browser</p>
-          <span class="badge">Free Tier</span>
-        </a>
-        <a href="https://notion.so" target="_blank" class="tool-card">
-          <div class="icon">📝</div>
-          <h3>Notion AI</h3>
-          <p>Docs + AI for notes & planning</p>
-          <span class="badge">Free Tier</span>
-        </a>
+        </label>
       </div>
     </section>
 
-    <section>
-      <h2><span class="icon">📖</span> Reading List</h2>
-      <p style="color: rgba(255,255,255,0.6); margin-bottom: 20px;">Expand your innovation mindset with these resources.</p>
-      
-      <ul class="reading-list">
-        <li>
-          <strong>"Zero to One" by Peter Thiel</strong>
-          <span>The classic on creating new things vs. copying existing ones. Core IDE philosophy.</span>
+    <!-- Section 2: AI Tools Guide -->
+    <section class="glass rounded-2xl p-8 mb-8">
+      <h2 class="text-2xl font-bold text-wc-pink mb-6">🛠️ AI Tools to Get Started</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="p-5 rounded-xl bg-white/5">
+          <h3 class="font-bold text-lg mb-2">Claude (Anthropic)</h3>
+          <p class="text-sm text-white/60 mb-3">Best for reasoning, analysis, and writing. Free tier available.</p>
+          <a href="https://claude.ai" target="_blank" class="text-wc-cyan text-sm hover:underline">→ claude.ai</a>
+        </div>
+        <div class="p-5 rounded-xl bg-white/5">
+          <h3 class="font-bold text-lg mb-2">ChatGPT (OpenAI)</h3>
+          <p class="text-sm text-white/60 mb-3">General purpose AI. Great plugins ecosystem.</p>
+          <a href="https://chat.openai.com" target="_blank" class="text-wc-cyan text-sm hover:underline">→ chat.openai.com</a>
+        </div>
+        <div class="p-5 rounded-xl bg-white/5">
+          <h3 class="font-bold text-lg mb-2">GitHub Copilot</h3>
+          <p class="text-sm text-white/60 mb-3">AI pair programmer. Free for students!</p>
+          <a href="https://github.com/features/copilot" target="_blank" class="text-wc-cyan text-sm hover:underline">→ github.com/copilot</a>
+        </div>
+        <div class="p-5 rounded-xl bg-white/5">
+          <h3 class="font-bold text-lg mb-2">v0 by Vercel</h3>
+          <p class="text-sm text-white/60 mb-3">AI that generates UI code. Describe → get code.</p>
+          <a href="https://v0.dev" target="_blank" class="text-wc-cyan text-sm hover:underline">→ v0.dev</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Project Ideas -->
+    <section class="glass rounded-2xl p-8 mb-8">
+      <h2 class="text-2xl font-bold text-wc-cyan mb-6">💡 Weekend Project Ideas</h2>
+      <div class="space-y-4">
+        <div class="p-5 rounded-xl bg-white/5 border-l-4 border-wc-purple">
+          <h3 class="font-bold">Personal AI Assistant</h3>
+          <p class="text-sm text-white/60">Build a Telegram/WhatsApp bot that answers your questions using Claude API.</p>
+        </div>
+        <div class="p-5 rounded-xl bg-white/5 border-l-4 border-wc-pink">
+          <h3 class="font-bold">Automated Newsletter</h3>
+          <p class="text-sm text-white/60">Scrape news → summarize with AI → send weekly email. Zero manual effort.</p>
+        </div>
+        <div class="p-5 rounded-xl bg-white/5 border-l-4 border-wc-cyan">
+          <h3 class="font-bold">Campus Problem Solver</h3>
+          <p class="text-sm text-white/60">Find one pain point at your university. Build a quick solution. Share it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Reading List -->
+    <section class="glass rounded-2xl p-8 mb-8">
+      <h2 class="text-2xl font-bold text-white mb-6">📚 Reading List</h2>
+      <ul class="space-y-3">
+        <li class="flex items-center gap-3">
+          <span class="text-wc-purple">📖</span>
+          <span><strong>"Zero to One"</strong> by Peter Thiel — On building the future</span>
         </li>
-        <li>
-          <strong>"The Lean Startup" by Eric Ries</strong>
-          <span>Build-measure-learn cycles. MVP thinking. Validated learning.</span>
+        <li class="flex items-center gap-3">
+          <span class="text-wc-pink">📖</span>
+          <span><strong>"The Lean Startup"</strong> by Eric Ries — Build, measure, learn</span>
         </li>
-        <li>
-          <strong>"Thinking in Bets" by Annie Duke</strong>
-          <span>Decision-making under uncertainty. Treating failures as data.</span>
+        <li class="flex items-center gap-3">
+          <span class="text-wc-cyan">📖</span>
+          <span><strong>"Disciplined Entrepreneurship"</strong> by Bill Aulet — MIT's IDE framework</span>
         </li>
-        <li>
-          <strong>"The Mom Test" by Rob Fitzpatrick</strong>
-          <span>How to talk to users and learn what to build. Essential for experimentation.</span>
-        </li>
-        <li>
-          <strong>Paul Graham's Essays (paulgraham.com)</strong>
-          <span>Free! Ideas on startups, innovation, and building things that matter.</span>
+        <li class="flex items-center gap-3">
+          <span class="text-wc-purple">📖</span>
+          <span><strong>"AI 2041"</strong> by Kai-Fu Lee — The future of AI</span>
         </li>
       </ul>
     </section>
 
-    <section>
-      <h2><span class="icon">💡</span> Project Ideas to Try</h2>
-      <p style="color: rgba(255,255,255,0.6); margin-bottom: 20px;">Stuck? Here are some starter projects you can build this weekend with AI:</p>
-      
-      <ul class="checklist">
-        <li>
-          <div class="checkbox"></div>
-          <div>
-            <strong>Personal portfolio with AI</strong>
-            <span>Use v0.dev or Cursor to build and deploy a portfolio site in 2 hours.</span>
-          </div>
-        </li>
-        <li>
-          <div class="checkbox"></div>
-          <div>
-            <strong>Solve your own problem</strong>
-            <span>What annoys you daily? Build a simple tool to fix it. Could be a Chrome extension, CLI tool, or simple app.</span>
-          </div>
-        </li>
-        <li>
-          <div class="checkbox"></div>
-          <div>
-            <strong>Automate something boring</strong>
-            <span>Use AI to write a script that automates repetitive tasks in your workflow.</span>
-          </div>
-        </li>
-        <li>
-          <div class="checkbox"></div>
-          <div>
-            <strong>AI-powered study tool</strong>
-            <span>Build a flashcard app or quiz generator that uses AI to create questions from your notes.</span>
-          </div>
-        </li>
-      </ul>
+    <!-- Section 5: Stay Connected -->
+    <section class="glass rounded-2xl p-8 mb-8 text-center">
+      <h2 class="text-2xl font-bold gradient-text mb-4">🔗 Stay Connected</h2>
+      <p class="text-white/60 mb-6">Follow WorldClass for more innovation insights</p>
+      <div class="flex justify-center gap-6 flex-wrap">
+        <a href="https://vent.africa" target="_blank" class="px-6 py-3 rounded-full glass hover:bg-white/10 transition">Vent.Africa</a>
+        <a href="https://twitter.com/worldclass_dev" target="_blank" class="px-6 py-3 rounded-full glass hover:bg-white/10 transition">Twitter/X</a>
+        <a href="mailto:hello@worldclass.dev" class="px-6 py-3 rounded-full glass hover:bg-white/10 transition">Email Us</a>
+      </div>
     </section>
 
-    <section class="cta-section">
-      <h2>🎯 Ready to Start?</h2>
-      <p>The best time to start building was yesterday. The second best time is now. Pick ONE thing from this kit and do it today.</p>
-      <a href="https://claude.ai" target="_blank" class="btn">Start with Claude.ai →</a>
-    </section>
+    <!-- Print Button -->
+    <div class="text-center no-print">
+      <button onclick="window.print()" class="px-8 py-4 rounded-full bg-gradient-to-r from-wc-purple to-wc-pink text-white font-bold hover:opacity-90 transition">
+        🖨️ Print This Kit
+      </button>
+    </div>
 
-    <footer>
-      <p>Made with ❤️ by WorldClass & Quinn (AI)</p>
-      <p style="margin-top: 8px;">University Excursion 2026 • worldclass.dev</p>
+    <!-- Footer -->
+    <footer class="text-center mt-16 text-white/30 text-sm">
+      <p>Built with ❤️ by WorldClass & Quinn (AI) at 2am</p>
+      <p class="mt-1">University Excursion 2026 — Innovation Driven Environment</p>
     </footer>
+
   </div>
 </body>
 </html>

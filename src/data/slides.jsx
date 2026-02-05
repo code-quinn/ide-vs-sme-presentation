@@ -313,7 +313,7 @@ export const slides = [
     links: [
       { label: 'WorldClass', url: 'https://worldclass.dev' },
       { label: 'Vent.Africa', url: 'https://vent.africa' },
-      { label: 'This Presentation', url: 'https://worldclass-dev.github.io/ide-vs-sme-presentation' },
+      { label: 'This Presentation', url: 'https://code-quinn.github.io/ide-vs-sme-presentation' },
     ],
     qrCode: true,
   },

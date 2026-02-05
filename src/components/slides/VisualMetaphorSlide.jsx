@@ -97,7 +97,7 @@ const VisualMetaphorSlide = ({ slide }) => {
       timer = setTimeout(() => {
         setRocketState('idle');
         setExplosionParticles([]);
-      }, 4000);
+      }, 6000);
     } else if (rocketState === 'exploding') {
       timer = setTimeout(() => setRocketState('crashed'), 600);
     } else if (rocketState === 'crashed') {
@@ -110,20 +110,43 @@ const VisualMetaphorSlide = ({ slide }) => {
     return () => clearTimeout(timer);
   }, [rocketState, countdown]);
 
+  // Orbit animation state
+  const [orbitAngle, setOrbitAngle] = useState(0);
+  
+  // Orbit animation effect
+  useEffect(() => {
+    if (rocketState === 'orbiting') {
+      const interval = setInterval(() => {
+        setOrbitAngle(prev => (prev + 3) % 360);
+      }, 30);
+      return () => clearInterval(interval);
+    } else {
+      setOrbitAngle(0);
+    }
+  }, [rocketState]);
+
   const getRocketPosition = () => {
     switch (rocketState) {
-      case 'idle': return { y: '75%', scale: 1, rotate: 0 };
-      case 'countdown': return { y: '75%', scale: 1.05, rotate: 0 };
-      case 'launching': return { y: '-20%', scale: 1, rotate: 0 };
-      case 'success': return { y: '15%', scale: 0.9, rotate: 0 };
-      case 'orbiting': return { y: '15%', scale: 0.9, rotate: 0 };
-      case 'exploding': return { y: '50%', scale: 0.3, rotate: 180 };
-      case 'crashed': return { y: '85%', scale: 0.2, rotate: 180 };
-      default: return { y: '75%', scale: 1, rotate: 0 };
+      case 'idle': return { y: '75%', scale: 1, rotate: 0, orbiting: false };
+      case 'countdown': return { y: '75%', scale: 1.05, rotate: 0, orbiting: false };
+      case 'launching': return { y: '-20%', scale: 1, rotate: 0, orbiting: false };
+      case 'success': return { y: '40%', scale: 0.7, rotate: 0, orbiting: false };
+      case 'orbiting': return { y: '40%', scale: 0.55, rotate: 0, orbiting: true };
+      case 'exploding': return { y: '50%', scale: 0.3, rotate: 180, orbiting: false };
+      case 'crashed': return { y: '85%', scale: 0.2, rotate: 180, orbiting: false };
+      default: return { y: '75%', scale: 1, rotate: 0, orbiting: false };
     }
   };
 
   const pos = getRocketPosition();
+  
+  // Calculate orbital position
+  const orbitRadiusX = 90; // Horizontal radius
+  const orbitRadiusY = 45; // Vertical radius (elliptical)
+  const orbitX = Math.cos((orbitAngle - 90) * Math.PI / 180) * orbitRadiusX;
+  const orbitY = Math.sin((orbitAngle - 90) * Math.PI / 180) * orbitRadiusY;
+  // Rocket should face direction of travel (tangent to orbit)
+  const orbitRotation = orbitAngle;
 
   return (
     <div className="max-w-7xl mx-auto px-4 max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-hide">
@@ -270,19 +293,265 @@ const VisualMetaphorSlide = ({ slide }) => {
               )}
             </AnimatePresence>
 
+            {/* Orbit path indicator - appears during orbiting */}
+            <AnimatePresence>
+              {rocketState === 'orbiting' && (
+                <motion.div
+                  className="absolute left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2 z-4"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {/* Elliptical orbit path */}
+                  <div 
+                    className="border-2 border-dashed border-purple-400/30 rounded-full"
+                    style={{
+                      width: `${orbitRadiusX * 2 + 20}px`,
+                      height: `${orbitRadiusY * 2 + 20}px`,
+                    }}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* EARTH GLOBE - appears during success/orbiting */}
+            <AnimatePresence>
+              {(rocketState === 'success' || rocketState === 'orbiting') && (
+                <motion.div
+                  className="absolute left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2 z-5"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                >
+                  {/* Outer glow */}
+                  <div 
+                    className="absolute inset-0 rounded-full blur-xl"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(59, 130, 246, 0.4), rgba(34, 197, 94, 0.2), transparent)',
+                      transform: 'scale(1.8)',
+                    }}
+                  />
+                  
+                  {/* Atmosphere glow */}
+                  <motion.div
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background: 'radial-gradient(circle at 30% 30%, rgba(147, 197, 253, 0.3), rgba(59, 130, 246, 0.15), transparent 70%)',
+                      transform: 'scale(1.15)',
+                    }}
+                    animate={{ 
+                      boxShadow: [
+                        '0 0 30px rgba(59, 130, 246, 0.4), 0 0 60px rgba(34, 197, 94, 0.2)',
+                        '0 0 40px rgba(59, 130, 246, 0.5), 0 0 80px rgba(34, 197, 94, 0.3)',
+                        '0 0 30px rgba(59, 130, 246, 0.4), 0 0 60px rgba(34, 197, 94, 0.2)',
+                      ]
+                    }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                  />
+                  
+                  {/* Earth base */}
+                  <motion.div
+                    className="relative w-24 h-24 rounded-full overflow-hidden"
+                    style={{
+                      background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 25%, #1d4ed8 50%, #1e3a8a 100%)',
+                      boxShadow: 'inset -8px -8px 20px rgba(0,0,0,0.4), inset 4px 4px 15px rgba(255,255,255,0.1)',
+                    }}
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+                  >
+                    {/* Continents */}
+                    {/* North America */}
+                    <div 
+                      className="absolute rounded-full"
+                      style={{
+                        width: '28px',
+                        height: '22px',
+                        top: '18%',
+                        left: '12%',
+                        background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 50%, #15803d 100%)',
+                        borderRadius: '40% 60% 50% 40%',
+                        transform: 'rotate(-15deg)',
+                      }}
+                    />
+                    {/* South America */}
+                    <div 
+                      className="absolute rounded-full"
+                      style={{
+                        width: '14px',
+                        height: '24px',
+                        top: '45%',
+                        left: '22%',
+                        background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 50%, #15803d 100%)',
+                        borderRadius: '50% 50% 40% 60%',
+                        transform: 'rotate(10deg)',
+                      }}
+                    />
+                    {/* Europe/Africa blob */}
+                    <div 
+                      className="absolute"
+                      style={{
+                        width: '20px',
+                        height: '35px',
+                        top: '20%',
+                        left: '48%',
+                        background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 50%, #15803d 100%)',
+                        borderRadius: '45% 55% 60% 40%',
+                        transform: 'rotate(5deg)',
+                      }}
+                    />
+                    {/* Asia */}
+                    <div 
+                      className="absolute"
+                      style={{
+                        width: '30px',
+                        height: '20px',
+                        top: '22%',
+                        left: '62%',
+                        background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 50%, #15803d 100%)',
+                        borderRadius: '30% 70% 50% 50%',
+                        transform: 'rotate(-5deg)',
+                      }}
+                    />
+                    {/* Australia */}
+                    <div 
+                      className="absolute"
+                      style={{
+                        width: '15px',
+                        height: '12px',
+                        top: '58%',
+                        left: '72%',
+                        background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%)',
+                        borderRadius: '50% 50% 40% 60%',
+                        transform: 'rotate(15deg)',
+                      }}
+                    />
+                    
+                    {/* Cloud layer */}
+                    <div className="absolute inset-0 overflow-hidden rounded-full">
+                      <motion.div
+                        className="absolute"
+                        style={{
+                          width: '40px',
+                          height: '8px',
+                          top: '15%',
+                          left: '5%',
+                          background: 'rgba(255,255,255,0.4)',
+                          borderRadius: '50%',
+                          filter: 'blur(2px)',
+                        }}
+                        animate={{ x: [0, 60, 0] }}
+                        transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+                      />
+                      <motion.div
+                        className="absolute"
+                        style={{
+                          width: '35px',
+                          height: '6px',
+                          top: '40%',
+                          left: '50%',
+                          background: 'rgba(255,255,255,0.35)',
+                          borderRadius: '50%',
+                          filter: 'blur(2px)',
+                        }}
+                        animate={{ x: [0, -40, 0] }}
+                        transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                      />
+                      <motion.div
+                        className="absolute"
+                        style={{
+                          width: '28px',
+                          height: '5px',
+                          top: '65%',
+                          left: '20%',
+                          background: 'rgba(255,255,255,0.3)',
+                          borderRadius: '50%',
+                          filter: 'blur(1px)',
+                        }}
+                        animate={{ x: [0, 30, 0] }}
+                        transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
+                      />
+                    </div>
+                    
+                    {/* Ice caps */}
+                    <div 
+                      className="absolute"
+                      style={{
+                        width: '100%',
+                        height: '12px',
+                        top: '0',
+                        left: '0',
+                        background: 'linear-gradient(to bottom, rgba(255,255,255,0.8), transparent)',
+                        borderRadius: '50% 50% 0 0',
+                      }}
+                    />
+                    <div 
+                      className="absolute"
+                      style={{
+                        width: '100%',
+                        height: '10px',
+                        bottom: '0',
+                        left: '0',
+                        background: 'linear-gradient(to top, rgba(255,255,255,0.7), transparent)',
+                        borderRadius: '0 0 50% 50%',
+                      }}
+                    />
+                    
+                    {/* Specular highlight */}
+                    <div 
+                      className="absolute"
+                      style={{
+                        width: '30px',
+                        height: '30px',
+                        top: '10%',
+                        left: '15%',
+                        background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.3), transparent 70%)',
+                        borderRadius: '50%',
+                      }}
+                    />
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {/* ROCKET */}
             <motion.div
-              className="absolute left-1/2 -translate-x-1/2 z-10"
+              className="absolute z-10"
+              style={{
+                left: pos.orbiting ? `calc(50% + ${orbitX}px)` : '50%',
+                top: pos.orbiting ? `calc(40% + ${orbitY}px)` : pos.y,
+              }}
               animate={{
-                top: pos.y,
                 scale: pos.scale,
-                rotate: pos.rotate,
+                rotate: pos.orbiting ? orbitRotation : pos.rotate,
+                x: '-50%',
+                y: pos.orbiting ? '-50%' : 0,
               }}
               transition={{
-                duration: rocketState === 'launching' ? 2.5 : 0.5,
-                ease: rocketState === 'launching' ? [0.2, 0.8, 0.4, 1] : 'easeOut',
+                duration: rocketState === 'launching' ? 2.5 : 0.3,
+                ease: rocketState === 'launching' ? [0.2, 0.8, 0.4, 1] : 'linear',
+                scale: { duration: 0.5 },
               }}
             >
+              {/* Orbital thrust (small flame for station-keeping during orbit) */}
+              {rocketState === 'orbiting' && (
+                <motion.div
+                  className="absolute left-1/2 -translate-x-1/2"
+                  style={{ top: '100%' }}
+                  animate={{
+                    scaleY: [0.2, 0.35, 0.25, 0.3, 0.2],
+                    opacity: [0.6, 0.9, 0.7, 0.85, 0.6],
+                  }}
+                  transition={{ duration: 0.3, repeat: Infinity }}
+                >
+                  <div className="relative">
+                    <div className="w-4 h-6 bg-gradient-to-b from-cyan-300 via-blue-400 to-transparent rounded-b-full blur-sm" />
+                    <div className="absolute inset-0 w-2 h-4 mx-auto bg-gradient-to-b from-white via-cyan-200 to-transparent rounded-b-full" />
+                  </div>
+                </motion.div>
+              )}
+
               {/* Flame */}
               {(rocketState === 'launching' || rocketState === 'countdown') && (
                 <motion.div
@@ -301,11 +570,7 @@ const VisualMetaphorSlide = ({ slide }) => {
               )}
 
               {/* Rocket body */}
-              <motion.div
-                className="relative"
-                animate={rocketState === 'orbiting' ? { y: [0, -8, 0] } : {}}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
+              <div className="relative">
                 {/* Glow effect */}
                 <div className="absolute inset-0 blur-xl bg-purple-500/30 scale-150" />
                 
@@ -341,7 +606,7 @@ const VisualMetaphorSlide = ({ slide }) => {
                 {/* Fins */}
                 <div className="absolute -bottom-1 -left-3 w-4 h-8 bg-purple-600 rounded-bl-lg -skew-x-12 z-0" />
                 <div className="absolute -bottom-1 -right-3 w-4 h-8 bg-purple-600 rounded-br-lg skew-x-12 z-0" />
-              </motion.div>
+              </div>
             </motion.div>
 
             {/* Countdown */}
@@ -389,7 +654,7 @@ const VisualMetaphorSlide = ({ slide }) => {
                   exit={{ opacity: 0 }}
                 >
                   <div className="px-4 py-1.5 rounded-full bg-purple-500/20 border border-purple-400/50 backdrop-blur">
-                    <span className="text-sm font-medium text-purple-300">🛰️ Collecting data... Next launch soon</span>
+                    <span className="text-sm font-medium text-purple-300">🌍 Orbiting Earth • Collecting data...</span>
                   </div>
                 </motion.div>
               )}

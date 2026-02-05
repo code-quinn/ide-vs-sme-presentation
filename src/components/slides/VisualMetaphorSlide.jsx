@@ -345,62 +345,33 @@ const VisualMetaphorSlide = ({ slide }) => {
                 </>
               )}
 
-              {/* SMOKE - Reduced, cleaner effect */}
+              {/* SMOKE - Minimal, subtle effect */}
               {(launched || countdown !== null) && (
                 <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-15 pointer-events-none">
-                  {/* Central smoke column */}
-                  {[...Array(8)].map((_, i) => (
+                  {/* Just a few subtle smoke puffs */}
+                  {[...Array(4)].map((_, i) => (
                     <motion.div
                       key={`smoke-${i}`}
                       className="absolute rounded-full"
                       style={{
-                        width: 40 + (i % 3) * 20,
-                        height: 35 + (i % 3) * 15,
-                        background: `rgba(200, 200, 200, ${0.6 - (i % 4) * 0.1})`,
-                        filter: 'blur(8px)',
-                        left: -20 + (i % 4) * 10,
+                        width: 30 + (i % 2) * 15,
+                        height: 25 + (i % 2) * 10,
+                        background: `rgba(180, 180, 180, ${0.4 - (i % 3) * 0.1})`,
+                        filter: 'blur(10px)',
+                        left: -15 + (i % 3) * 10,
                         top: 0,
                       }}
-                      initial={{ y: 0, scale: 0.3, opacity: 0.6 }}
+                      initial={{ y: 0, scale: 0.3, opacity: 0.4 }}
                       animate={{
-                        y: [0, 15 + (i % 3) * 10],
-                        x: ((i % 2 === 0 ? -1 : 1) * (20 + (i % 4) * 15)),
-                        scale: [0.3, 1, 1.8],
-                        opacity: [0.6, 0.4, 0],
+                        y: [0, 20 + (i % 2) * 10],
+                        x: ((i % 2 === 0 ? -1 : 1) * (15 + (i % 2) * 10)),
+                        scale: [0.3, 1, 1.5],
+                        opacity: [0.4, 0.2, 0],
                       }}
                       transition={{
-                        duration: 1.5 + (i % 3) * 0.3,
+                        duration: 1.5,
                         repeat: Infinity,
-                        delay: i * 0.15,
-                        ease: "easeOut"
-                      }}
-                    />
-                  ))}
-                  
-                  {/* Light steam from water hitting exhaust */}
-                  {[...Array(6)].map((_, i) => (
-                    <motion.div
-                      key={`steam-${i}`}
-                      className="absolute rounded-full"
-                      style={{
-                        width: 30 + (i % 3) * 15,
-                        height: 25 + (i % 3) * 10,
-                        background: 'rgba(220, 235, 255, 0.5)',
-                        filter: 'blur(6px)',
-                        left: -15 + (i % 3) * 10,
-                        top: 5,
-                      }}
-                      initial={{ y: 0, scale: 0.2, opacity: 0.5 }}
-                      animate={{
-                        y: [-5, -25 - (i % 3) * 15],
-                        x: ((i % 2 === 0 ? -1 : 1) * (15 + (i % 3) * 10)),
-                        scale: [0.2, 0.8, 1.5],
-                        opacity: [0.5, 0.3, 0],
-                      }}
-                      transition={{
-                        duration: 1.2 + (i % 3) * 0.2,
-                        repeat: Infinity,
-                        delay: i * 0.2,
+                        delay: i * 0.3,
                         ease: "easeOut"
                       }}
                     />
@@ -412,21 +383,70 @@ const VisualMetaphorSlide = ({ slide }) => {
               <motion.div
                 className="flex flex-col items-center relative z-10"
                 animate={{ 
-                  y: launched ? -350 : 0,
+                  y: launched ? (launchResult === 'iterate' ? -150 : -350) : 0,
                   scale: launched ? 0.85 : 1,
+                  rotate: launchResult === 'iterate' ? [0, -5, 5, -3, 0] : 0,
                 }}
                 transition={{
                   duration: launched ? 1.2 : 0.3,
                   ease: launched ? [0.2, 0.8, 0.2, 1] : "easeOut"
                 }}
               >
+                {/* CRASH EXPLOSION - Shows on rocket when it fails */}
+                <AnimatePresence>
+                  {launchResult === 'iterate' && (
+                    <motion.div
+                      className="absolute inset-0 flex items-center justify-center z-20"
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                    >
+                      {/* Explosion emojis around rocket */}
+                      <motion.span 
+                        className="absolute text-5xl"
+                        style={{ top: -20, left: -30 }}
+                        animate={{ scale: [0, 1.5, 1], rotate: [0, 15, 0] }}
+                        transition={{ duration: 0.3 }}
+                      >💥</motion.span>
+                      <motion.span 
+                        className="absolute text-4xl"
+                        style={{ top: 10, right: -25 }}
+                        animate={{ scale: [0, 1.3, 1], rotate: [0, -10, 0] }}
+                        transition={{ duration: 0.3, delay: 0.1 }}
+                      >💥</motion.span>
+                      <motion.span 
+                        className="absolute text-5xl"
+                        style={{ top: -10, left: 10 }}
+                        animate={{ scale: [0, 1.4, 1] }}
+                        transition={{ duration: 0.3, delay: 0.05 }}
+                      >🔥</motion.span>
+                      <motion.span 
+                        className="absolute text-3xl"
+                        style={{ bottom: 20, left: -20 }}
+                        animate={{ scale: [0, 1.2, 1], y: [0, -10, 0] }}
+                        transition={{ duration: 0.4, delay: 0.15 }}
+                      >💨</motion.span>
+                      <motion.span 
+                        className="absolute text-3xl"
+                        style={{ bottom: 10, right: -15 }}
+                        animate={{ scale: [0, 1.2, 1], y: [0, -8, 0] }}
+                        transition={{ duration: 0.4, delay: 0.2 }}
+                      >💨</motion.span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 {/* The Rocket - Rotated to point STRAIGHT UP */}
-                <div 
+                <motion.div 
                   className="text-8xl"
                   style={{ transform: 'rotate(-45deg)' }}
+                  animate={{
+                    opacity: launchResult === 'iterate' ? [1, 0.7, 1] : 1,
+                    filter: launchResult === 'iterate' ? 'brightness(0.7)' : 'brightness(1)',
+                  }}
                 >
                   🚀
-                </div>
+                </motion.div>
                 
                 {/* FIRE - ATTACHED to rocket, moves with it */}
                 {(launched || countdown !== null) && (

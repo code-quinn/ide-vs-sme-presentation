@@ -5,16 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run generate-pdf && vite build",
+    "generate-pdf": "node scripts/generate-pdf-sparticuz.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@sparticuz/chromium": "^143.0.4",
     "confetti-js": "^0.0.18",
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.294.0",
     "pdfkit": "^0.17.2",
     "playwright": "^1.58.1",
     "puppeteer": "^24.36.1",
+    "puppeteer-core": "^24.36.1",
     "qrcode.react": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

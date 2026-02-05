@@ -150,32 +150,35 @@ const VisualMetaphorSlide = ({ slide }) => {
               </div>
             </div>
 
-            {/* Countdown Display - Centered in launch zone */}
+            {/* Countdown Display - Fixed position ABOVE rocket area */}
             <AnimatePresence>
               {countdown !== null && (
                 <motion.div
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 2, opacity: 0 }}
-                  className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30"
+                  className="absolute top-16 left-1/2 -translate-x-1/2 z-30"
                 >
-                  <span className="text-8xl font-black text-white drop-shadow-lg"
-                    style={{ textShadow: '0 0 40px rgba(168, 85, 247, 0.8)' }}
-                  >
-                    {countdown}
-                  </span>
+                  <div className="flex flex-col items-center">
+                    <span className="text-xs text-purple-300 uppercase tracking-widest mb-1">Launch in</span>
+                    <span className="text-8xl font-black text-white drop-shadow-lg"
+                      style={{ textShadow: '0 0 40px rgba(168, 85, 247, 0.8)' }}
+                    >
+                      {countdown}
+                    </span>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Launch Result - Centered in launch zone, more prominent */}
+            {/* Launch Result - Fixed position ABOVE rocket area */}
             <AnimatePresence>
               {launchResult && (
                 <motion.div
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0, opacity: 0 }}
-                  className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-center"
+                  className="absolute top-16 left-1/2 -translate-x-1/2 z-30 text-center"
                 >
                   {launchResult === 'success' ? (
                     <div className="flex flex-col items-center">
@@ -261,38 +264,71 @@ const VisualMetaphorSlide = ({ slide }) => {
                 </motion.div>
               )}
 
-              {/* SMOKE - Stays at launch pad, trails behind rocket */}
+              {/* SMOKE - 3X intensity, stays at launch pad */}
               {(launched || countdown !== null) && (
                 <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-0">
-                  {/* Multiple smoke puffs that spread and fade */}
-                  {[...Array(12)].map((_, i) => (
+                  {/* Heavy smoke cloud - 36 puffs for 3x intensity */}
+                  {[...Array(36)].map((_, i) => (
                     <motion.div
                       key={i}
                       className="absolute rounded-full"
                       style={{
-                        width: 15 + (i % 4) * 10,
-                        height: 15 + (i % 4) * 10,
-                        background: `rgba(156, 163, 175, ${0.4 + (i % 3) * 0.1})`,
-                        filter: 'blur(8px)',
-                        left: -20 + (i % 5) * 10,
-                        top: (i % 3) * 10,
+                        width: 25 + (i % 5) * 15,
+                        height: 25 + (i % 5) * 15,
+                        background: `rgba(180, 180, 180, ${0.6 + (i % 4) * 0.1})`,
+                        filter: 'blur(10px)',
+                        left: -40 + (i % 8) * 12,
+                        top: (i % 4) * 8,
                       }}
                       initial={{ 
                         x: 0, 
                         y: 0, 
-                        opacity: 0.6,
-                        scale: 0.5 
+                        opacity: 0.8,
+                        scale: 0.6 
                       }}
                       animate={{ 
-                        x: ((i % 2 === 0 ? 1 : -1) * (20 + (i % 4) * 15)),
-                        y: 10 + (i % 3) * 15,
+                        x: ((i % 2 === 0 ? 1 : -1) * (30 + (i % 5) * 20)),
+                        y: 15 + (i % 4) * 20,
                         opacity: 0,
-                        scale: 2 + (i % 3) * 0.5,
+                        scale: 3 + (i % 4) * 0.8,
                       }}
                       transition={{
-                        duration: 1.5 + (i % 4) * 0.3,
+                        duration: 1.8 + (i % 5) * 0.3,
                         repeat: Infinity,
-                        delay: i * 0.15,
+                        delay: i * 0.08,
+                        ease: "easeOut"
+                      }}
+                    />
+                  ))}
+                  {/* Extra dense core smoke */}
+                  {[...Array(12)].map((_, i) => (
+                    <motion.div
+                      key={`core-${i}`}
+                      className="absolute rounded-full"
+                      style={{
+                        width: 40 + (i % 3) * 20,
+                        height: 40 + (i % 3) * 20,
+                        background: `rgba(200, 200, 200, ${0.7 + (i % 3) * 0.1})`,
+                        filter: 'blur(15px)',
+                        left: -30 + (i % 4) * 15,
+                        top: 0,
+                      }}
+                      initial={{ 
+                        x: 0, 
+                        y: 0, 
+                        opacity: 0.9,
+                        scale: 0.4 
+                      }}
+                      animate={{ 
+                        x: ((i % 2 === 0 ? 1 : -1) * (15 + (i % 3) * 10)),
+                        y: 20 + (i % 3) * 15,
+                        opacity: 0,
+                        scale: 2.5,
+                      }}
+                      transition={{
+                        duration: 1.2,
+                        repeat: Infinity,
+                        delay: i * 0.12,
                         ease: "easeOut"
                       }}
                     />

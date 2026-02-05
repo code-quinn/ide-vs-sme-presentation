@@ -51,8 +51,8 @@ const VisualMetaphorSlide = ({ slide }) => {
       setTimeout(() => {
         setCountdown(null);
         setLaunched(true);
-        // 50% success, 50% crash - fail fast mentality!
-        const success = Math.random() > 0.5;
+        // ~65% success, ~35% crash - fail fast but succeed more often
+        const success = Math.random() > 0.35;
         setTimeout(() => {
           setLaunchResult(success ? 'success' : 'iterate');
         }, 1500);
@@ -679,7 +679,7 @@ const VisualMetaphorSlide = ({ slide }) => {
           <Lightbulb className="w-6 h-6 text-yellow-400" />
           <p className="text-white/80 text-base">
             <span className="text-purple-400 font-bold">IDE: </span>
-            50% crash → data → learning → iteration
+            Every crash = data → learning → iteration
             <span className="mx-4 text-white/30">|</span>
             <span className="text-blue-400 font-bold">SME: </span>
             Steady workflow, predictable delivery

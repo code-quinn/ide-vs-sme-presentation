@@ -40,7 +40,7 @@ const ResourcesSlide = ({ slide }) => {
           </div>
           <p className="text-sm text-white/50 mb-4">Scan or click below</p>
           <a
-            href="https://code-quinn.github.io/ide-vs-sme-presentation/one-pager.html"
+            href="https://code-quinn.github.io/ide-vs-sme-presentation/ide-vs-sme-one-pager.pdf" download
             target="_blank"
             className="block w-full py-3 rounded-xl bg-gradient-to-r from-wc-purple to-wc-pink text-white font-bold hover:opacity-90 transition-opacity"
           >

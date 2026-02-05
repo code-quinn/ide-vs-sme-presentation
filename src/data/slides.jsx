@@ -12,7 +12,7 @@ export const slides = [
     subtitle: 'vs Small/Medium Enterprise',
     description: 'A framework for understanding how innovation-first organizations operate differently',
     presenter: 'WorldClass',
-    event: 'University Excursion 2026',
+    event: 'Admiralty University of Nigeria Excursion 2026',
     icon: Rocket,
   },
 

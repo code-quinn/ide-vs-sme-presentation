@@ -323,26 +323,36 @@
     
     .footer-links {
       display: flex;
-      gap: 24px;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 32px;
     }
     
     .footer-link {
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     
     .qr-box {
-      width: 72px;
-      height: 72px;
+      width: 80px;
+      height: 80px;
       background: #fff;
-      border-radius: 8px;
-      padding: 6px;
-      margin-bottom: 6px;
+      border-radius: 10px;
+      padding: 8px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     
     .qr-box img {
       width: 100%;
       height: 100%;
       object-fit: contain;
+      display: block;
     }
     
     /* Simple QR placeholder using CSS */
@@ -650,15 +660,15 @@
     </footer>
     
     <div class="download-section">
-      <button class="download-btn" onclick="window.print()">
+      <a href="./ide-vs-sme-one-pager.pdf" download class="download-btn" style="text-decoration: none;">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="7,10 12,15 17,10"/>
           <line x1="12" y1="15" x2="12" y2="3"/>
         </svg>
-        Download / Print PDF
-      </button>
-      <p class="print-hint">Click to open print dialog → Save as PDF</p>
+        Download PDF
+      </a>
+      <p class="print-hint">Direct PDF download — no print dialog needed</p>
     </div>
   </div>
 

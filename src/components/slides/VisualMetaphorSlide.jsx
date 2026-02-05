@@ -8,15 +8,8 @@ const VisualMetaphorSlide = ({ slide }) => {
   const [countdown, setCountdown] = useState(null);
   const [launchResult, setLaunchResult] = useState(null);
 
-  // Pre-generate stable random values for windows
-  const windowDelays = useMemo(() => 
-    [...Array(20)].map(() => Math.random() * 2), 
-    []
-  );
-  const windowDurations = useMemo(() => 
-    [...Array(20)].map(() => 2 + Math.random() * 2), 
-    []
-  );
+  // SME Building workflow state
+  const [elevatorFloor, setElevatorFloor] = useState(0);
 
   // Pre-generate stable star positions
   const stars = useMemo(() => 
@@ -40,6 +33,14 @@ const VisualMetaphorSlide = ({ slide }) => {
     []
   );
 
+  // Elevator animation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setElevatorFloor(prev => (prev + 1) % 5);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Rocket launch cycle
   useEffect(() => {
     const launchCycle = () => {
@@ -50,8 +51,8 @@ const VisualMetaphorSlide = ({ slide }) => {
       setTimeout(() => {
         setCountdown(null);
         setLaunched(true);
-        // Random result - 70% success, 30% "learning opportunity"
-        const success = Math.random() > 0.3;
+        // 50% success, 50% crash - fail fast mentality!
+        const success = Math.random() > 0.5;
         setTimeout(() => {
           setLaunchResult(success ? 'success' : 'iterate');
         }, 1500);
@@ -149,14 +150,14 @@ const VisualMetaphorSlide = ({ slide }) => {
               </div>
             </div>
 
-            {/* Countdown Display */}
+            {/* Countdown Display - Centered in launch zone */}
             <AnimatePresence>
               {countdown !== null && (
                 <motion.div
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 2, opacity: 0 }}
-                  className="absolute top-1/4 left-1/2 -translate-x-1/2 z-30"
+                  className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30"
                 >
                   <span className="text-8xl font-black text-white drop-shadow-lg"
                     style={{ textShadow: '0 0 40px rgba(168, 85, 247, 0.8)' }}
@@ -167,31 +168,43 @@ const VisualMetaphorSlide = ({ slide }) => {
               )}
             </AnimatePresence>
 
-            {/* Launch Result */}
+            {/* Launch Result - Centered in launch zone, more prominent */}
             <AnimatePresence>
               {launchResult && (
                 <motion.div
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0, opacity: 0 }}
-                  className="absolute top-1/4 left-1/2 -translate-x-1/2 z-30 text-center"
+                  className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 text-center"
                 >
                   {launchResult === 'success' ? (
-                    <>
-                      <span className="text-6xl">✨🎉✨</span>
-                      <p className="text-green-400 font-bold mt-2">SHIPPED!</p>
-                    </>
+                    <div className="flex flex-col items-center">
+                      <span className="text-7xl">✨🎉✨</span>
+                      <motion.p 
+                        className="text-green-400 font-bold text-2xl mt-3 px-6 py-2 bg-green-500/20 rounded-full border border-green-500/50"
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 0.5, repeat: Infinity }}
+                      >
+                        SHIPPED! 🚀
+                      </motion.p>
+                    </div>
                   ) : (
-                    <>
-                      <span className="text-6xl">💥📊💡</span>
-                      <p className="text-orange-400 font-bold mt-2">Learning!</p>
-                    </>
+                    <div className="flex flex-col items-center">
+                      <span className="text-7xl">💥🔥💥</span>
+                      <motion.p 
+                        className="text-orange-400 font-bold text-2xl mt-3 px-6 py-2 bg-orange-500/20 rounded-full border border-orange-500/50"
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 0.5, repeat: Infinity }}
+                      >
+                        Learning! 📊
+                      </motion.p>
+                    </div>
                   )}
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Rocket with Animation */}
+            {/* Rocket with Animation - Flames now inside and aligned */}
             <div className="flex-1 flex items-center justify-center relative z-10">
               <motion.div
                 animate={{ 
@@ -203,68 +216,82 @@ const VisualMetaphorSlide = ({ slide }) => {
                   duration: launched ? 2 : 0.5,
                   ease: launched ? "easeIn" : "easeOut"
                 }}
-                className="relative"
+                className="relative flex flex-col items-center"
               >
                 {/* The Rocket */}
                 <div className="text-8xl transform -rotate-45">🚀</div>
                 
-                {/* Flame trail when launching */}
+                {/* Flame trail when launching - positioned relative to rocket */}
                 <AnimatePresence>
                   {launched && (
-                    <>
-                      {/* Main flame */}
+                    <div className="absolute top-16 left-1/2 -translate-x-1/2 flex flex-col items-center" style={{ transform: 'translateX(-50%) rotate(45deg)' }}>
+                      {/* Main flame - centered below rocket */}
                       <motion.div
                         initial={{ opacity: 0, scale: 0 }}
                         animate={{ 
                           opacity: [1, 0.8, 1],
-                          scale: [1, 1.3, 1],
+                          scale: [1, 1.4, 1],
                         }}
                         exit={{ opacity: 0, scale: 0 }}
-                        transition={{ duration: 0.3, repeat: Infinity }}
-                        className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-6xl"
+                        transition={{ duration: 0.15, repeat: Infinity }}
+                        className="text-5xl"
                         style={{ filter: 'blur(1px)' }}
                       >
                         🔥
                       </motion.div>
-                      {/* Smoke particles */}
+                      {/* Secondary flame */}
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ 
+                          opacity: [0.8, 0.6, 0.8],
+                          scale: [0.8, 1.2, 0.8],
+                        }}
+                        exit={{ opacity: 0, scale: 0 }}
+                        transition={{ duration: 0.2, repeat: Infinity, delay: 0.1 }}
+                        className="text-4xl -mt-4"
+                      >
+                        🔥
+                      </motion.div>
+                      {/* Smoke particles - following rocket trail */}
                       {[...Array(5)].map((_, i) => (
                         <motion.div
                           key={i}
-                          initial={{ opacity: 0.8, y: 0, x: 0, scale: 0.5 }}
+                          initial={{ opacity: 0.8, y: 0, scale: 0.5 }}
                           animate={{ 
                             opacity: 0,
-                            y: 100 + i * 30,
-                            x: (i - 2) * 15,
+                            y: 80 + i * 20,
                             scale: 2
                           }}
                           transition={{ 
-                            duration: 1.5,
+                            duration: 1,
                             delay: i * 0.1,
                             repeat: Infinity 
                           }}
-                          className="absolute -bottom-4 left-1/2 text-3xl"
+                          className="absolute text-2xl"
+                          style={{ top: '60px' }}
                         >
                           💨
                         </motion.div>
                       ))}
-                    </>
+                    </div>
                   )}
                 </AnimatePresence>
-              </motion.div>
 
-              {/* Idle flame animation when not launched */}
-              {!launched && countdown === null && (
-                <motion.div
-                  className="absolute bottom-20 left-1/2 -translate-x-1/2"
-                  animate={{ 
-                    scale: [1, 1.1, 1],
-                    opacity: [0.6, 0.9, 0.6]
-                  }}
-                  transition={{ duration: 0.5, repeat: Infinity }}
-                >
-                  <span className="text-4xl">🔥</span>
-                </motion.div>
-              )}
+                {/* Idle flame animation when not launched - properly aligned */}
+                {!launched && countdown === null && (
+                  <motion.div
+                    className="absolute top-16 left-1/2"
+                    style={{ transform: 'translateX(-50%) rotate(45deg)' }}
+                    animate={{ 
+                      scale: [1, 1.15, 1],
+                      opacity: [0.6, 0.9, 0.6]
+                    }}
+                    transition={{ duration: 0.5, repeat: Infinity }}
+                  >
+                    <span className="text-4xl">🔥</span>
+                  </motion.div>
+                )}
+              </motion.div>
             </div>
 
             {/* Launch platform */}
@@ -289,7 +316,7 @@ const VisualMetaphorSlide = ({ slide }) => {
                 animate={{ opacity: [0.7, 1, 0.7] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                🚀 Launch → Learn → Iterate → Repeat
+                🚀 Launch → Crash → Learn → Iterate → Repeat
               </motion.span>
             </div>
           </div>
@@ -298,7 +325,7 @@ const VisualMetaphorSlide = ({ slide }) => {
           <div className="mt-4 grid grid-cols-3 gap-3">
             {[
               { icon: Zap, text: "Ship fast", color: "text-yellow-400", bg: "bg-yellow-500/10", border: "border-yellow-500/30" },
-              { icon: Target, text: "Learn from failures", color: "text-orange-400", bg: "bg-orange-500/10", border: "border-orange-500/30" },
+              { icon: Target, text: "Fail fast, learn", color: "text-orange-400", bg: "bg-orange-500/10", border: "border-orange-500/30" },
               { icon: TrendingUp, text: "Iterate rapidly", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
             ].map((item, idx) => (
               <motion.div
@@ -315,7 +342,7 @@ const VisualMetaphorSlide = ({ slide }) => {
           </div>
         </motion.div>
 
-        {/* SME - Building with Lights Animation */}
+        {/* SME - Building with Animated Workflow */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -368,97 +395,207 @@ const VisualMetaphorSlide = ({ slide }) => {
               </div>
             </div>
 
-            {/* City Skyline with Buildings */}
+            {/* City Skyline with Animated Workflow Building */}
             <div className="flex-1 flex items-end justify-center relative z-10 pb-16">
               <div className="flex items-end gap-3">
-                {/* Building 1 - Shorter */}
+                {/* Building 1 - Shorter side building */}
                 <div className="relative">
                   <div 
-                    className="w-16 h-28 rounded-t-lg relative"
+                    className="w-14 h-24 rounded-t-lg relative"
                     style={{
                       background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
                       boxShadow: 'inset -5px 0 15px rgba(0,0,0,0.3)',
                     }}
                   >
-                    {/* Windows */}
+                    {/* Static lit windows */}
                     <div className="grid grid-cols-2 gap-1.5 p-2">
-                      {[...Array(6)].map((_, i) => (
-                        <motion.div
+                      {[...Array(4)].map((_, i) => (
+                        <div
                           key={i}
-                          className="w-5 h-5 rounded-sm"
-                          style={{ backgroundColor: '#fef08a' }}
-                          animate={{ opacity: [0.4, 1, 0.4] }}
-                          transition={{ 
-                            duration: windowDurations[i],
-                            repeat: Infinity,
-                            delay: windowDelays[i]
-                          }}
+                          className="w-4 h-4 rounded-sm bg-yellow-200/70"
                         />
                       ))}
                     </div>
                   </div>
                 </div>
 
-                {/* Building 2 - Main/Tallest */}
+                {/* Main Building - Animated Workflow */}
                 <div className="relative">
+                  {/* Antenna */}
+                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex flex-col items-center z-20">
+                    <motion.div
+                      className="w-3 h-3 bg-red-500 rounded-full"
+                      animate={{ opacity: [1, 0.3, 1] }}
+                      transition={{ duration: 1, repeat: Infinity }}
+                      style={{ boxShadow: '0 0 10px rgba(239, 68, 68, 0.8)' }}
+                    />
+                    <div className="w-0.5 h-5 bg-slate-400" />
+                    <span className="text-xs">📡</span>
+                  </div>
+
                   <div 
-                    className="w-24 h-48 rounded-t-lg relative"
+                    className="w-32 h-56 rounded-t-lg relative overflow-hidden"
                     style={{
                       background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e3a8a 100%)',
                       boxShadow: 'inset -8px 0 20px rgba(0,0,0,0.3)',
                     }}
                   >
-                    {/* Windows grid */}
-                    <div className="grid grid-cols-3 gap-1.5 p-3">
-                      {[...Array(12)].map((_, i) => (
+                    {/* Floor labels and workflow */}
+                    <div className="absolute inset-0 flex flex-col">
+                      {/* Floor 5 - Manager */}
+                      <div className="flex-1 border-b border-blue-800/50 flex items-center justify-between px-2 relative">
+                        <span className="text-[10px] text-blue-200/60">F5</span>
+                        <motion.span
+                          className="text-lg"
+                          animate={{ scale: [1, 1.1, 1] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        >
+                          🧑‍💼
+                        </motion.span>
+                        <div className="w-4 h-4 bg-yellow-200/80 rounded-sm" />
+                      </div>
+                      
+                      {/* Floor 4 - Documents flowing */}
+                      <div className="flex-1 border-b border-blue-800/50 flex items-center justify-between px-2 relative overflow-hidden">
+                        <span className="text-[10px] text-blue-200/60">F4</span>
+                        <div className="flex gap-1">
+                          {[0, 1, 2].map((i) => (
+                            <motion.span
+                              key={i}
+                              className="text-sm"
+                              animate={{ 
+                                y: [0, 10, 20],
+                                opacity: [1, 0.8, 0.5]
+                              }}
+                              transition={{ 
+                                duration: 2, 
+                                repeat: Infinity, 
+                                delay: i * 0.6 
+                              }}
+                            >
+                              📄
+                            </motion.span>
+                          ))}
+                        </div>
+                        <div className="w-4 h-4 bg-yellow-200/70 rounded-sm" />
+                      </div>
+                      
+                      {/* Floor 3 - Workers processing */}
+                      <div className="flex-1 border-b border-blue-800/50 flex items-center justify-between px-2 relative">
+                        <span className="text-[10px] text-blue-200/60">F3</span>
+                        <div className="flex gap-1">
+                          {[0, 1, 2].map((i) => (
+                            <motion.div
+                              key={i}
+                              className="w-2 h-2 rounded-full bg-cyan-400"
+                              animate={{ 
+                                x: [0, 8, 0, -8, 0],
+                                scale: [1, 1.2, 1, 1.2, 1]
+                              }}
+                              transition={{ 
+                                duration: 4, 
+                                repeat: Infinity, 
+                                delay: i * 1.2,
+                                ease: "linear"
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <div className="w-4 h-4 bg-yellow-200/80 rounded-sm" />
+                      </div>
+                      
+                      {/* Floor 2 - Elevator area */}
+                      <div className="flex-1 border-b border-blue-800/50 flex items-center justify-between px-2 relative">
+                        <span className="text-[10px] text-blue-200/60">F2</span>
+                        <span className="text-sm">⚙️</span>
+                        <div className="w-4 h-4 bg-yellow-200/60 rounded-sm" />
+                      </div>
+                      
+                      {/* Floor 1 - Completed tasks exit */}
+                      <div className="flex-1 flex items-center justify-between px-2 relative">
+                        <span className="text-[10px] text-blue-200/60">F1</span>
                         <motion.div
-                          key={i}
-                          className="w-5 h-6 rounded-sm"
-                          style={{ backgroundColor: '#fef08a' }}
-                          animate={{ opacity: [0.5, 1, 0.5] }}
-                          transition={{ 
-                            duration: windowDurations[i + 6],
-                            repeat: Infinity,
-                            delay: windowDelays[i + 6]
-                          }}
-                        />
-                      ))}
+                          className="flex gap-1"
+                          animate={{ x: [0, 15, 30] }}
+                          transition={{ duration: 3, repeat: Infinity }}
+                        >
+                          <span className="text-sm">✅</span>
+                          <span className="text-sm">📦</span>
+                        </motion.div>
+                        <div className="w-4 h-4 bg-yellow-200/90 rounded-sm" />
+                      </div>
                     </div>
-                    {/* Antenna */}
-                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex flex-col items-center">
+
+                    {/* Elevator shaft */}
+                    <div className="absolute left-2 top-0 bottom-0 w-6 bg-slate-800/50 border-r border-slate-600/50">
                       <motion.div
-                        className="w-3 h-3 bg-red-500 rounded-full"
-                        animate={{ opacity: [1, 0.3, 1] }}
-                        transition={{ duration: 1, repeat: Infinity }}
-                        style={{ boxShadow: '0 0 10px rgba(239, 68, 68, 0.8)' }}
-                      />
-                      <div className="w-0.5 h-4 bg-slate-400" />
+                        className="w-5 h-8 bg-gradient-to-b from-slate-400 to-slate-500 rounded-sm mx-auto flex items-center justify-center text-xs"
+                        animate={{ y: elevatorFloor * 42 + 4 }}
+                        transition={{ duration: 1.5, ease: "easeInOut" }}
+                      >
+                        🛗
+                      </motion.div>
                     </div>
+
+                    {/* Moving workers between floors */}
+                    {[0, 1, 2].map((i) => (
+                      <motion.div
+                        key={i}
+                        className="absolute w-2 h-2 rounded-full bg-green-400 shadow-lg"
+                        style={{ left: '40%' }}
+                        animate={{
+                          y: [180, 140, 100, 60, 20],
+                          x: [0, 10, 0, -10, 0],
+                        }}
+                        transition={{
+                          duration: 8,
+                          repeat: Infinity,
+                          delay: i * 2.5,
+                          ease: "linear"
+                        }}
+                      />
+                    ))}
+
+                    {/* Document flow down the building */}
+                    {[0, 1].map((i) => (
+                      <motion.div
+                        key={i}
+                        className="absolute text-sm"
+                        style={{ right: '25%' }}
+                        animate={{ y: [-10, 220] }}
+                        transition={{ 
+                          duration: 6, 
+                          repeat: Infinity, 
+                          delay: i * 3,
+                          ease: "linear" 
+                        }}
+                      >
+                        📋
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Entrance */}
+                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-2xl">
+                    🚪
                   </div>
                 </div>
 
-                {/* Building 3 - Medium */}
+                {/* Building 3 - Medium side building */}
                 <div className="relative">
                   <div 
-                    className="w-14 h-36 rounded-t-lg relative"
+                    className="w-12 h-32 rounded-t-lg relative"
                     style={{
                       background: 'linear-gradient(135deg, #475569 0%, #334155 100%)',
                       boxShadow: 'inset -5px 0 15px rgba(0,0,0,0.3)',
                     }}
                   >
-                    {/* Windows */}
+                    {/* Static lit windows */}
                     <div className="grid grid-cols-2 gap-1 p-2">
-                      {[...Array(8)].map((_, i) => (
-                        <motion.div
+                      {[...Array(6)].map((_, i) => (
+                        <div
                           key={i}
-                          className="w-4 h-5 rounded-sm"
-                          style={{ backgroundColor: '#fef08a' }}
-                          animate={{ opacity: [0.3, 0.9, 0.3] }}
-                          transition={{ 
-                            duration: windowDurations[(i + 18) % 20],
-                            repeat: Infinity,
-                            delay: windowDelays[(i + 18) % 20]
-                          }}
+                          className="w-3 h-4 rounded-sm bg-yellow-200/60"
                         />
                       ))}
                     </div>
@@ -499,7 +636,7 @@ const VisualMetaphorSlide = ({ slide }) => {
             {/* Status text */}
             <div className="absolute bottom-4 left-4 right-4 text-center">
               <span className="text-sm font-mono text-blue-300/80 bg-blue-900/30 px-4 py-1.5 rounded-full">
-                🏢 99.9% Uptime • Steady Growth • Predictable
+                🏢 Workflow → Process → Deliver → Repeat
               </span>
             </div>
           </div>
@@ -508,7 +645,7 @@ const VisualMetaphorSlide = ({ slide }) => {
           <div className="mt-4 grid grid-cols-3 gap-3">
             {[
               { icon: Shield, text: "Minimize risk", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/30" },
-              { icon: Building2, text: "Solid foundation", color: "text-slate-400", bg: "bg-slate-500/10", border: "border-slate-500/30" },
+              { icon: Building2, text: "Solid process", color: "text-slate-400", bg: "bg-slate-500/10", border: "border-slate-500/30" },
               { icon: Clock, text: "Steady growth", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
             ].map((item, idx) => (
               <motion.div
@@ -542,10 +679,10 @@ const VisualMetaphorSlide = ({ slide }) => {
           <Lightbulb className="w-6 h-6 text-yellow-400" />
           <p className="text-white/80 text-base">
             <span className="text-purple-400 font-bold">IDE: </span>
-            Every crash = data → learning → iteration
+            50% crash → data → learning → iteration
             <span className="mx-4 text-white/30">|</span>
             <span className="text-blue-400 font-bold">SME: </span>
-            Stability over speed, every time
+            Steady workflow, predictable delivery
           </p>
           <Sparkles className="w-6 h-6 text-pink-400" />
         </div>

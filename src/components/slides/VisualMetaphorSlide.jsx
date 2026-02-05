@@ -219,15 +219,15 @@ const VisualMetaphorSlide = ({ slide }) => {
               </div>
               <div className="flex items-center gap-2">
                 <span>💨</span>
-                <span>= Rapid Iteration</span>
+                <span>= Massive Launch Power</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>💧</span>
+                <span>= Resources & Cooling</span>
               </div>
               <div className="flex items-center gap-2">
                 <span>💥</span>
-                <span>= Failure → Learning</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span>✨</span>
-                <span>= Success → Ship It!</span>
+                <span>= Fail Fast → Learn</span>
               </div>
             </div>
 
@@ -264,71 +264,182 @@ const VisualMetaphorSlide = ({ slide }) => {
                 </motion.div>
               )}
 
-              {/* SMOKE - 3X intensity, stays at launch pad */}
+              {/* WATER DELUGE SYSTEM - Sprays from both sides */}
               {(launched || countdown !== null) && (
-                <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-0">
-                  {/* Heavy smoke cloud - 36 puffs for 3x intensity */}
-                  {[...Array(36)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      className="absolute rounded-full"
-                      style={{
-                        width: 25 + (i % 5) * 15,
-                        height: 25 + (i % 5) * 15,
-                        background: `rgba(180, 180, 180, ${0.6 + (i % 4) * 0.1})`,
-                        filter: 'blur(10px)',
-                        left: -40 + (i % 8) * 12,
-                        top: (i % 4) * 8,
-                      }}
-                      initial={{ 
-                        x: 0, 
-                        y: 0, 
-                        opacity: 0.8,
-                        scale: 0.6 
-                      }}
-                      animate={{ 
-                        x: ((i % 2 === 0 ? 1 : -1) * (30 + (i % 5) * 20)),
-                        y: 15 + (i % 4) * 20,
-                        opacity: 0,
-                        scale: 3 + (i % 4) * 0.8,
-                      }}
-                      transition={{
-                        duration: 1.8 + (i % 5) * 0.3,
-                        repeat: Infinity,
-                        delay: i * 0.08,
-                        ease: "easeOut"
-                      }}
-                    />
-                  ))}
-                  {/* Extra dense core smoke */}
-                  {[...Array(12)].map((_, i) => (
+                <>
+                  {/* Left water spray */}
+                  <div className="absolute bottom-20 left-[20%] z-5">
+                    {[...Array(15)].map((_, i) => (
+                      <motion.div
+                        key={`water-l-${i}`}
+                        className="absolute rounded-full"
+                        style={{
+                          width: 4,
+                          height: 8 + (i % 3) * 4,
+                          background: 'rgba(147, 197, 253, 0.8)',
+                          filter: 'blur(1px)',
+                        }}
+                        initial={{ x: 0, y: 0, opacity: 0.9 }}
+                        animate={{
+                          x: [0, 30 + (i % 5) * 10, 50 + (i % 4) * 15],
+                          y: [0, -20 - (i % 3) * 10, 30 + (i % 4) * 20],
+                          opacity: [0.9, 0.7, 0],
+                          scale: [1, 1.5, 0.5],
+                        }}
+                        transition={{
+                          duration: 0.8 + (i % 3) * 0.2,
+                          repeat: Infinity,
+                          delay: i * 0.05,
+                          ease: "easeOut"
+                        }}
+                      />
+                    ))}
+                  </div>
+                  {/* Right water spray */}
+                  <div className="absolute bottom-20 right-[20%] z-5">
+                    {[...Array(15)].map((_, i) => (
+                      <motion.div
+                        key={`water-r-${i}`}
+                        className="absolute rounded-full"
+                        style={{
+                          width: 4,
+                          height: 8 + (i % 3) * 4,
+                          background: 'rgba(147, 197, 253, 0.8)',
+                          filter: 'blur(1px)',
+                        }}
+                        initial={{ x: 0, y: 0, opacity: 0.9 }}
+                        animate={{
+                          x: [0, -30 - (i % 5) * 10, -50 - (i % 4) * 15],
+                          y: [0, -20 - (i % 3) * 10, 30 + (i % 4) * 20],
+                          opacity: [0.9, 0.7, 0],
+                          scale: [1, 1.5, 0.5],
+                        }}
+                        transition={{
+                          duration: 0.8 + (i % 3) * 0.2,
+                          repeat: Infinity,
+                          delay: i * 0.05,
+                          ease: "easeOut"
+                        }}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* MASSIVE THICK SMOKE - Launch pad style billowing clouds */}
+              {(launched || countdown !== null) && (
+                <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-0">
+                  {/* CORE SMOKE - Solid white/gray massive clouds */}
+                  {[...Array(30)].map((_, i) => (
                     <motion.div
                       key={`core-${i}`}
                       className="absolute rounded-full"
                       style={{
-                        width: 40 + (i % 3) * 20,
-                        height: 40 + (i % 3) * 20,
-                        background: `rgba(200, 200, 200, ${0.7 + (i % 3) * 0.1})`,
-                        filter: 'blur(15px)',
-                        left: -30 + (i % 4) * 15,
-                        top: 0,
+                        width: 60 + (i % 4) * 30,
+                        height: 50 + (i % 4) * 25,
+                        background: `rgba(255, 255, 255, ${0.95 - (i % 5) * 0.05})`,
+                        filter: 'blur(3px)',
+                        left: -80 + (i % 6) * 25,
+                        top: -10 + (i % 4) * 5,
                       }}
-                      initial={{ 
-                        x: 0, 
-                        y: 0, 
-                        opacity: 0.9,
-                        scale: 0.4 
-                      }}
-                      animate={{ 
-                        x: ((i % 2 === 0 ? 1 : -1) * (15 + (i % 3) * 10)),
-                        y: 20 + (i % 3) * 15,
-                        opacity: 0,
-                        scale: 2.5,
+                      initial={{ x: 0, y: 0, opacity: 0.95, scale: 0.3 }}
+                      animate={{
+                        x: ((i % 2 === 0 ? 1 : -1) * (40 + (i % 6) * 25)),
+                        y: [0, 20 + (i % 4) * 15],
+                        opacity: [0.95, 0.85, 0.4, 0],
+                        scale: [0.3, 1.5, 2.5, 3.5],
                       }}
                       transition={{
-                        duration: 1.2,
+                        duration: 2 + (i % 4) * 0.4,
                         repeat: Infinity,
-                        delay: i * 0.12,
+                        delay: i * 0.06,
+                        ease: "easeOut"
+                      }}
+                    />
+                  ))}
+
+                  {/* DENSE INNER SMOKE - Brightest white at center */}
+                  {[...Array(20)].map((_, i) => (
+                    <motion.div
+                      key={`dense-${i}`}
+                      className="absolute rounded-full"
+                      style={{
+                        width: 80 + (i % 3) * 40,
+                        height: 70 + (i % 3) * 35,
+                        background: 'rgba(255, 255, 255, 0.98)',
+                        filter: 'blur(2px)',
+                        left: -60 + (i % 5) * 20,
+                        top: 0,
+                      }}
+                      initial={{ x: 0, y: 0, opacity: 1, scale: 0.2 }}
+                      animate={{
+                        x: ((i % 2 === 0 ? 1 : -1) * (20 + (i % 4) * 15)),
+                        y: [0, 10, 25],
+                        opacity: [1, 0.9, 0.5, 0],
+                        scale: [0.2, 1, 2, 3],
+                      }}
+                      transition={{
+                        duration: 1.5 + (i % 3) * 0.3,
+                        repeat: Infinity,
+                        delay: i * 0.07,
+                        ease: "easeOut"
+                      }}
+                    />
+                  ))}
+
+                  {/* OUTER SPREADING SMOKE - Gray billowing outward */}
+                  {[...Array(40)].map((_, i) => (
+                    <motion.div
+                      key={`outer-${i}`}
+                      className="absolute rounded-full"
+                      style={{
+                        width: 40 + (i % 5) * 20,
+                        height: 35 + (i % 5) * 18,
+                        background: `rgba(200, 200, 200, ${0.9 - (i % 6) * 0.08})`,
+                        filter: 'blur(4px)',
+                        left: -100 + (i % 10) * 20,
+                        top: (i % 5) * 8,
+                      }}
+                      initial={{ x: 0, y: 0, opacity: 0.9, scale: 0.4 }}
+                      animate={{
+                        x: ((i % 2 === 0 ? 1 : -1) * (60 + (i % 7) * 30)),
+                        y: [0, 30 + (i % 5) * 20],
+                        opacity: [0.9, 0.7, 0.3, 0],
+                        scale: [0.4, 1.8, 3, 4],
+                      }}
+                      transition={{
+                        duration: 2.5 + (i % 5) * 0.4,
+                        repeat: Infinity,
+                        delay: i * 0.04,
+                        ease: "easeOut"
+                      }}
+                    />
+                  ))}
+
+                  {/* STEAM from water hitting hot exhaust */}
+                  {[...Array(25)].map((_, i) => (
+                    <motion.div
+                      key={`steam-${i}`}
+                      className="absolute rounded-full"
+                      style={{
+                        width: 30 + (i % 4) * 15,
+                        height: 25 + (i % 4) * 12,
+                        background: 'rgba(220, 230, 255, 0.85)',
+                        filter: 'blur(5px)',
+                        left: -70 + (i % 7) * 20,
+                        top: 10,
+                      }}
+                      initial={{ x: 0, y: 0, opacity: 0.85, scale: 0.3 }}
+                      animate={{
+                        x: ((i % 2 === 0 ? 1 : -1) * (50 + (i % 5) * 25)),
+                        y: [-10, -30, -50 - (i % 4) * 20],
+                        opacity: [0.85, 0.6, 0.2, 0],
+                        scale: [0.3, 1.2, 2, 2.8],
+                      }}
+                      transition={{
+                        duration: 2 + (i % 4) * 0.3,
+                        repeat: Infinity,
+                        delay: i * 0.08,
                         ease: "easeOut"
                       }}
                     />

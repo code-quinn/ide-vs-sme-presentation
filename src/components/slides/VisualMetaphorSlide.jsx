@@ -204,84 +204,129 @@ const VisualMetaphorSlide = ({ slide }) => {
               )}
             </AnimatePresence>
 
-            {/* Rocket with Animation - Flames now inside and aligned */}
+            {/* Metaphorical Labels Legend */}
+            <div className="absolute bottom-20 left-4 text-xs text-white/60 space-y-1 z-20">
+              <div className="flex items-center gap-2">
+                <span>🚀</span>
+                <span>= Your Idea/Product</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>🔥</span>
+                <span>= Energy & Effort</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>💨</span>
+                <span>= Rapid Iteration</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>💥</span>
+                <span>= Failure → Learning</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span>✨</span>
+                <span>= Success → Ship It!</span>
+              </div>
+            </div>
+
+            {/* Rocket with Animation - Proper vertical alignment */}
             <div className="flex-1 flex items-center justify-center relative z-10">
-              <motion.div
-                animate={{ 
-                  y: launched ? -350 : 0,
-                  scale: launched ? 0.7 : 1,
-                  rotate: launched ? -5 : 0,
-                }}
-                transition={{
-                  duration: launched ? 2 : 0.5,
-                  ease: launched ? "easeIn" : "easeOut"
-                }}
-                className="relative flex flex-col items-center"
-              >
+              <div className="flex flex-col items-center">
                 {/* The Rocket */}
-                <div className="text-8xl transform -rotate-45">🚀</div>
+                <motion.div
+                  animate={{ 
+                    y: launched ? -350 : 0,
+                    scale: launched ? 0.7 : 1,
+                  }}
+                  transition={{
+                    duration: launched ? 2 : 0.5,
+                    ease: launched ? "easeIn" : "easeOut"
+                  }}
+                  className="relative z-10"
+                >
+                  <div className="text-8xl">🚀</div>
+                </motion.div>
                 
-                {/* Flame trail when launching - positioned relative to rocket */}
-                <AnimatePresence>
-                  {launched && (
-                    <div className="absolute top-16 left-1/2 -translate-x-1/2 flex flex-col items-center" style={{ transform: 'translateX(-50%) rotate(45deg)' }}>
-                      {/* Main flame - centered below rocket */}
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ 
-                          opacity: [1, 0.8, 1],
-                          scale: [1, 1.4, 1],
-                        }}
-                        exit={{ opacity: 0, scale: 0 }}
-                        transition={{ duration: 0.15, repeat: Infinity }}
-                        className="text-5xl"
-                        style={{ filter: 'blur(1px)' }}
-                      >
-                        🔥
-                      </motion.div>
-                      {/* Secondary flame */}
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ 
-                          opacity: [0.8, 0.6, 0.8],
-                          scale: [0.8, 1.2, 0.8],
-                        }}
-                        exit={{ opacity: 0, scale: 0 }}
-                        transition={{ duration: 0.2, repeat: Infinity, delay: 0.1 }}
-                        className="text-4xl -mt-4"
-                      >
-                        🔥
-                      </motion.div>
-                      {/* Smoke particles - following rocket trail */}
-                      {[...Array(5)].map((_, i) => (
+                {/* Fire - directly under rocket */}
+                {(launched || countdown !== null) && (
+                  <motion.div 
+                    className="flex flex-col items-center -mt-6"
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }}
+                    transition={{ duration: 0.2, repeat: Infinity }}
+                  >
+                    <span className="text-5xl">🔥</span>
+                    <span className="text-4xl -mt-4">🔥</span>
+                  </motion.div>
+                )}
+                
+                {/* Smoke - LOTS of it, below fire */}
+                {(launched || countdown !== null) && (
+                  <div className="flex flex-col items-center -mt-2">
+                    {/* Layer 1 */}
+                    <motion.div className="flex gap-1"
+                      animate={{ opacity: [0.6, 1, 0.6], y: [0, 10, 20] }}
+                      transition={{ duration: 1, repeat: Infinity }}
+                    >
+                      <span className="text-3xl">💨</span>
+                    </motion.div>
+                    {/* Layer 2 */}
+                    <motion.div className="flex gap-1"
+                      animate={{ opacity: [0.5, 0.8, 0.5], y: [0, 15, 30] }}
+                      transition={{ duration: 1.2, repeat: Infinity, delay: 0.2 }}
+                    >
+                      <span className="text-3xl">💨</span>
+                      <span className="text-3xl">💨</span>
+                    </motion.div>
+                    {/* Layer 3 */}
+                    <motion.div className="flex gap-2"
+                      animate={{ opacity: [0.4, 0.7, 0.4], y: [0, 20, 40] }}
+                      transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }}
+                    >
+                      <span className="text-2xl">💨</span>
+                      <span className="text-3xl">💨</span>
+                      <span className="text-2xl">💨</span>
+                    </motion.div>
+                    {/* Layer 4 - spreading wider */}
+                    <motion.div className="flex gap-3"
+                      animate={{ opacity: [0.3, 0.5, 0.3], y: [0, 25, 50], scale: [1, 1.2, 1.4] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: 0.6 }}
+                    >
+                      <span className="text-xl">💨</span>
+                      <span className="text-2xl">💨</span>
+                      <span className="text-2xl">💨</span>
+                      <span className="text-xl">💨</span>
+                    </motion.div>
+                    {/* CSS smoke particles for extra effect */}
+                    <div className="relative h-16 w-32">
+                      {[...Array(8)].map((_, i) => (
                         <motion.div
                           key={i}
-                          initial={{ opacity: 0.8, y: 0, scale: 0.5 }}
+                          className="absolute rounded-full bg-gray-400/40"
+                          style={{
+                            width: 12 + (i % 3) * 8,
+                            height: 12 + (i % 3) * 8,
+                            left: `${30 + (i % 4) * 10}%`,
+                          }}
                           animate={{ 
-                            opacity: 0,
-                            y: 80 + i * 20,
-                            scale: 2
+                            y: [0, 40 + (i % 3) * 20],
+                            x: [(i % 2 === 0 ? -1 : 1) * 10, (i % 2 === 0 ? 1 : -1) * 20],
+                            opacity: [0.5, 0],
+                            scale: [0.5, 1.5]
                           }}
-                          transition={{ 
-                            duration: 1,
-                            delay: i * 0.1,
-                            repeat: Infinity 
+                          transition={{
+                            duration: 1.5 + (i % 3) * 0.3,
+                            repeat: Infinity,
+                            delay: i * 0.15
                           }}
-                          className="absolute text-2xl"
-                          style={{ top: '60px' }}
-                        >
-                          💨
-                        </motion.div>
+                        />
                       ))}
                     </div>
-                  )}
-                </AnimatePresence>
+                  </div>
+                )}
 
-                {/* Idle flame animation when not launched - properly aligned */}
+                {/* Idle flame animation when not launched */}
                 {!launched && countdown === null && (
                   <motion.div
-                    className="absolute top-16 left-1/2"
-                    style={{ transform: 'translateX(-50%) rotate(45deg)' }}
+                    className="-mt-6"
                     animate={{ 
                       scale: [1, 1.15, 1],
                       opacity: [0.6, 0.9, 0.6]
@@ -291,7 +336,7 @@ const VisualMetaphorSlide = ({ slide }) => {
                     <span className="text-4xl">🔥</span>
                   </motion.div>
                 )}
-              </motion.div>
+              </div>
             </div>
 
             {/* Launch platform */}

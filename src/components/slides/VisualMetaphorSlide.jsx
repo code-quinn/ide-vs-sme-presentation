@@ -1,654 +1,81 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import Lottie from 'lottie-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, Shield, Target, Clock, Lightbulb, Sparkles, TrendingUp, Building2, Rocket } from 'lucide-react';
 
-// Lottie animation URLs from LottieFiles (free, public animations)
-const ROCKET_LOTTIE_URL = "https://lottie.host/4db68bbd-31f6-4cd8-84eb-189571c13146/OlahFoDyDQ.json";
-const CITY_LOTTIE_URL = "https://lottie.host/1ad8c8e0-6f68-4e3d-b7c4-3c3b2a2a8f89/8gY6HfCRwC.json";
-const GLOBE_LOTTIE_URL = "https://lottie.host/c9eb53c7-f840-4f78-b33e-0f2b0c3e7c80/s7LhXhJMwM.json";
-
-// Fallback inline Lottie data for rocket (compact, works offline)
-const rocketLottieData = {
-  "v": "5.7.4",
-  "fr": 30,
-  "ip": 0,
-  "op": 90,
-  "w": 200,
-  "h": 200,
-  "nm": "Rocket",
-  "ddd": 0,
-  "assets": [],
-  "layers": [
-    {
-      "ddd": 0,
-      "ind": 1,
-      "ty": 4,
-      "nm": "Flame",
-      "sr": 1,
-      "ks": {
-        "o": { "a": 0, "k": 100 },
-        "r": { "a": 0, "k": 0 },
-        "p": { "a": 0, "k": [100, 160, 0] },
-        "a": { "a": 0, "k": [0, 0, 0] },
-        "s": {
-          "a": 1,
-          "k": [
-            { "t": 0, "s": [100, 100, 100], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-            { "t": 15, "s": [120, 140, 100], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-            { "t": 30, "s": [90, 110, 100], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-            { "t": 45, "s": [115, 130, 100], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-            { "t": 60, "s": [95, 105, 100], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-            { "t": 75, "s": [110, 125, 100], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-            { "t": 90, "s": [100, 100, 100] }
-          ]
-        }
-      },
-      "shapes": [
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "el",
-              "s": { "a": 0, "k": [30, 50] },
-              "p": { "a": 0, "k": [0, 25] }
-            },
-            {
-              "ty": "gf",
-              "o": { "a": 0, "k": 100 },
-              "r": 1,
-              "bm": 0,
-              "g": {
-                "p": 3,
-                "k": { "a": 0, "k": [0, 1, 0.95, 0.6, 0.5, 1, 0.6, 0.2, 1, 1, 0.3, 0] }
-              },
-              "s": { "a": 0, "k": [0, 0] },
-              "e": { "a": 0, "k": [0, 50] },
-              "t": 1
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        }
-      ]
-    },
-    {
-      "ddd": 0,
-      "ind": 2,
-      "ty": 4,
-      "nm": "Rocket Body",
-      "sr": 1,
-      "ks": {
-        "o": { "a": 0, "k": 100 },
-        "r": { "a": 0, "k": 0 },
-        "p": {
-          "a": 1,
-          "k": [
-            { "t": 0, "s": [100, 100, 0], "i": { "x": 0.5, "y": 1 }, "o": { "x": 0.5, "y": 0 } },
-            { "t": 45, "s": [100, 95, 0], "i": { "x": 0.5, "y": 1 }, "o": { "x": 0.5, "y": 0 } },
-            { "t": 90, "s": [100, 100, 0] }
-          ]
-        },
-        "a": { "a": 0, "k": [0, 0, 0] },
-        "s": { "a": 0, "k": [100, 100, 100] }
-      },
-      "shapes": [
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [40, 80] },
-              "p": { "a": 0, "k": [0, 20] },
-              "r": { "a": 0, "k": 8 }
-            },
-            {
-              "ty": "gf",
-              "o": { "a": 0, "k": 100 },
-              "r": 1,
-              "bm": 0,
-              "g": {
-                "p": 3,
-                "k": { "a": 0, "k": [0, 0.55, 0.36, 0.96, 0.5, 0.42, 0.27, 0.85, 1, 0.3, 0.18, 0.75] }
-              },
-              "s": { "a": 0, "k": [-20, 0] },
-              "e": { "a": 0, "k": [20, 0] },
-              "t": 1
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        },
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "sr",
-              "sy": 1,
-              "d": 1,
-              "pt": { "a": 0, "k": 3 },
-              "p": { "a": 0, "k": [0, -30] },
-              "r": { "a": 0, "k": 0 },
-              "ir": { "a": 0, "k": 0 },
-              "is": { "a": 0, "k": 0 },
-              "or": { "a": 0, "k": 25 },
-              "os": { "a": 0, "k": 0 }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [0.9, 0.9, 0.95, 1] },
-              "o": { "a": 0, "k": 100 }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 180 }, "o": { "a": 0, "k": 100 } }
-          ]
-        },
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "el",
-              "s": { "a": 0, "k": [16, 16] },
-              "p": { "a": 0, "k": [0, 5] }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [0.4, 0.85, 0.95, 1] },
-              "o": { "a": 0, "k": 100 }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        }
-      ]
-    },
-    {
-      "ddd": 0,
-      "ind": 3,
-      "ty": 4,
-      "nm": "Left Fin",
-      "sr": 1,
-      "ks": {
-        "o": { "a": 0, "k": 100 },
-        "r": { "a": 0, "k": 0 },
-        "p": { "a": 0, "k": [75, 145, 0] },
-        "a": { "a": 0, "k": [0, 0, 0] },
-        "s": { "a": 0, "k": [100, 100, 100] }
-      },
-      "shapes": [
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "sr",
-              "sy": 1,
-              "d": 1,
-              "pt": { "a": 0, "k": 3 },
-              "p": { "a": 0, "k": [0, 0] },
-              "r": { "a": 0, "k": 0 },
-              "ir": { "a": 0, "k": 0 },
-              "is": { "a": 0, "k": 0 },
-              "or": { "a": 0, "k": 15 },
-              "os": { "a": 0, "k": 0 }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [0.35, 0.25, 0.65, 1] },
-              "o": { "a": 0, "k": 100 }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 90 }, "o": { "a": 0, "k": 100 } }
-          ]
-        }
-      ]
-    },
-    {
-      "ddd": 0,
-      "ind": 4,
-      "ty": 4,
-      "nm": "Right Fin",
-      "sr": 1,
-      "ks": {
-        "o": { "a": 0, "k": 100 },
-        "r": { "a": 0, "k": 0 },
-        "p": { "a": 0, "k": [125, 145, 0] },
-        "a": { "a": 0, "k": [0, 0, 0] },
-        "s": { "a": 0, "k": [100, 100, 100] }
-      },
-      "shapes": [
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "sr",
-              "sy": 1,
-              "d": 1,
-              "pt": { "a": 0, "k": 3 },
-              "p": { "a": 0, "k": [0, 0] },
-              "r": { "a": 0, "k": 0 },
-              "ir": { "a": 0, "k": 0 },
-              "is": { "a": 0, "k": 0 },
-              "or": { "a": 0, "k": 15 },
-              "os": { "a": 0, "k": 0 }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [0.35, 0.25, 0.65, 1] },
-              "o": { "a": 0, "k": 100 }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": -90 }, "o": { "a": 0, "k": 100 } }
-          ]
-        }
-      ]
-    }
-  ]
-};
-
-// Building/city Lottie data
-const buildingLottieData = {
-  "v": "5.7.4",
-  "fr": 30,
-  "ip": 0,
-  "op": 120,
-  "w": 200,
-  "h": 200,
-  "nm": "City",
-  "ddd": 0,
-  "assets": [],
-  "layers": [
-    {
-      "ddd": 0,
-      "ind": 1,
-      "ty": 4,
-      "nm": "Building 1",
-      "sr": 1,
-      "ks": {
-        "o": { "a": 0, "k": 100 },
-        "r": { "a": 0, "k": 0 },
-        "p": { "a": 0, "k": [60, 130, 0] },
-        "a": { "a": 0, "k": [0, 0, 0] },
-        "s": { "a": 0, "k": [100, 100, 100] }
-      },
-      "shapes": [
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [35, 100] },
-              "p": { "a": 0, "k": [0, 0] },
-              "r": { "a": 0, "k": 2 }
-            },
-            {
-              "ty": "gf",
-              "o": { "a": 0, "k": 100 },
-              "r": 1,
-              "bm": 0,
-              "g": {
-                "p": 2,
-                "k": { "a": 0, "k": [0, 0.15, 0.25, 0.45, 1, 0.1, 0.2, 0.35] }
-              },
-              "s": { "a": 0, "k": [-17, 0] },
-              "e": { "a": 0, "k": [17, 0] },
-              "t": 1
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        }
-      ]
-    },
-    {
-      "ddd": 0,
-      "ind": 2,
-      "ty": 4,
-      "nm": "Building 2 (Main)",
-      "sr": 1,
-      "ks": {
-        "o": { "a": 0, "k": 100 },
-        "r": { "a": 0, "k": 0 },
-        "p": { "a": 0, "k": [100, 115, 0] },
-        "a": { "a": 0, "k": [0, 0, 0] },
-        "s": { "a": 0, "k": [100, 100, 100] }
-      },
-      "shapes": [
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [45, 130] },
-              "p": { "a": 0, "k": [0, 0] },
-              "r": { "a": 0, "k": 2 }
-            },
-            {
-              "ty": "gf",
-              "o": { "a": 0, "k": 100 },
-              "r": 1,
-              "bm": 0,
-              "g": {
-                "p": 3,
-                "k": { "a": 0, "k": [0, 0.12, 0.35, 0.55, 0.5, 0.15, 0.4, 0.6, 1, 0.1, 0.3, 0.5] }
-              },
-              "s": { "a": 0, "k": [-22, 0] },
-              "e": { "a": 0, "k": [22, 0] },
-              "t": 1
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        }
-      ]
-    },
-    {
-      "ddd": 0,
-      "ind": 3,
-      "ty": 4,
-      "nm": "Building 3",
-      "sr": 1,
-      "ks": {
-        "o": { "a": 0, "k": 100 },
-        "r": { "a": 0, "k": 0 },
-        "p": { "a": 0, "k": [145, 140, 0] },
-        "a": { "a": 0, "k": [0, 0, 0] },
-        "s": { "a": 0, "k": [100, 100, 100] }
-      },
-      "shapes": [
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [30, 80] },
-              "p": { "a": 0, "k": [0, 0] },
-              "r": { "a": 0, "k": 2 }
-            },
-            {
-              "ty": "gf",
-              "o": { "a": 0, "k": 100 },
-              "r": 1,
-              "bm": 0,
-              "g": {
-                "p": 2,
-                "k": { "a": 0, "k": [0, 0.18, 0.28, 0.42, 1, 0.12, 0.22, 0.35] }
-              },
-              "s": { "a": 0, "k": [-15, 0] },
-              "e": { "a": 0, "k": [15, 0] },
-              "t": 1
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        }
-      ]
-    },
-    {
-      "ddd": 0,
-      "ind": 4,
-      "ty": 4,
-      "nm": "Windows",
-      "sr": 1,
-      "ks": {
-        "o": { "a": 0, "k": 100 },
-        "r": { "a": 0, "k": 0 },
-        "p": { "a": 0, "k": [100, 100, 0] },
-        "a": { "a": 0, "k": [0, 0, 0] },
-        "s": { "a": 0, "k": [100, 100, 100] }
-      },
-      "shapes": [
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [6, 8] },
-              "p": { "a": 0, "k": [-12, -40] },
-              "r": { "a": 0, "k": 1 }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [1, 0.95, 0.7, 1] },
-              "o": {
-                "a": 1,
-                "k": [
-                  { "t": 0, "s": [80], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 60, "s": [40], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 120, "s": [80] }
-                ]
-              }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        },
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [6, 8] },
-              "p": { "a": 0, "k": [0, -40] },
-              "r": { "a": 0, "k": 1 }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [1, 0.95, 0.7, 1] },
-              "o": { "a": 0, "k": 90 }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        },
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [6, 8] },
-              "p": { "a": 0, "k": [12, -40] },
-              "r": { "a": 0, "k": 1 }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [1, 0.95, 0.7, 1] },
-              "o": {
-                "a": 1,
-                "k": [
-                  { "t": 0, "s": [60], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 40, "s": [95], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 80, "s": [50], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 120, "s": [60] }
-                ]
-              }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        },
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [6, 8] },
-              "p": { "a": 0, "k": [-12, -25] },
-              "r": { "a": 0, "k": 1 }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [1, 0.95, 0.7, 1] },
-              "o": { "a": 0, "k": 75 }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        },
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [6, 8] },
-              "p": { "a": 0, "k": [0, -25] },
-              "r": { "a": 0, "k": 1 }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [1, 0.95, 0.7, 1] },
-              "o": {
-                "a": 1,
-                "k": [
-                  { "t": 0, "s": [50], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 50, "s": [90], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 100, "s": [45], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 120, "s": [50] }
-                ]
-              }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        },
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [6, 8] },
-              "p": { "a": 0, "k": [12, -25] },
-              "r": { "a": 0, "k": 1 }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [1, 0.95, 0.7, 1] },
-              "o": { "a": 0, "k": 85 }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        },
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [6, 8] },
-              "p": { "a": 0, "k": [-12, -10] },
-              "r": { "a": 0, "k": 1 }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [1, 0.95, 0.7, 1] },
-              "o": {
-                "a": 1,
-                "k": [
-                  { "t": 0, "s": [95], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 70, "s": [55], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 120, "s": [95] }
-                ]
-              }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        },
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [6, 8] },
-              "p": { "a": 0, "k": [0, -10] },
-              "r": { "a": 0, "k": 1 }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [1, 0.95, 0.7, 1] },
-              "o": { "a": 0, "k": 70 }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        },
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [6, 8] },
-              "p": { "a": 0, "k": [12, -10] },
-              "r": { "a": 0, "k": 1 }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [1, 0.95, 0.7, 1] },
-              "o": { "a": 0, "k": 80 }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        }
-      ]
-    },
-    {
-      "ddd": 0,
-      "ind": 5,
-      "ty": 4,
-      "nm": "Antenna Light",
-      "sr": 1,
-      "ks": {
-        "o": { "a": 0, "k": 100 },
-        "r": { "a": 0, "k": 0 },
-        "p": { "a": 0, "k": [100, 42, 0] },
-        "a": { "a": 0, "k": [0, 0, 0] },
-        "s": { "a": 0, "k": [100, 100, 100] }
-      },
-      "shapes": [
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "rc",
-              "d": 1,
-              "s": { "a": 0, "k": [3, 10] },
-              "p": { "a": 0, "k": [0, 5] },
-              "r": { "a": 0, "k": 0 }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [0.4, 0.45, 0.5, 1] },
-              "o": { "a": 0, "k": 100 }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        },
-        {
-          "ty": "gr",
-          "it": [
-            {
-              "ty": "el",
-              "s": { "a": 0, "k": [8, 8] },
-              "p": { "a": 0, "k": [0, 0] }
-            },
-            {
-              "ty": "fl",
-              "c": { "a": 0, "k": [1, 0.3, 0.3, 1] },
-              "o": {
-                "a": 1,
-                "k": [
-                  { "t": 0, "s": [100], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 30, "s": [30], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 60, "s": [100], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 90, "s": [30], "i": { "x": [0.5], "y": [1] }, "o": { "x": [0.5], "y": [0] } },
-                  { "t": 120, "s": [100] }
-                ]
-              }
-            },
-            { "ty": "tr", "p": { "a": 0, "k": [0, 0] }, "a": { "a": 0, "k": [0, 0] }, "s": { "a": 0, "k": [100, 100] }, "r": { "a": 0, "k": 0 }, "o": { "a": 0, "k": 100 } }
-          ]
-        }
-      ]
-    }
-  ]
-};
-
 const VisualMetaphorSlide = ({ slide }) => {
+  // Rocket launch state
+  const [launched, setLaunched] = useState(false);
+  const [countdown, setCountdown] = useState(null);
+  const [launchResult, setLaunchResult] = useState(null);
+
+  // Pre-generate stable random values for windows
+  const windowDelays = useMemo(() => 
+    [...Array(20)].map(() => Math.random() * 2), 
+    []
+  );
+  const windowDurations = useMemo(() => 
+    [...Array(20)].map(() => 2 + Math.random() * 2), 
+    []
+  );
+
+  // Pre-generate stable star positions
+  const stars = useMemo(() => 
+    [...Array(50)].map((_, i) => ({
+      left: `${(i * 17 + 13) % 100}%`,
+      top: `${(i * 23 + 7) % 100}%`,
+      opacity: 0.3 + (i % 5) * 0.1,
+      duration: 2 + (i % 3),
+      delay: (i % 4) * 0.5
+    })), 
+    []
+  );
+
+  // SME building star positions (fewer, more subtle)
+  const smeStars = useMemo(() =>
+    [...Array(20)].map((_, i) => ({
+      left: `${(i * 19 + 11) % 100}%`,
+      top: `${(i * 13 + 5) % 50}%`,
+      opacity: 0.2 + (i % 4) * 0.1
+    })),
+    []
+  );
+
+  // Rocket launch cycle
+  useEffect(() => {
+    const launchCycle = () => {
+      // Start countdown
+      setCountdown(3);
+      setTimeout(() => setCountdown(2), 1000);
+      setTimeout(() => setCountdown(1), 2000);
+      setTimeout(() => {
+        setCountdown(null);
+        setLaunched(true);
+        // Random result - 70% success, 30% "learning opportunity"
+        const success = Math.random() > 0.3;
+        setTimeout(() => {
+          setLaunchResult(success ? 'success' : 'iterate');
+        }, 1500);
+      }, 3000);
+      
+      // Reset after animation
+      setTimeout(() => {
+        setLaunched(false);
+        setLaunchResult(null);
+      }, 6000);
+    };
+
+    // Initial launch after 1s
+    const initialTimer = setTimeout(launchCycle, 1000);
+    
+    // Repeat every 8s
+    const interval = setInterval(launchCycle, 8000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <div className="max-w-7xl mx-auto px-4 max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-hide">
       <motion.h2
@@ -676,23 +103,23 @@ const VisualMetaphorSlide = ({ slide }) => {
           >
             {/* Starfield background */}
             <div className="absolute inset-0 overflow-hidden">
-              {[...Array(50)].map((_, i) => (
+              {stars.map((star, i) => (
                 <motion.div
                   key={i}
                   className="absolute w-1 h-1 bg-white rounded-full"
                   style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                    opacity: 0.3 + Math.random() * 0.5,
+                    left: star.left,
+                    top: star.top,
+                    opacity: star.opacity,
                   }}
                   animate={{
-                    opacity: [0.3, 0.8, 0.3],
+                    opacity: [star.opacity, star.opacity + 0.4, star.opacity],
                     scale: [1, 1.2, 1],
                   }}
                   transition={{
-                    duration: 2 + Math.random() * 2,
+                    duration: star.duration,
                     repeat: Infinity,
-                    delay: Math.random() * 2,
+                    delay: star.delay,
                   }}
                 />
               ))}
@@ -722,40 +149,137 @@ const VisualMetaphorSlide = ({ slide }) => {
               </div>
             </div>
 
-            {/* Lottie Animation - Rocket */}
+            {/* Countdown Display */}
+            <AnimatePresence>
+              {countdown !== null && (
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 2, opacity: 0 }}
+                  className="absolute top-1/4 left-1/2 -translate-x-1/2 z-30"
+                >
+                  <span className="text-8xl font-black text-white drop-shadow-lg"
+                    style={{ textShadow: '0 0 40px rgba(168, 85, 247, 0.8)' }}
+                  >
+                    {countdown}
+                  </span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Launch Result */}
+            <AnimatePresence>
+              {launchResult && (
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  className="absolute top-1/4 left-1/2 -translate-x-1/2 z-30 text-center"
+                >
+                  {launchResult === 'success' ? (
+                    <>
+                      <span className="text-6xl">✨🎉✨</span>
+                      <p className="text-green-400 font-bold mt-2">SHIPPED!</p>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-6xl">💥📊💡</span>
+                      <p className="text-orange-400 font-bold mt-2">Learning!</p>
+                    </>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Rocket with Animation */}
             <div className="flex-1 flex items-center justify-center relative z-10">
               <motion.div
                 animate={{ 
-                  y: [0, -10, 0],
+                  y: launched ? -350 : 0,
+                  scale: launched ? 0.7 : 1,
+                  rotate: launched ? -5 : 0,
                 }}
                 transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut"
+                  duration: launched ? 2 : 0.5,
+                  ease: launched ? "easeIn" : "easeOut"
                 }}
-                style={{ width: 220, height: 220 }}
+                className="relative"
               >
-                <Lottie 
-                  animationData={rocketLottieData}
-                  loop={true}
-                  style={{ 
-                    width: '100%', 
-                    height: '100%',
-                    filter: 'drop-shadow(0 0 30px rgba(168, 85, 247, 0.5))'
-                  }}
-                />
+                {/* The Rocket */}
+                <div className="text-8xl transform -rotate-45">🚀</div>
+                
+                {/* Flame trail when launching */}
+                <AnimatePresence>
+                  {launched && (
+                    <>
+                      {/* Main flame */}
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ 
+                          opacity: [1, 0.8, 1],
+                          scale: [1, 1.3, 1],
+                        }}
+                        exit={{ opacity: 0, scale: 0 }}
+                        transition={{ duration: 0.3, repeat: Infinity }}
+                        className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-6xl"
+                        style={{ filter: 'blur(1px)' }}
+                      >
+                        🔥
+                      </motion.div>
+                      {/* Smoke particles */}
+                      {[...Array(5)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0.8, y: 0, x: 0, scale: 0.5 }}
+                          animate={{ 
+                            opacity: 0,
+                            y: 100 + i * 30,
+                            x: (i - 2) * 15,
+                            scale: 2
+                          }}
+                          transition={{ 
+                            duration: 1.5,
+                            delay: i * 0.1,
+                            repeat: Infinity 
+                          }}
+                          className="absolute -bottom-4 left-1/2 text-3xl"
+                        >
+                          💨
+                        </motion.div>
+                      ))}
+                    </>
+                  )}
+                </AnimatePresence>
               </motion.div>
+
+              {/* Idle flame animation when not launched */}
+              {!launched && countdown === null && (
+                <motion.div
+                  className="absolute bottom-20 left-1/2 -translate-x-1/2"
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    opacity: [0.6, 0.9, 0.6]
+                  }}
+                  transition={{ duration: 0.5, repeat: Infinity }}
+                >
+                  <span className="text-4xl">🔥</span>
+                </motion.div>
+              )}
             </div>
 
             {/* Launch platform */}
-            <div className="absolute bottom-0 left-0 right-0 h-16">
+            <div className="absolute bottom-0 left-0 right-0 h-20">
               <div 
                 className="w-full h-full"
                 style={{
                   background: 'linear-gradient(to top, #1e1b4b 0%, transparent 100%)',
                 }}
               />
-              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-24 h-2 bg-slate-700 rounded" />
+              {/* Platform base */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
+                <div className="w-32 h-3 bg-gradient-to-r from-slate-600 via-slate-500 to-slate-600 rounded-lg" />
+                <div className="w-24 h-2 bg-slate-700 rounded mx-auto mt-1" />
+              </div>
             </div>
 
             {/* Status text */}
@@ -791,7 +315,7 @@ const VisualMetaphorSlide = ({ slide }) => {
           </div>
         </motion.div>
 
-        {/* SME - City Animation */}
+        {/* SME - Building with Lights Animation */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -808,14 +332,14 @@ const VisualMetaphorSlide = ({ slide }) => {
           >
             {/* Stars - subtle */}
             <div className="absolute inset-0 overflow-hidden">
-              {[...Array(25)].map((_, i) => (
+              {smeStars.map((star, i) => (
                 <div
                   key={i}
                   className="absolute w-0.5 h-0.5 bg-white rounded-full"
                   style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 50}%`,
-                    opacity: 0.3 + Math.random() * 0.3,
+                    left: star.left,
+                    top: star.top,
+                    opacity: star.opacity,
                   }}
                 />
               ))}
@@ -844,29 +368,132 @@ const VisualMetaphorSlide = ({ slide }) => {
               </div>
             </div>
 
-            {/* Lottie Animation - City */}
-            <div className="flex-1 flex items-center justify-center relative z-10 pt-8">
-              <div style={{ width: 280, height: 280 }}>
-                <Lottie 
-                  animationData={buildingLottieData}
-                  loop={true}
-                  style={{ 
-                    width: '100%', 
-                    height: '100%',
-                    filter: 'drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3))'
-                  }}
-                />
+            {/* City Skyline with Buildings */}
+            <div className="flex-1 flex items-end justify-center relative z-10 pb-16">
+              <div className="flex items-end gap-3">
+                {/* Building 1 - Shorter */}
+                <div className="relative">
+                  <div 
+                    className="w-16 h-28 rounded-t-lg relative"
+                    style={{
+                      background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
+                      boxShadow: 'inset -5px 0 15px rgba(0,0,0,0.3)',
+                    }}
+                  >
+                    {/* Windows */}
+                    <div className="grid grid-cols-2 gap-1.5 p-2">
+                      {[...Array(6)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="w-5 h-5 rounded-sm"
+                          style={{ backgroundColor: '#fef08a' }}
+                          animate={{ opacity: [0.4, 1, 0.4] }}
+                          transition={{ 
+                            duration: windowDurations[i],
+                            repeat: Infinity,
+                            delay: windowDelays[i]
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Building 2 - Main/Tallest */}
+                <div className="relative">
+                  <div 
+                    className="w-24 h-48 rounded-t-lg relative"
+                    style={{
+                      background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e3a8a 100%)',
+                      boxShadow: 'inset -8px 0 20px rgba(0,0,0,0.3)',
+                    }}
+                  >
+                    {/* Windows grid */}
+                    <div className="grid grid-cols-3 gap-1.5 p-3">
+                      {[...Array(12)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="w-5 h-6 rounded-sm"
+                          style={{ backgroundColor: '#fef08a' }}
+                          animate={{ opacity: [0.5, 1, 0.5] }}
+                          transition={{ 
+                            duration: windowDurations[i + 6],
+                            repeat: Infinity,
+                            delay: windowDelays[i + 6]
+                          }}
+                        />
+                      ))}
+                    </div>
+                    {/* Antenna */}
+                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                      <motion.div
+                        className="w-3 h-3 bg-red-500 rounded-full"
+                        animate={{ opacity: [1, 0.3, 1] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                        style={{ boxShadow: '0 0 10px rgba(239, 68, 68, 0.8)' }}
+                      />
+                      <div className="w-0.5 h-4 bg-slate-400" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Building 3 - Medium */}
+                <div className="relative">
+                  <div 
+                    className="w-14 h-36 rounded-t-lg relative"
+                    style={{
+                      background: 'linear-gradient(135deg, #475569 0%, #334155 100%)',
+                      boxShadow: 'inset -5px 0 15px rgba(0,0,0,0.3)',
+                    }}
+                  >
+                    {/* Windows */}
+                    <div className="grid grid-cols-2 gap-1 p-2">
+                      {[...Array(8)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="w-4 h-5 rounded-sm"
+                          style={{ backgroundColor: '#fef08a' }}
+                          animate={{ opacity: [0.3, 0.9, 0.3] }}
+                          transition={{ 
+                            duration: windowDurations[(i + 18) % 20],
+                            repeat: Infinity,
+                            delay: windowDelays[(i + 18) % 20]
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Ground / City base */}
-            <div className="absolute bottom-0 left-0 right-0 h-12">
+            <div className="absolute bottom-0 left-0 right-0 h-16">
               <div 
                 className="w-full h-full"
                 style={{
                   background: 'linear-gradient(to top, #065f46 0%, #047857 50%, transparent 100%)',
                 }}
               />
+              {/* Street lights */}
+              <div className="absolute bottom-6 left-1/4 flex flex-col items-center">
+                <motion.div
+                  className="w-2 h-2 bg-yellow-300 rounded-full"
+                  animate={{ opacity: [0.8, 1, 0.8] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  style={{ boxShadow: '0 0 8px rgba(253, 224, 71, 0.6)' }}
+                />
+                <div className="w-0.5 h-4 bg-slate-500" />
+              </div>
+              <div className="absolute bottom-6 right-1/4 flex flex-col items-center">
+                <motion.div
+                  className="w-2 h-2 bg-yellow-300 rounded-full"
+                  animate={{ opacity: [0.8, 1, 0.8] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                  style={{ boxShadow: '0 0 8px rgba(253, 224, 71, 0.6)' }}
+                />
+                <div className="w-0.5 h-4 bg-slate-500" />
+              </div>
             </div>
 
             {/* Status text */}

@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDE vs SME Quiz | Test Your Knowledge</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Start Screen */
+        .start-screen {
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .start-screen h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .start-screen p {
+            color: #a0a0a0;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .rocket-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.4);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 50px rgba(168, 85, 247, 0.5);
+        }
+
+        /* Quiz Container */
+        .quiz-container {
+            display: none;
+        }
+
+        .quiz-container.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #a0a0a0;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #a855f7, #ec4899);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        /* Question Card */
+        .question-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .question-number {
+            color: #a855f7;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 18px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option:hover:not(.disabled) {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.5);
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+        }
+
+        .option.correct {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: #22c55e;
+            animation: pulse 0.5s ease;
+        }
+
+        .option.wrong {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            animation: shake 0.5s ease;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option.show-correct {
+            background: rgba(34, 197, 94, 0.15);
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .option-letter {
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .option.correct .option-letter {
+            background: #22c55e;
+        }
+
+        .option.wrong .option-letter {
+            background: #ef4444;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        /* Feedback */
+        .feedback {
+            margin-top: 20px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback.show {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback.correct {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .feedback.wrong {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .feedback-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Next Button */
+        .next-btn {
+            display: none;
+            margin-top: 25px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            width: 100%;
+        }
+
+        .next-btn.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .results-screen.active {
+            display: block;
+        }
+
+        .results-emoji {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s ease;
+        }
+
+        .results-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .results-score {
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        .results-message {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .score-breakdown {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-item-value {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .score-item-value.correct-count {
+            color: #22c55e;
+        }
+
+        .score-item-value.wrong-count {
+            color: #ef4444;
+        }
+
+        .score-item-label {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        .results-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .share-btn {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .retry-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .retry-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: #a855f7;
+            text-decoration: none;
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            animation: confetti-fall linear forwards;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            .start-screen h1 {
+                font-size: 1.8rem;
+            }
+
+            .rocket-icon {
+                font-size: 3rem;
+            }
+
+            .question-text {
+                font-size: 1.2rem;
+            }
+
+            .question-card {
+                padding: 20px;
+            }
+
+            .option {
+                padding: 15px;
+            }
+
+            .option-letter {
+                width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+            }
+
+            .results-score {
+                font-size: 3rem;
+            }
+
+            .score-breakdown {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Start Screen -->
+        <div class="start-screen" id="startScreen">
+            <div class="rocket-icon">🚀</div>
+            <h1>IDE vs SME Quiz</h1>
+            <p>Test your knowledge about Innovation Driven Environment vs Subject Matter Expert frameworks!</p>
+            <p style="margin-bottom: 2rem; color: #888;">5 questions • ~2 minutes</p>
+            <button class="start-btn" onclick="startQuiz()">Start Quiz →</button>
+        </div>
+
+        <!-- Quiz Container -->
+        <div class="quiz-container" id="quizContainer">
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span id="progressLabel">Question 1 of 5</span>
+                    <span id="scoreLabel">Score: 0</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 20%"></div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-number" id="questionNumber">Question 1</div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="optionsContainer"></div>
+                <div class="feedback" id="feedback">
+                    <span class="feedback-icon" id="feedbackIcon"></span>
+                    <span id="feedbackText"></span>
+                </div>
+                <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="resultsScreen">
+            <div class="results-emoji" id="resultsEmoji">🎉</div>
+            <h2 class="results-title">Quiz Complete!</h2>
+            <div class="results-score" id="resultsScore">5/5</div>
+            <p class="results-message" id="resultsMessage">You're an IDE expert!</p>
+            
+            <div class="score-breakdown">
+                <div class="score-item">
+                    <div class="score-item-value correct-count" id="correctCount">5</div>
+                    <div class="score-item-label">Correct</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-item-value wrong-count" id="wrongCount">0</div>
+                    <div class="score-item-label">Wrong</div>
+                </div>
+            </div>
+
+            <div class="results-buttons">
+                <button class="share-btn" onclick="shareResults()">
+                    <span>📤</span> Share Your Score
+                </button>
+                <button class="retry-btn" onclick="retryQuiz()">Try Again</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            Powered by <a href="/">Quinn</a> ⚡
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What does IDE stand for in the context of this framework?",
+                options: [
+                    "Integrated Development Environment",
+                    "Innovation Driven Environment",
+                    "Internal Design Engineering",
+                    "Internet Data Exchange"
+                ],
+                correct: 1,
+                explanation: "IDE stands for Innovation Driven Environment - a mindset focused on rapid experimentation and learning!"
+            },
+            {
+                question: "Which approach emphasizes \"fail fast, learn fast\"?",
+                options: [
+                    "SME (Subject Matter Expert)",
+                    "IDE (Innovation Driven Environment)",
+                    "Both equally",
+                    "Neither"
+                ],
+                correct: 1,
+                explanation: "IDE embraces failure as a learning opportunity - the faster you fail, the faster you learn and iterate!"
+            },
+            {
+                question: "The rocket metaphor represents:",
+                options: [
+                    "SME's stability and predictability",
+                    "IDE's rapid iteration and bold experimentation",
+                    "Traditional business approaches",
+                    "Government processes"
+                ],
+                correct: 1,
+                explanation: "The rocket symbolizes IDE's bold approach - aiming high, moving fast, and not being afraid to explode and rebuild!"
+            },
+            {
+                question: "What percentage of startups typically fail?",
+                options: [
+                    "10%",
+                    "50%",
+                    "70-90%",
+                    "5%"
+                ],
+                correct: 2,
+                explanation: "70-90% of startups fail - but those that succeed using IDE principles often create massive value through rapid learning!"
+            },
+            {
+                question: "Which company exemplifies IDE mindset with \"move fast and break things\"?",
+                options: [
+                    "IBM",
+                    "Facebook/Meta",
+                    "Government agency",
+                    "Traditional bank"
+                ],
+                correct: 1,
+                explanation: "Facebook/Meta famously used this motto - it embodies the IDE philosophy of speed over perfection!"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        function startQuiz() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('quizContainer').classList.add('active');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            answered = false;
+            const q = questions[currentQuestion];
+            
+            document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1}`;
+            document.getElementById('questionText').textContent = q.question;
+            document.getElementById('progressLabel').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('scoreLabel').textContent = `Score: ${score}`;
+            document.getElementById('progressFill').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((option, index) => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'option';
+                optionEl.innerHTML = `
+                    <div class="option-letter">${letters[index]}</div>
+                    <div class="option-text">${option}</div>
+                `;
+                optionEl.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionEl);
+            });
+
+            document.getElementById('feedback').classList.remove('show', 'correct', 'wrong');
+            document.getElementById('nextBtn').classList.remove('show');
+        }
+
+        function selectOption(index) {
+            if (answered) return;
+            answered = true;
+
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackText = document.getElementById('feedbackText');
+
+            options.forEach((opt, i) => {
+                opt.classList.add('disabled');
+                if (i === q.correct) {
+                    opt.classList.add('show-correct');
+                }
+            });
+
+            if (index === q.correct) {
+                score++;
+                options[index].classList.add('correct');
+                feedback.classList.add('correct');
+                feedbackIcon.textContent = '✅';
+                feedbackText.textContent = 'Correct! ' + q.explanation;
+            } else {
+                options[index].classList.add('wrong');
+                options[q.correct].classList.add('correct');
+                feedback.classList.add('wrong');
+                feedbackIcon.textContent = '❌';
+                feedbackText.textContent = 'Not quite. ' + q.explanation;
+            }
+
+            feedback.classList.add('show');
+            document.getElementById('scoreLabel').textContent = `Score: ${score}`;
+            
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.textContent = currentQuestion === questions.length - 1 ? 'See Results →' : 'Next Question →';
+            nextBtn.classList.add('show');
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion >= questions.length) {
+                showResults();
+            } else {
+                // Animate out then in
+                const quizContainer = document.getElementById('quizContainer');
+                quizContainer.style.opacity = '0';
+                quizContainer.style.transform = 'translateX(-50px)';
+                setTimeout(() => {
+                    showQuestion();
+                    quizContainer.style.opacity = '1';
+                    quizContainer.style.transform = 'translateX(0)';
+                }, 200);
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quizContainer').classList.remove('active');
+            document.getElementById('resultsScreen').classList.add('active');
+            
+            const percentage = (score / questions.length) * 100;
+            
+            document.getElementById('resultsScore').textContent = `${score}/${questions.length}`;
+            document.getElementById('correctCount').textContent = score;
+            document.getElementById('wrongCount').textContent = questions.length - score;
+
+            let emoji, message;
+            if (percentage === 100) {
+                emoji = '🏆';
+                message = "Perfect score! You're an IDE master! 🚀";
+                createConfetti();
+            } else if (percentage >= 80) {
+                emoji = '🎉';
+                message = "Excellent! You really understand the IDE mindset!";
+                createConfetti();
+            } else if (percentage >= 60) {
+                emoji = '👍';
+                message = "Good job! You're getting the hang of it!";
+            } else if (percentage >= 40) {
+                emoji = '📚';
+                message = "Not bad! Review the presentation and try again!";
+            } else {
+                emoji = '🤔';
+                message = "Time to revisit the IDE vs SME concepts!";
+            }
+
+            document.getElementById('resultsEmoji').textContent = emoji;
+            document.getElementById('resultsMessage').textContent = message;
+        }
+
+        function createConfetti() {
+            const colors = ['#a855f7', '#ec4899', '#3b82f6', '#22c55e', '#f59e0b', '#ef4444'];
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 30);
+            }
+        }
+
+        function shareResults() {
+            const percentage = Math.round((score / questions.length) * 100);
+            const text = `🚀 I scored ${score}/${questions.length} (${percentage}%) on the IDE vs SME Quiz!\n\nTest your knowledge about Innovation Driven Environment: ${window.location.href}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'IDE vs SME Quiz Results',
+                    text: text,
+                    url: window.location.href
+                }).catch(() => {
+                    copyToClipboard(text);
+                });
+            } else {
+                copyToClipboard(text);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.share-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<span>✅</span> Copied to clipboard!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                }, 2000);
+            }).catch(() => {
+                alert('Share this:\n\n' + text);
+            });
+        }
+
+        function retryQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = false;
+            document.getElementById('resultsScreen').classList.remove('active');
+            document.getElementById('quizContainer').classList.add('active');
+            showQuestion();
+        }
+    </script>
+</body>
+</html>

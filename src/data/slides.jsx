@@ -376,7 +376,7 @@ export const slides = [
     title: 'Thank You!',
     subtitle: 'Questions?',
     message: 'The future belongs to those who build it.',
-    social: '@worldclass_dev',
-    email: 'hello@worldclass.dev',
+    social: '@beyondkodes',
+    email: 'ceo@vent.africa',
   },
 ];

@@ -92,7 +92,7 @@ const EndingSlide = ({ slide }) => {
           <Mail className="w-6 h-6 text-white/60 group-hover:text-wc-pink" />
         </a>
         <a
-          href="https://worldclass.dev"
+          href="https://chuksabanum.com/#home"
           target="_blank"
           rel="noopener noreferrer"
           className="glass rounded-xl p-4 hover:bg-wc-purple/20 transition-colors group"

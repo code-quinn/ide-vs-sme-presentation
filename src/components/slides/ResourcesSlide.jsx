@@ -68,7 +68,7 @@ const ResourcesSlide = ({ slide }) => {
           </div>
           <p className="text-sm text-white/50 mb-4">chuksabanum.com</p>
           <a
-            href="https://chuksabanum.com"
+            href="https://chuksabanum.com/#home"
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full py-3 rounded-xl bg-gradient-to-r from-wc-cyan to-blue-500 text-white font-bold hover:opacity-90 transition-opacity"

@@ -363,9 +363,10 @@ export const slides = [
     title: 'Resources & Links',
     onePager: true,
     links: [
-      { label: 'WorldClass', url: 'https://chuksabanum.com' },
+      { label: 'WorldClass', url: 'https://chuksabanum.com/#home' },
       { label: 'Vent.Africa', url: 'https://vent.africa' },
       { label: 'This Presentation', url: 'https://code-quinn.github.io/ide-vs-sme-presentation' },
+      { label: 'One-Pager PDF', url: 'https://code-quinn.github.io/ide-vs-sme-presentation/one-pager.html' },
     ],
     qrCode: true,
   },

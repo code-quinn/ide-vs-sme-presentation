@@ -4,7 +4,7 @@ import { Gamepad2, Trophy, Zap } from 'lucide-react';
 
 const QuizIntroSlide = ({ slide }) => {
   return (
-    <div className="max-w-3xl mx-auto text-center">
+    <div className="max-w-3xl mx-auto text-center max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-hide">
       <motion.div
         initial={{ scale: 0, rotate: -180 }}
         animate={{ scale: 1, rotate: 0 }}

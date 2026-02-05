@@ -5,7 +5,7 @@ const TitleSlide = ({ slide }) => {
   const Icon = slide.icon;
 
   return (
-    <div className="text-center">
+    <div className="text-center max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-hide">
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}

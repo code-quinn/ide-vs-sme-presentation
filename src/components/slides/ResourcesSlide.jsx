@@ -8,7 +8,7 @@ const ResourcesSlide = ({ slide }) => {
   const onePagerUrl = `${presentationUrl}/one-pager.html`;
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-hide">
       <div className="text-center mb-8">
         <motion.div
           initial={{ scale: 0 }}

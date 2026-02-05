@@ -4,7 +4,7 @@ import { Play, Terminal, Code, Zap } from 'lucide-react';
 
 const DemoSlide = ({ slide }) => {
   return (
-    <div className="max-w-4xl mx-auto text-center">
+    <div className="max-w-4xl mx-auto text-center max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-hide">
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}

@@ -14,7 +14,7 @@ const DefinitionSlide = ({ slide }) => {
   const Icon = slide.icon;
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-hide">
       <div className="flex items-center gap-4 mb-8">
         <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-wc-purple to-wc-pink flex items-center justify-center">
           <Icon className="w-8 h-8 text-white" />

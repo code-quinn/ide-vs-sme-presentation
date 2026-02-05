@@ -19,7 +19,7 @@ const AnimatedFlowSlide = ({ slide }) => {
   const smeStep = Math.min(step, slide.smeFlow.length);
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-hide">
       <motion.h2
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

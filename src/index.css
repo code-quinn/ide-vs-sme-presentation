@@ -128,3 +128,13 @@ body {
   border-color: #EF4444;
   background: rgba(239, 68, 68, 0.2);
 }
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

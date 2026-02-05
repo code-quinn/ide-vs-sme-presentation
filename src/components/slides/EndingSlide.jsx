@@ -4,7 +4,7 @@ import { Heart, Twitter, Mail, Globe } from 'lucide-react';
 
 const EndingSlide = ({ slide }) => {
   return (
-    <div className="max-w-3xl mx-auto text-center">
+    <div className="max-w-3xl mx-auto text-center max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-hide">
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}

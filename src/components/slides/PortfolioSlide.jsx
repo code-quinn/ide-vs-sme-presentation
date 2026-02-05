@@ -10,7 +10,7 @@ const colorClasses = {
 
 const PortfolioSlide = ({ slide }) => {
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-hide">
       <div className="text-center mb-8">
         <h2 className="text-4xl font-bold gradient-text">{slide.title}</h2>
         <p className="text-xl text-white/50">{slide.subtitle}</p>

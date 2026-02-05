@@ -89,7 +89,7 @@ function App() {
       <ScoreBoard score={score} achievements={achievements} />
       
       {/* Main Slide Area */}
-      <div className="w-full h-full flex items-center justify-center px-8 py-16">
+      <div className="w-full h-full flex items-center justify-center px-8 pt-16 pb-28">
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
             key={currentSlide}

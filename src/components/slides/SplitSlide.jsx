@@ -12,7 +12,7 @@ const SplitSlide = ({ slide }) => {
   const RightIcon = slide.right.icon;
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto max-h-[calc(100vh-180px)] overflow-y-auto scrollbar-hide">
       <h2 className="text-4xl font-bold gradient-text text-center mb-8">{slide.title}</h2>
 
       <div className="grid md:grid-cols-2 gap-8">

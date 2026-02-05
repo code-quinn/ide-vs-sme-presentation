@@ -680,153 +680,220 @@ const VisualMetaphorSlide = ({ slide }) => {
               </div>
             </div>
 
-            {/* City Skyline with Animated Bureaucratic Workflow Building */}
-            <div className="flex-1 flex items-end justify-center relative z-10 pb-16">
-              <div className="flex items-end gap-2">
-                {/* Building 1 - Shorter side building */}
+            {/* City Skyline with Realistic Corporate Building */}
+            <div className="flex-1 flex items-end justify-center relative z-10 pb-12">
+              <div className="flex items-end gap-1">
+                {/* Building 1 - Left residential tower */}
                 <div className="relative">
+                  {/* Rooftop water tank */}
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-3 bg-slate-500 rounded-sm" />
                   <div 
-                    className="w-12 h-20 rounded-t-lg relative"
+                    className="w-16 h-32 relative"
                     style={{
-                      background: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
-                      boxShadow: 'inset -5px 0 15px rgba(0,0,0,0.3)',
+                      background: 'linear-gradient(180deg, #4b5563 0%, #374151 50%, #1f2937 100%)',
+                      boxShadow: 'inset -4px 0 12px rgba(0,0,0,0.4), 2px 0 8px rgba(0,0,0,0.3)',
                     }}
                   >
-                    <div className="grid grid-cols-2 gap-1 p-2">
-                      {[...Array(4)].map((_, i) => (
-                        <div key={i} className="w-3 h-3 rounded-sm bg-yellow-200/70" />
+                    {/* Window grid */}
+                    <div className="grid grid-cols-3 gap-1 p-1.5">
+                      {[...Array(12)].map((_, i) => (
+                        <motion.div 
+                          key={i} 
+                          className="w-3 h-4 rounded-sm"
+                          style={{
+                            background: i % 3 === 0 ? 'rgba(254, 240, 138, 0.9)' : 'rgba(254, 240, 138, 0.4)',
+                            boxShadow: i % 3 === 0 ? '0 0 4px rgba(254, 240, 138, 0.6)' : 'none',
+                          }}
+                          animate={i % 4 === 0 ? { opacity: [0.4, 0.9, 0.4] } : {}}
+                          transition={{ duration: 3 + i, repeat: Infinity }}
+                        />
                       ))}
                     </div>
+                    {/* AC units */}
+                    <div className="absolute -right-1 top-8 w-2 h-3 bg-slate-400 rounded-sm" />
+                    <div className="absolute -right-1 top-20 w-2 h-3 bg-slate-400 rounded-sm" />
                   </div>
                 </div>
 
-                {/* Main Building - Bureaucratic Workflow with Stairs */}
+                {/* Main Corporate HQ Building - Glass & Steel */}
                 <div className="relative">
-                  {/* Antenna */}
-                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex flex-col items-center z-20">
-                    <motion.div
-                      className="w-3 h-3 bg-red-500 rounded-full"
-                      animate={{ opacity: [1, 0.3, 1] }}
-                      transition={{ duration: 1, repeat: Infinity }}
-                      style={{ boxShadow: '0 0 10px rgba(239, 68, 68, 0.8)' }}
-                    />
-                    <div className="w-0.5 h-5 bg-slate-400" />
-                    <span className="text-xs">📡</span>
+                  {/* Helipad on roof */}
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-14 h-2 bg-slate-600 rounded-full flex items-center justify-center">
+                    <div className="w-10 h-1 border border-yellow-400/60 rounded-full" />
+                  </div>
+                  
+                  {/* Antenna array */}
+                  <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex items-end gap-2 z-20">
+                    <div className="w-0.5 h-4 bg-slate-400" />
+                    <div className="flex flex-col items-center">
+                      <motion.div
+                        className="w-2 h-2 bg-red-500 rounded-full"
+                        animate={{ opacity: [1, 0.3, 1] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                        style={{ boxShadow: '0 0 8px rgba(239, 68, 68, 0.8)' }}
+                      />
+                      <div className="w-0.5 h-6 bg-slate-400" />
+                    </div>
+                    <div className="w-0.5 h-3 bg-slate-400" />
                   </div>
 
+                  {/* Main building structure */}
                   <div 
-                    className="w-44 h-60 rounded-t-lg relative overflow-hidden"
+                    className="w-48 h-64 relative overflow-hidden"
                     style={{
-                      background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e3a8a 100%)',
-                      boxShadow: 'inset -8px 0 20px rgba(0,0,0,0.3)',
+                      background: 'linear-gradient(135deg, #1e3a5f 0%, #0f2744 40%, #0a1929 100%)',
+                      boxShadow: 'inset -10px 0 25px rgba(0,0,0,0.5), 4px 0 15px rgba(0,0,0,0.4)',
+                      borderTop: '3px solid #334155',
                     }}
                   >
-                    {/* Staircase on left side */}
-                    <div className="absolute left-1 top-0 bottom-0 w-10 flex flex-col justify-between py-1">
+                    {/* Glass facade reflection */}
+                    <div 
+                      className="absolute inset-0 opacity-20"
+                      style={{
+                        background: 'linear-gradient(135deg, transparent 0%, rgba(147,197,253,0.3) 50%, transparent 100%)',
+                      }}
+                    />
+                    
+                    {/* Stairwell section - darker vertical strip */}
+                    <div 
+                      className="absolute left-0 top-0 bottom-0 w-8"
+                      style={{ background: 'rgba(0,0,0,0.3)' }}
+                    >
+                      {/* Staircase railings */}
                       {[0,1,2,3,4].map((floor) => (
-                        <div key={floor} className="flex flex-col items-center">
-                          <div className="w-8 h-1 bg-slate-600/80" />
-                          <div className="flex">
-                            <div className="w-1 h-2 bg-slate-500/60" />
-                            <div className="w-6 h-1 bg-slate-600/60 mt-1" />
-                          </div>
+                        <div key={floor} className="h-[48px] border-b border-slate-700/50 flex items-end justify-center pb-1">
+                          <div className="w-5 h-0.5 bg-slate-600/60" />
                         </div>
                       ))}
                     </div>
 
-                    {/* Floor labels and offices */}
-                    <div className="absolute left-12 right-1 top-0 bottom-0 flex flex-col">
-                      {/* Floor 5 - CEO Office - Final Approval */}
-                      <div className="flex-1 border-b border-blue-800/50 flex items-center gap-1 px-1 relative">
-                        <span className="text-[8px] text-blue-200/60">F5</span>
-                        <div className="flex-1 flex items-center justify-center gap-1">
-                          <span className="text-sm">🧑‍💼</span>
-                          <span className="text-[8px] text-blue-200/80">CEO</span>
+                    {/* Floor sections with glass windows */}
+                    <div className="absolute left-9 right-1 top-0 bottom-0 flex flex-col">
+                      {/* Floor 5 - Executive Suite */}
+                      <div className="h-[48px] border-b border-slate-700/40 flex items-center px-1 relative">
+                        <div className="flex-1 grid grid-cols-4 gap-0.5">
+                          {[...Array(4)].map((_, i) => (
+                            <div key={i} className="h-9 rounded-sm" style={{
+                              background: i === 2 ? 'linear-gradient(180deg, rgba(254,240,138,0.9) 0%, rgba(251,191,36,0.7) 100%)' : 'linear-gradient(180deg, rgba(147,197,253,0.15) 0%, rgba(59,130,246,0.1) 100%)',
+                              boxShadow: i === 2 ? '0 0 8px rgba(251,191,36,0.4)' : 'inset 0 0 3px rgba(0,0,0,0.3)',
+                              border: '1px solid rgba(71,85,105,0.4)',
+                            }} />
+                          ))}
                         </div>
-                        <div className="w-3 h-3 bg-yellow-200/80 rounded-sm" />
+                        <span className="absolute right-1 top-1 text-[7px] text-slate-400">F5</span>
                       </div>
                       
-                      {/* Floor 4 - Verification Dept */}
-                      <div className="flex-1 border-b border-blue-800/50 flex items-center gap-1 px-1 relative">
-                        <span className="text-[8px] text-blue-200/60">F4</span>
-                        <div className="flex-1 flex items-center justify-center gap-1">
-                          <span className="text-xs">🔍</span>
-                          <span className="text-[8px] text-blue-200/80">Verify</span>
+                      {/* Floor 4 */}
+                      <div className="h-[48px] border-b border-slate-700/40 flex items-center px-1 relative">
+                        <div className="flex-1 grid grid-cols-4 gap-0.5">
+                          {[...Array(4)].map((_, i) => (
+                            <div key={i} className="h-9 rounded-sm" style={{
+                              background: i % 2 === 0 ? 'linear-gradient(180deg, rgba(254,240,138,0.7) 0%, rgba(251,191,36,0.5) 100%)' : 'linear-gradient(180deg, rgba(147,197,253,0.15) 0%, rgba(59,130,246,0.1) 100%)',
+                              boxShadow: i % 2 === 0 ? '0 0 6px rgba(251,191,36,0.3)' : 'inset 0 0 3px rgba(0,0,0,0.3)',
+                              border: '1px solid rgba(71,85,105,0.4)',
+                            }} />
+                          ))}
                         </div>
-                        <div className="w-3 h-3 bg-yellow-200/70 rounded-sm" />
+                        <span className="absolute right-1 top-1 text-[7px] text-slate-400">F4</span>
                       </div>
                       
-                      {/* Floor 3 - Processing Dept */}
-                      <div className="flex-1 border-b border-blue-800/50 flex items-center gap-1 px-1 relative">
-                        <span className="text-[8px] text-blue-200/60">F3</span>
-                        <div className="flex-1 flex items-center justify-center gap-1">
-                          <span className="text-xs">⚙️</span>
-                          <span className="text-[8px] text-blue-200/80">Process</span>
+                      {/* Floor 3 */}
+                      <div className="h-[48px] border-b border-slate-700/40 flex items-center px-1 relative">
+                        <div className="flex-1 grid grid-cols-4 gap-0.5">
+                          {[...Array(4)].map((_, i) => (
+                            <motion.div 
+                              key={i} 
+                              className="h-9 rounded-sm" 
+                              style={{
+                                background: 'linear-gradient(180deg, rgba(254,240,138,0.6) 0%, rgba(251,191,36,0.4) 100%)',
+                                boxShadow: '0 0 5px rgba(251,191,36,0.2)',
+                                border: '1px solid rgba(71,85,105,0.4)',
+                              }}
+                              animate={{ opacity: [0.6, 1, 0.6] }}
+                              transition={{ duration: 2 + i, repeat: Infinity }}
+                            />
+                          ))}
                         </div>
-                        <div className="w-3 h-3 bg-yellow-200/80 rounded-sm" />
+                        <span className="absolute right-1 top-1 text-[7px] text-slate-400">F3</span>
                       </div>
                       
-                      {/* Floor 2 - Documentation */}
-                      <div className="flex-1 border-b border-blue-800/50 flex items-center gap-1 px-1 relative">
-                        <span className="text-[8px] text-blue-200/60">F2</span>
-                        <div className="flex-1 flex items-center justify-center gap-1">
-                          <span className="text-xs">📝</span>
-                          <span className="text-[8px] text-blue-200/80">Forms</span>
+                      {/* Floor 2 */}
+                      <div className="h-[48px] border-b border-slate-700/40 flex items-center px-1 relative">
+                        <div className="flex-1 grid grid-cols-4 gap-0.5">
+                          {[...Array(4)].map((_, i) => (
+                            <div key={i} className="h-9 rounded-sm" style={{
+                              background: i < 3 ? 'linear-gradient(180deg, rgba(254,240,138,0.8) 0%, rgba(251,191,36,0.6) 100%)' : 'linear-gradient(180deg, rgba(147,197,253,0.15) 0%, rgba(59,130,246,0.1) 100%)',
+                              boxShadow: i < 3 ? '0 0 6px rgba(251,191,36,0.3)' : 'inset 0 0 3px rgba(0,0,0,0.3)',
+                              border: '1px solid rgba(71,85,105,0.4)',
+                            }} />
+                          ))}
                         </div>
-                        <div className="w-3 h-3 bg-yellow-200/60 rounded-sm" />
+                        <span className="absolute right-1 top-1 text-[7px] text-slate-400">F2</span>
                       </div>
                       
-                      {/* Floor 1 - Reception */}
-                      <div className="flex-1 flex items-center gap-1 px-1 relative">
-                        <span className="text-[8px] text-blue-200/60">F1</span>
-                        <div className="flex-1 flex items-center justify-center gap-1">
-                          <span className="text-xs">🛎️</span>
-                          <span className="text-[8px] text-blue-200/80">Queue</span>
+                      {/* Floor 1 - Lobby with large windows */}
+                      <div className="h-[56px] flex items-center px-1 relative">
+                        <div className="flex-1 grid grid-cols-3 gap-1">
+                          {[...Array(3)].map((_, i) => (
+                            <div key={i} className="h-11 rounded-sm" style={{
+                              background: 'linear-gradient(180deg, rgba(254,240,138,0.95) 0%, rgba(251,191,36,0.8) 100%)',
+                              boxShadow: '0 0 10px rgba(251,191,36,0.5)',
+                              border: '1px solid rgba(71,85,105,0.4)',
+                            }} />
+                          ))}
                         </div>
-                        <div className="w-3 h-3 bg-yellow-200/90 rounded-sm" />
+                        <span className="absolute right-1 top-1 text-[7px] text-slate-400">F1</span>
                       </div>
+                    </div>
+
+                    {/* Floor labels on stairwell */}
+                    <div className="absolute left-1 top-0 bottom-0 flex flex-col text-[7px] text-blue-300/70 font-medium">
+                      <div className="h-[48px] flex items-center">5</div>
+                      <div className="h-[48px] flex items-center">4</div>
+                      <div className="h-[48px] flex items-center">3</div>
+                      <div className="h-[48px] flex items-center">2</div>
+                      <div className="h-[56px] flex items-center">1</div>
                     </div>
 
                     {/* BUREAUCRAT WORKER 1 - Full journey with file */}
                     <motion.div
-                      className="absolute text-lg z-30"
+                      className="absolute text-base z-30"
                       animate={{
-                        // Enter → F1 queue → stairs to F2 → get form → stairs to F3 → process → stairs to F4 → verify → stairs to F5 → approval → descend → exit
                         x: [
-                          75, 75,    // Enter, wait at reception
-                          20, 20,    // Walk to stairs
-                          20, 20,    // Climb to F2
-                          60, 60,    // Walk to forms desk
-                          20, 20,    // Back to stairs
-                          20, 20,    // Climb to F3
-                          60, 60,    // Walk to processing
-                          20, 20,    // Back to stairs  
-                          20, 20,    // Climb to F4
-                          60, 60,    // Walk to verify
-                          20, 20,    // Back to stairs
-                          20, 20,    // Climb to F5
-                          60, 60,    // Walk to CEO
-                          20, 20,    // Back to stairs
-                          20, 20, 20, 20, 20,  // Descend all floors
-                          75, 120,   // Walk to exit
+                          80, 80,    // Enter lobby
+                          15, 15,    // Walk to stairs
+                          15, 15,    // Climb to F2
+                          70, 70,    // Walk to desk
+                          15, 15,    // Back to stairs
+                          15, 15,    // Climb to F3
+                          70, 70,    // Walk to desk
+                          15, 15,    // Back to stairs  
+                          15, 15,    // Climb to F4
+                          70, 70,    // Walk to desk
+                          15, 15,    // Back to stairs
+                          15, 15,    // Climb to F5
+                          70, 70,    // Walk to CEO
+                          15, 15,    // Back to stairs
+                          15, 15, 15, 15, 15,  // Descend
+                          80, 130,   // Exit
                         ],
                         y: [
-                          200, 200,  // F1 - reception
-                          200, 200,  // At stairs
-                          152, 152,  // F2
-                          152, 152,  // At forms
-                          152, 152,  // Back to stairs
-                          104, 104,  // F3
-                          104, 104,  // At processing
-                          104, 104,  // Back to stairs
-                          56, 56,    // F4
-                          56, 56,    // At verify
-                          56, 56,    // Back to stairs
-                          8, 8,      // F5
-                          8, 8,      // At CEO
-                          8, 8,      // Back to stairs
-                          56, 104, 152, 200, 200,  // Descend
-                          200, 200,  // Exit
+                          220, 220,  // F1 lobby
+                          220, 220,  // At stairs
+                          168, 168,  // F2
+                          168, 168,  // At desk
+                          168, 168,  // Back
+                          120, 120,  // F3
+                          120, 120,  // At desk
+                          120, 120,  // Back
+                          72, 72,    // F4
+                          72, 72,    // At desk
+                          72, 72,    // Back
+                          24, 24,    // F5
+                          24, 24,    // At CEO
+                          24, 24,    // Back
+                          72, 120, 168, 220, 220,  // Descend
+                          220, 220,  // Exit
                         ],
                       }}
                       transition={{
@@ -834,135 +901,73 @@ const VisualMetaphorSlide = ({ slide }) => {
                         repeat: Infinity,
                         ease: "linear",
                         times: [
-                          0, 0.04,
-                          0.08, 0.10,
-                          0.14, 0.16,
-                          0.20, 0.24,
-                          0.28, 0.30,
-                          0.34, 0.36,
-                          0.40, 0.44,
-                          0.48, 0.50,
-                          0.54, 0.56,
-                          0.60, 0.64,
-                          0.68, 0.70,
-                          0.74, 0.76,
-                          0.80, 0.84,
-                          0.88, 0.90,
-                          0.92, 0.94, 0.96, 0.98, 1.0,
+                          0, 0.04, 0.08, 0.10, 0.14, 0.16, 0.20, 0.24, 0.28, 0.30,
+                          0.34, 0.36, 0.40, 0.44, 0.48, 0.50, 0.54, 0.56, 0.60, 0.64,
+                          0.68, 0.70, 0.74, 0.76, 0.80, 0.84, 0.88, 0.90, 0.92, 0.94, 0.96, 0.98, 1.0,
                         ]
                       }}
                     >
                       🧑‍💼
                     </motion.div>
 
-                    {/* BUREAUCRAT WORKER 2 - Staggered */}
+                    {/* BUREAUCRAT WORKER 2 */}
                     <motion.div
-                      className="absolute text-lg z-30"
+                      className="absolute text-base z-30"
                       animate={{
-                        x: [
-                          75, 75, 20, 20, 20, 20, 60, 60, 20, 20,
-                          20, 20, 60, 60, 20, 20, 20, 20, 60, 60,
-                          20, 20, 20, 20, 60, 60, 20, 20, 20, 20, 20, 20, 20, 75, 120,
-                        ],
-                        y: [
-                          200, 200, 200, 200, 152, 152, 152, 152, 152, 152,
-                          104, 104, 104, 104, 104, 104, 56, 56, 56, 56,
-                          56, 56, 8, 8, 8, 8, 8, 8, 56, 104, 152, 200, 200, 200, 200,
-                        ],
+                        x: [80, 80, 15, 15, 15, 15, 70, 70, 15, 15, 15, 15, 70, 70, 15, 15, 15, 15, 70, 70, 15, 15, 15, 15, 70, 70, 15, 15, 15, 15, 15, 15, 15, 80, 130],
+                        y: [220, 220, 220, 220, 168, 168, 168, 168, 168, 168, 120, 120, 120, 120, 120, 120, 72, 72, 72, 72, 72, 72, 24, 24, 24, 24, 24, 24, 72, 120, 168, 220, 220, 220, 220],
                       }}
-                      transition={{
-                        duration: 20,
-                        repeat: Infinity,
-                        ease: "linear",
-                        delay: 6.67,
-                      }}
+                      transition={{ duration: 20, repeat: Infinity, ease: "linear", delay: 6.67 }}
                     >
                       👩‍💼
                     </motion.div>
 
-                    {/* BUREAUCRAT WORKER 3 - Staggered */}
+                    {/* BUREAUCRAT WORKER 3 */}
                     <motion.div
-                      className="absolute text-lg z-30"
+                      className="absolute text-base z-30"
                       animate={{
-                        x: [
-                          75, 75, 20, 20, 20, 20, 60, 60, 20, 20,
-                          20, 20, 60, 60, 20, 20, 20, 20, 60, 60,
-                          20, 20, 20, 20, 60, 60, 20, 20, 20, 20, 20, 20, 20, 75, 120,
-                        ],
-                        y: [
-                          200, 200, 200, 200, 152, 152, 152, 152, 152, 152,
-                          104, 104, 104, 104, 104, 104, 56, 56, 56, 56,
-                          56, 56, 8, 8, 8, 8, 8, 8, 56, 104, 152, 200, 200, 200, 200,
-                        ],
+                        x: [80, 80, 15, 15, 15, 15, 70, 70, 15, 15, 15, 15, 70, 70, 15, 15, 15, 15, 70, 70, 15, 15, 15, 15, 70, 70, 15, 15, 15, 15, 15, 15, 15, 80, 130],
+                        y: [220, 220, 220, 220, 168, 168, 168, 168, 168, 168, 120, 120, 120, 120, 120, 120, 72, 72, 72, 72, 72, 72, 24, 24, 24, 24, 24, 24, 72, 120, 168, 220, 220, 220, 220],
                       }}
-                      transition={{
-                        duration: 20,
-                        repeat: Infinity,
-                        ease: "linear",
-                        delay: 13.33,
-                      }}
+                      transition={{ duration: 20, repeat: Infinity, ease: "linear", delay: 13.33 }}
                     >
                       🧑‍🔧
                     </motion.div>
 
-                    {/* Documents being carried - follows worker 1 */}
+                    {/* Document following worker 1 */}
                     <motion.div
-                      className="absolute text-sm z-20"
+                      className="absolute text-xs z-20"
                       animate={{
-                        x: [
-                          85, 85, 30, 30, 30, 30, 70, 70, 30, 30,
-                          30, 30, 70, 70, 30, 30, 30, 30, 70, 70,
-                          30, 30, 30, 30, 70, 70, 30, 30, 30, 30, 30, 30, 30, 85, 130,
-                        ],
-                        y: [
-                          205, 205, 205, 205, 157, 157, 157, 157, 157, 157,
-                          109, 109, 109, 109, 109, 109, 61, 61, 61, 61,
-                          61, 61, 13, 13, 13, 13, 13, 13, 61, 109, 157, 205, 205, 205, 205,
-                        ],
-                        opacity: [
-                          0, 0, 0, 0, 0, 0, 1, 1, 1, 1,  // Get form at F2
-                          1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,  // Exit with approved doc
-                        ],
+                        x: [90, 90, 25, 25, 25, 25, 80, 80, 25, 25, 25, 25, 80, 80, 25, 25, 25, 25, 80, 80, 25, 25, 25, 25, 80, 80, 25, 25, 25, 25, 25, 25, 25, 90, 140],
+                        y: [225, 225, 225, 225, 173, 173, 173, 173, 173, 173, 125, 125, 125, 125, 125, 125, 77, 77, 77, 77, 77, 77, 29, 29, 29, 29, 29, 29, 77, 125, 173, 225, 225, 225, 225],
+                        opacity: [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
                       }}
-                      transition={{
-                        duration: 20,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
+                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                     >
                       📄
                     </motion.div>
 
-                    {/* Stamp animation at each floor */}
-                    {[152, 104, 56, 8].map((y, i) => (
+                    {/* Approval stamps */}
+                    {[168, 120, 72, 24].map((y, i) => (
                       <motion.div
                         key={i}
                         className="absolute text-xs"
-                        style={{ left: 75, top: y }}
-                        animate={{
-                          scale: [0, 1.5, 1, 0],
-                          opacity: [0, 1, 1, 0],
-                        }}
-                        transition={{
-                          duration: 1,
-                          repeat: Infinity,
-                          delay: 4 + i * 4,
-                          repeatDelay: 19,
-                        }}
+                        style={{ left: 85, top: y }}
+                        animate={{ scale: [0, 1.5, 1, 0], opacity: [0, 1, 1, 0] }}
+                        transition={{ duration: 1, repeat: Infinity, delay: 4 + i * 4, repeatDelay: 19 }}
                       >
                         ✅
                       </motion.div>
                     ))}
 
-                    {/* Waiting queue at reception */}
-                    <div className="absolute bottom-2 right-2 flex gap-0.5">
-                      {[0, 1, 2].map((i) => (
+                    {/* People waiting in lobby */}
+                    <div className="absolute bottom-3 right-3 flex gap-1">
+                      {[0, 1, 2, 3].map((i) => (
                         <motion.span
                           key={i}
-                          className="text-xs"
-                          animate={{ y: [0, -2, 0] }}
-                          transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+                          className="text-[10px]"
+                          animate={{ y: [0, -1, 0] }}
+                          transition={{ duration: 2, repeat: Infinity, delay: i * 0.4 }}
                         >
                           🧍
                         </motion.span>
@@ -970,26 +975,46 @@ const VisualMetaphorSlide = ({ slide }) => {
                     </div>
                   </div>
 
-                  {/* Entrance */}
-                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-2xl">
-                    🚪
+                  {/* Main entrance with awning */}
+                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 flex flex-col items-center">
+                    <div className="w-20 h-2 bg-slate-700 rounded-t-sm" style={{ boxShadow: '0 2px 4px rgba(0,0,0,0.3)' }} />
+                    <div className="flex gap-1">
+                      <div className="w-6 h-8 bg-amber-100/90 rounded-t-sm" style={{ boxShadow: 'inset 0 0 5px rgba(251,191,36,0.5)' }} />
+                      <div className="w-6 h-8 bg-amber-100/90 rounded-t-sm" style={{ boxShadow: 'inset 0 0 5px rgba(251,191,36,0.5)' }} />
+                    </div>
                   </div>
                 </div>
 
-                {/* Building 3 - Medium side building */}
+                {/* Building 3 - Right tower */}
                 <div className="relative">
+                  {/* Rooftop structure */}
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-2 bg-slate-600 rounded-sm" />
                   <div 
-                    className="w-10 h-28 rounded-t-lg relative"
+                    className="w-14 h-40 relative"
                     style={{
-                      background: 'linear-gradient(135deg, #475569 0%, #334155 100%)',
-                      boxShadow: 'inset -5px 0 15px rgba(0,0,0,0.3)',
+                      background: 'linear-gradient(180deg, #334155 0%, #1e293b 60%, #0f172a 100%)',
+                      boxShadow: 'inset -4px 0 12px rgba(0,0,0,0.4), 2px 0 8px rgba(0,0,0,0.3)',
                     }}
                   >
-                    <div className="grid grid-cols-2 gap-1 p-1.5">
-                      {[...Array(6)].map((_, i) => (
-                        <div key={i} className="w-2.5 h-3 rounded-sm bg-yellow-200/60" />
+                    {/* Windows */}
+                    <div className="grid grid-cols-2 gap-1 p-1">
+                      {[...Array(14)].map((_, i) => (
+                        <motion.div 
+                          key={i} 
+                          className="w-4 h-4 rounded-sm"
+                          style={{
+                            background: i % 5 === 0 ? 'rgba(254, 240, 138, 0.85)' : 'rgba(254, 240, 138, 0.3)',
+                            boxShadow: i % 5 === 0 ? '0 0 5px rgba(254, 240, 138, 0.5)' : 'none',
+                            border: '1px solid rgba(71,85,105,0.3)',
+                          }}
+                          animate={i % 7 === 0 ? { opacity: [0.3, 0.85, 0.3] } : {}}
+                          transition={{ duration: 4 + i % 3, repeat: Infinity }}
+                        />
                       ))}
                     </div>
+                    {/* Balconies */}
+                    <div className="absolute -right-1 top-12 w-2 h-8 bg-slate-500/60 rounded-r-sm" />
+                    <div className="absolute -right-1 top-28 w-2 h-8 bg-slate-500/60 rounded-r-sm" />
                   </div>
                 </div>
               </div>
